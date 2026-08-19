@@ -16,9 +16,11 @@ import re
 import sys
 from typing import Any, Iterable, Mapping
 
-from configs.prompts import REVISION_DECISIONS
-
 NUMERIC_TOLERANCE = 1e-6
+EXPECTED_PILOT_MIN = 40
+EXPECTED_PILOT_MAX = 50
+FULL_SCALE_INTERACTIONS = (300, 500)
+
 TRANSITIONS = ("HELPED", "HURT", "STABLE-CORRECT", "STABLE-WRONG")
 
 # Keep the output columns ordered so downstream stages receive a stable schema.
@@ -164,14 +166,6 @@ def _stage_text(stage: Mapping[str, Any] | None, key: str) -> str | None:
     return value if isinstance(value, str) else None
 
 
-def _revision_decision(stage: Mapping[str, Any] | None) -> str | None:
-    """Return a completed revision decision only when it is KEEP or CHANGE."""
-    if not _stage_complete(stage):
-        return None
-    decision = _stage_text(stage, "decision")
-    return decision if decision in REVISION_DECISIONS else None
-
-
 def _stage_number(stage: Mapping[str, Any] | None, key: str) -> int | float | None:
     if stage is None:
         return None
@@ -224,9 +218,6 @@ def _parse_failure_stage(record: Mapping[str, Any]) -> str | None:
         if stage is not None and stage.get("status") == "parse_failure":
             value = stage.get("parse_failure_stage")
             return str(value) if isinstance(value, str) else name
-    revision = _stage(record, "revision")
-    if _stage_complete(revision) and _revision_decision(revision) is None:
-        return "revision"
     return None
 
 
@@ -243,7 +234,7 @@ def _record_valid(record: Mapping[str, Any]) -> bool:
     verdict = critique.get("verdict")
     revision = _stage(record, "revision")
     if verdict == "INCORRECT":
-        return _revision_decision(revision) is not None
+        return _stage_complete(revision)
     return verdict == "CORRECT" and revision is None
 
 
@@ -411,7 +402,7 @@ def _build_dataset_rows(
             "critic_proposed_answer": proposed_answer,
             "revision_called": int(revision_called),
             "revision_reasoning": _stage_text(revision, "reasoning") if revision_called else None,
-            "revise_decision": _revision_decision(revision) if revision_called else None,
+            "revise_decision": _stage_text(revision, "decision") if revision_called else None,
             "revised_answer": revised_answer,
             "revised_correct": _bool_to_int(revised_correct),
             "changed_answer": _bool_to_int(changed_answer),
@@ -478,9 +469,7 @@ def _parse_success_per_stage(records: Iterable[Mapping[str, Any]]) -> dict[str, 
     return metrics
 
 
-def _project_helped(
-    rows: Iterable[Mapping[str, Any]], full_scale_interactions: int
-) -> dict[str, Any]:
+def _project_helped(rows: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
     observed = list(rows)
     evaluated = [row for row in observed if row.get("transition") in TRANSITIONS]
     helped = sum(row.get("transition") == "HELPED" for row in evaluated)
@@ -491,10 +480,10 @@ def _project_helped(
             "observed_transition_eligible_count": 0,
             "observed_interaction_count": len(observed),
             "observed_helped_rate": None,
-            "full_scale_interactions_range": [full_scale_interactions, full_scale_interactions],
+            "full_scale_interactions_range": list(FULL_SCALE_INTERACTIONS),
             "projected_helped_count_range": None,
             "uncertainty_method": "Not estimable: no transition-eligible pilot interactions.",
-            "note": "Pilot projections are uncertain and must not be treated as exact counts.",
+            "note": "A 40-50 question pilot is noisy; do not treat any projected count as exact.",
         }
     # Project HELPED cases from the rate across all observed interactions.
     denominator = len(observed)
@@ -509,18 +498,19 @@ def _project_helped(
     )
     lower_rate = max(0.0, center - margin)
     upper_rate = min(1.0, center + margin)
+    low_interactions, high_interactions = FULL_SCALE_INTERACTIONS
     return {
         "observed_helped_count": helped,
         "observed_transition_eligible_count": eligible_count,
         "observed_interaction_count": denominator,
         "observed_helped_rate": round(rate, 6),
-        "full_scale_interactions_range": [full_scale_interactions, full_scale_interactions],
+        "full_scale_interactions_range": [low_interactions, high_interactions],
         "projected_helped_count_range": [
-            math.floor(lower_rate * full_scale_interactions),
-            math.ceil(upper_rate * full_scale_interactions),
+            math.floor(lower_rate * low_interactions),
+            math.ceil(upper_rate * high_interactions),
         ],
         "uncertainty_method": "95% Wilson interval applied to the observed pilot HELPED rate.",
-        "note": "Pilot projections are uncertain and must not be treated as exact counts.",
+        "note": "A 40-50 question pilot is noisy; do not treat any projected count as exact.",
     }
 
 
@@ -528,7 +518,6 @@ def _validation_warnings(
     records: list[Mapping[str, Any]],
     summary: Mapping[str, Any],
     expected_directions: Iterable[str],
-    expected_question_counts: set[int],
 ) -> list[str]:
     expected_directions = tuple(expected_directions)
     warnings: list[str] = []
@@ -537,10 +526,9 @@ def _validation_warnings(
     if missing:
         warnings.append(f"Missing required direction(s): {', '.join(missing)}.")
     unique_questions = int(summary["unique_questions_processed"])
-    if unique_questions not in expected_question_counts:
-        expected_text = " or ".join(str(value) for value in sorted(expected_question_counts))
+    if not EXPECTED_PILOT_MIN <= unique_questions <= EXPECTED_PILOT_MAX:
         warnings.append(
-            f"Run has {unique_questions} unique questions; expected {expected_text} from config.yaml."
+            f"Pilot has {unique_questions} unique questions; the feasibility checkpoint requires {EXPECTED_PILOT_MIN}-{EXPECTED_PILOT_MAX}."
         )
     expected_interactions = unique_questions * len(expected_directions)
     if int(summary["interactions_processed"]) != expected_interactions:
@@ -634,17 +622,6 @@ def run_feasibility_evaluation(
     ]
     if len(expected_directions) != 2:
         raise EvaluationValidationError("config.yaml must define exactly two named cross-model directions.")
-    dataset_config = config.get("dataset")
-    if not isinstance(dataset_config, Mapping):
-        raise EvaluationValidationError("config.yaml must define dataset settings.")
-    pilot_questions = int(dataset_config.get("pilot_size", 0))
-    full_questions = int(dataset_config.get("sample_size", 0))
-    if not 0 < pilot_questions <= full_questions:
-        raise EvaluationValidationError(
-            "dataset.pilot_size must be positive and no larger than dataset.sample_size."
-        )
-    expected_question_counts = {pilot_questions, full_questions}
-    full_scale_interactions = full_questions * len(expected_directions)
     observed_directions = {str(record.get("direction")) for record in records}
     unexpected_directions = sorted(observed_directions.difference(expected_directions))
     if unexpected_directions:
@@ -697,19 +674,17 @@ def run_feasibility_evaluation(
         "pooled_transitions": pooled_transitions,
         "changed_correctness_count": changed_correctness_count,
         "parse_success_per_stage": parse_success,
-        "projected_helped_range": _project_helped(rows, full_scale_interactions),
+        "projected_helped_range": _project_helped(rows),
         "valid_count": sum(row["valid"] == 1 for row in rows),
         "invalid_count": sum(row["valid"] == 0 for row in rows),
         "prompt_version": prompt_versions[0],
         "prompt_versions": prompt_versions,
         "originally_correct_count": aggregates["original_correct_count"],
         "originally_incorrect_count": aggregates["original_incorrect_count"],
-        "configured_pilot_questions": pilot_questions,
-        "configured_full_questions": full_questions,
-        "configured_full_interactions": full_scale_interactions,
         "feasibility_evidence": {
-            "run_size_matches_configured_scope": len({row["question_id"] for row in rows})
-            in expected_question_counts,
+            "pilot_size_is_40_to_50_questions": EXPECTED_PILOT_MIN
+            <= len({row["question_id"] for row in rows})
+            <= EXPECTED_PILOT_MAX,
             "both_directions_present": all(
                 any(row["direction"] == direction for row in rows) for direction in expected_directions
             ),
@@ -719,9 +694,7 @@ def run_feasibility_evaluation(
             "helped_cases_present": pooled_transitions["HELPED"] > 0,
         },
     }
-    blockers = _validation_warnings(
-        records, summary, expected_directions, expected_question_counts
-    )
+    blockers = _validation_warnings(records, summary, expected_directions)
     summary["blockers_detected"] = blockers
 
     root = Path(output_root)
@@ -736,7 +709,7 @@ def format_checkpoint_summary(metrics: Mapping[str, Any]) -> str:
     """Return a compact checkpoint summary for notebook output."""
     lines = [
         "Feasibility Checkpoint",
-        f"Unique questions: {metrics['unique_questions_processed']}",
+        f"Unique pilot questions: {metrics['unique_questions_processed']}",
         f"Interactions: {metrics['interactions_processed']} ({metrics['interactions_per_direction']})",
     ]
     accuracy = metrics["solver_accuracy"]
@@ -768,11 +741,7 @@ def format_checkpoint_summary(metrics: Mapping[str, Any]) -> str:
             f"other_failures={values['other_failure_count']}"
         )
     projection = metrics["projected_helped_range"]
-    target = projection["full_scale_interactions_range"][1]
-    lines.append(
-        f"Projected HELPED count at {target} interactions: "
-        f"{projection['projected_helped_count_range']}"
-    )
+    lines.append(f"Projected HELPED count at 300-500 interactions: {projection['projected_helped_count_range']}")
     lines.append(
         "Scope limitation: the Solver revises only after critic disagreement, so this evaluates selective "
         "revision among disagreement cases only."

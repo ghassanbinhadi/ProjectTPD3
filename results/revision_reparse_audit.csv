@@ -1,0 +1,6 @@
+interaction_id,question_id,direction,original_status,original_error,reparse_status,selected_attempt,selected_decision,selected_answer,preamble_present,gold_used_for_parsing,before_transition,after_transition
+llama_solver_qwen_critic::gsm8k-test-1140,gsm8k-test-1140,llama_solver_qwen_critic,parse_failure,revision_format_invalid,recovered,1,KEEP,54,True,False,,STABLE-WRONG
+llama_solver_qwen_critic::gsm8k-test-1191,gsm8k-test-1191,llama_solver_qwen_critic,parse_failure,revision_format_invalid,recovered,1,KEEP,100,True,False,,STABLE-CORRECT
+llama_solver_qwen_critic::gsm8k-test-129,gsm8k-test-129,llama_solver_qwen_critic,parse_failure,revision_format_invalid,recovered,1,CHANGE,10000,True,False,,HELPED
+llama_solver_qwen_critic::gsm8k-test-252,gsm8k-test-252,llama_solver_qwen_critic,parse_failure,revision_format_invalid,recovered,1,KEEP,82,True,False,,STABLE-WRONG
+llama_solver_qwen_critic::gsm8k-test-948,gsm8k-test-948,llama_solver_qwen_critic,parse_failure,revision_format_invalid,recovered,1,CHANGE,15,True,False,,HELPED

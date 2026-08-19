@@ -1,19 +1,18 @@
 project:
   name: LLMs_Judge
-  schema_version: V7
+  schema_version: V6
 
 dataset:
   name: openai/gsm8k
   config_name: main
   source_url: https://huggingface.co/datasets/openai/gsm8k
-  generation_split: train
+  generation_split: test
   expected_train_size: 7473
   expected_test_size: 1319
-  # Save one fixed 1000-question cohort. Run its first 50 as the pilot,
-  # then resume the same output directory to complete all 1000 questions.
-  sample_size: 1000
+  sample_size: 150
   pilot_size: 50
   random_seed: 20260725
+  frozen_question_ids_file: frozen_test_question_ids.csv
 
 models:
   qwen:
@@ -36,11 +35,9 @@ quantization:
   bnb_4bit_use_double_quant: true
 
 decoding:
-  # Initial decoding is deterministic so primary outputs are reproducible.
   do_sample: false
   max_new_tokens: 1024
   retry:
-    # Only the single parse retry samples a different completion.
     do_sample: true
     temperature: 0.7
 
@@ -51,11 +48,11 @@ runtime:
 
 paths:
   kaggle_working_dir: /kaggle/working
-  kaggle_project_dir: /kaggle/working/project_v7_1000
+  kaggle_project_dir: /kaggle/working/v6_final_test_150
   raw_dir: data/raw
   selected_questions_file: selected_questions.json
   checkpoint_file: checkpoint.json
   metadata_file: run_metadata.json
   execution_log_file: execution_log.jsonl
   pipeline_outputs_file: pipeline_outputs.jsonl
-  archive_file: pipeline_artifacts_v7_1000.zip
+  archive_file: pipeline_artifacts_v6_final_test_150.zip

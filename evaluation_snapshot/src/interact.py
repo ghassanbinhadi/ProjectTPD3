@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import copy
 from contextlib import contextmanager
+import csv
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import hashlib
@@ -22,13 +23,14 @@ import zipfile
 
 import yaml
 
-from configs.prompts import PROMPT_VERSION, REVISION_DECISIONS, render_prompt
+from configs.prompts import PROMPT_VERSION, render_prompt
 from src.models import FourBitModel, GenerationOutput
 
 
 FINAL_ANSWER = "FINAL_ANSWER:"
 CURRENCY = re.compile(r"[$\u20ac\u00a3\u00a5]")
 NUMBER = re.compile(r"[+-]?(?:\d+(?:\.\d+)?|\.\d+)")
+QUESTION_ID = re.compile(r"gsm8k-(train|test)-(\d+)")
 Parser = Callable[[str], dict[str, Any]]
 
 
@@ -125,7 +127,7 @@ def build_artifact_paths(root: Path, config: dict[str, Any]) -> ArtifactPaths:
     )
 
 
-def load_config(path: str | Path) -> dict[str, Any]:
+def load_config(path: str | Path, *, strict: bool = True) -> dict[str, Any]:
     with Path(path).resolve().open(encoding="utf-8") as stream:
         config = yaml.safe_load(stream)
     required = {"project", "dataset", "models", "directions", "quantization", "decoding", "runtime", "paths"}
@@ -143,15 +145,17 @@ def load_config(path: str | Path) -> dict[str, Any]:
         raise ValueError("decoding.max_new_tokens must be a positive integer.")
     retry_decoding = config["decoding"].get("retry")
     if not isinstance(retry_decoding, dict) or retry_decoding.get("do_sample") is not True:
-        raise ValueError("Retry decoding requires decoding.retry.do_sample=true.")
+        raise ValueError("V6 retry decoding requires decoding.retry.do_sample=true.")
     if float(retry_decoding.get("temperature", 0)) <= 0:
         raise ValueError("decoding.retry.temperature must be positive.")
     if int(config["runtime"].get("parse_retry_count", -1)) != 1:
-        raise ValueError("The protocol requires exactly one parse retry.")
+        raise ValueError("V6 protocol requires exactly one parse retry.")
     sample_size = int(config["dataset"].get("sample_size", 0))
     pilot_size = int(config["dataset"].get("pilot_size", sample_size))
     if sample_size <= 0 or pilot_size <= 0 or pilot_size > sample_size:
         raise ValueError("dataset.sample_size must be positive and dataset.pilot_size must be within the selected cohort.")
+    if strict and not 40 <= pilot_size <= 50:
+        raise ValueError("The official pilot needs dataset.pilot_size between 40 and 50.")
     directions = config["directions"]
     if not isinstance(directions, list) or len(directions) != 2:
         raise ValueError("The specification requires both cross-model directions.")
@@ -212,32 +216,14 @@ def parse_critique(response: str) -> dict[str, Any]:
 
 
 def parse_revision(response: str) -> dict[str, Any]:
-    """Parse one unambiguous revision block while allowing a leading preamble."""
-    if FINAL_ANSWER not in response:
-        return {"ok": False, "error": "revision_missing_final_answer_marker"}
-    prefix, remainder = response.rsplit(FINAL_ANSWER, 1)
-
-    decision_matches = list(
-        re.finditer(r"(?m)^[ \t]*DECISION:[ \t]*(.*?)[ \t]*$", response)
+    # Accept an inline or next-line answer and validate only its first non-empty line.
+    match = re.fullmatch(
+        r"REASONING:\s*(.*?)\s*\nDECISION:\s*(KEEP|CHANGE)\s*\nFINAL_ANSWER:(.*)",
+        response.strip(), flags=re.DOTALL,
     )
-    if len(decision_matches) != 1:
-        return {"ok": False, "error": "revision_decision_count_invalid"}
-    decision_match = decision_matches[0]
-    decision = decision_match.group(1).strip()
-    if decision not in REVISION_DECISIONS:
-        return {"ok": False, "error": "revision_decision_invalid"}
-    if decision_match.start() >= len(prefix):
-        return {"ok": False, "error": "revision_decision_after_final_answer"}
-
-    reasoning_matches = list(
-        re.finditer(r"(?m)^[ \t]*REASONING:[ \t]*", prefix[:decision_match.start()])
-    )
-    if not reasoning_matches:
-        return {"ok": False, "error": "revision_missing_reasoning"}
-    reasoning = prefix[reasoning_matches[-1].end():decision_match.start()].strip()
-    if not reasoning:
-        return {"ok": False, "error": "revision_empty_reasoning"}
-
+    if match is None:
+        return {"ok": False, "error": "revision_format_invalid"}
+    reasoning, decision, remainder = match.groups()
     answer_line = next((line for line in remainder.splitlines() if line.strip()), "")
     if not answer_line:
         return {"ok": False, "error": "revision_empty_answer"}
@@ -245,18 +231,19 @@ def parse_revision(response: str) -> dict[str, Any]:
     if not answer["ok"]:
         return {"ok": False, "error": f"revision_{answer['error']}", "answer_parse": answer}
     return {
-        "ok": True, "reasoning": reasoning, "decision": decision,
+        "ok": True, "reasoning": reasoning.strip(), "decision": decision,
         "raw_extracted": answer["raw_extracted"], "normalized_answer": answer["normalized_answer"], "answer": answer["answer"],
     }
 
 
-def validate_gsm8k(config: dict[str, Any], logger: EventLog) -> Any:
+def validate_gsm8k(config: dict[str, Any], logger: EventLog | None) -> Any:
     try:
         from datasets import load_dataset
     except ImportError as exc:  # pragma: no cover - Kaggle dependency
         raise RuntimeError("Install datasets before running the Pipeline.") from exc
     source = config["dataset"]
-    logger.write("dataset_validation_started", dataset=source["name"], config=source["config_name"])
+    if logger is not None:
+        logger.write("dataset_validation_started", dataset=source["name"], config=source["config_name"])
     dataset = load_dataset(source["name"], source["config_name"])
     if {"train", "test"}.difference(dataset):
         raise DatasetValidationError("GSM8K must provide train and test splits.")
@@ -264,12 +251,136 @@ def validate_gsm8k(config: dict[str, Any], logger: EventLog) -> Any:
         raise DatasetValidationError("Unexpected GSM8K split size.")
     if any(not {"question", "answer"}.issubset(dataset[split].column_names) for split in ("train", "test")):
         raise DatasetValidationError("GSM8K must contain question and answer columns.")
-    logger.write("dataset_validation_completed", train_size=len(dataset["train"]), test_size=len(dataset["test"]))
+    if logger is not None:
+        logger.write("dataset_validation_completed", train_size=len(dataset["train"]), test_size=len(dataset["test"]))
     return dataset
 
 
 def question_hash(question: str) -> str:
     return hashlib.sha256(question.encode("utf-8")).hexdigest()
+
+
+def resolve_frozen_question_ids_file(config: dict[str, Any]) -> Path | None:
+    value = config["dataset"].get("frozen_question_ids_file")
+    if value is None:
+        return None
+    if not isinstance(value, str) or not value.strip():
+        raise DatasetValidationError("dataset.frozen_question_ids_file must be a non-empty path.")
+    path = Path(value).expanduser()
+    if not path.is_absolute():
+        path = Path(__file__).resolve().parents[1] / path
+    path = path.resolve()
+    if not path.is_file():
+        raise DatasetValidationError(f"Frozen question ID file does not exist: {path}")
+    return path
+
+
+def read_frozen_question_ids(path: Path) -> list[str]:
+    with path.open(newline="", encoding="utf-8-sig") as stream:
+        reader = csv.DictReader(stream)
+        if reader.fieldnames != ["question_id"]:
+            raise DatasetValidationError("Frozen CSV must contain exactly one column named question_id.")
+        identifiers = [str(row.get("question_id", "")).strip() for row in reader]
+    if any(not identifier for identifier in identifiers):
+        raise DatasetValidationError("Frozen CSV contains an empty question_id.")
+    return identifiers
+
+
+def frozen_selection_report(dataset: Any, config: dict[str, Any]) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    settings = config["dataset"]
+    split_name = str(settings.get("generation_split", ""))
+    frozen_path = resolve_frozen_question_ids_file(config)
+    if frozen_path is None:
+        raise DatasetValidationError("dataset.frozen_question_ids_file is required for frozen-test validation.")
+
+    identifiers = read_frozen_question_ids(frozen_path)
+    seen: set[str] = set()
+    duplicate_ids: list[str] = []
+    for identifier in identifiers:
+        if identifier in seen and identifier not in duplicate_ids:
+            duplicate_ids.append(identifier)
+        seen.add(identifier)
+
+    invalid_format_ids: list[str] = []
+    wrong_split_ids: list[str] = []
+    missing_ids: list[str] = []
+    questions: list[dict[str, Any]] = []
+    split = dataset[split_name] if split_name in dataset else None
+    for identifier in identifiers:
+        match = QUESTION_ID.fullmatch(identifier)
+        if match is None:
+            invalid_format_ids.append(identifier)
+            missing_ids.append(identifier)
+            continue
+        identifier_split, index_text = match.groups()
+        if identifier_split != "test" or split_name != "test":
+            wrong_split_ids.append(identifier)
+            missing_ids.append(identifier)
+            continue
+        index = int(index_text)
+        if split is None or not 0 <= index < len(split):
+            missing_ids.append(identifier)
+            continue
+        questions.append({
+            "question_id": identifier,
+            # Retain this field name for compatibility with saved interactions.
+            "train_index": index,
+            "question": split[index]["question"],
+        })
+
+    errors: list[str] = []
+    if split_name != "test":
+        errors.append("dataset.generation_split must be test for the final held-out run")
+    if int(settings.get("sample_size", 0)) != 150:
+        errors.append("dataset.sample_size must be 150 for the frozen final test")
+    if len(identifiers) != 150:
+        errors.append(f"frozen CSV must contain exactly 150 IDs; found {len(identifiers)}")
+    if duplicate_ids:
+        errors.append("frozen CSV contains duplicate IDs")
+    if invalid_format_ids:
+        errors.append("frozen CSV contains malformed IDs")
+    if wrong_split_ids:
+        errors.append("frozen CSV contains IDs outside gsm8k-test-*")
+    if missing_ids:
+        errors.append("one or more frozen IDs do not match GSM8K test")
+
+    report = {
+        "prompt_version": PROMPT_VERSION,
+        "dataset_split": split_name,
+        "frozen_csv_path": str(frozen_path),
+        "frozen_csv_sha256": hashlib.sha256(frozen_path.read_bytes()).hexdigest(),
+        "number_of_frozen_ids": len(identifiers),
+        "number_of_unique_ids": len(set(identifiers)),
+        "first_5_ids": identifiers[:5],
+        "last_5_ids": identifiers[-5:],
+        "matched_gsm8k_questions": len(questions),
+        "missing_ids": missing_ids,
+        "duplicate_ids": duplicate_ids,
+        "invalid_format_ids": invalid_format_ids,
+        "wrong_split_ids": wrong_split_ids,
+        "expected_interactions": len(identifiers) * len(config["directions"]),
+        "directions": [direction["name"] for direction in config["directions"]],
+        "errors": errors,
+    }
+    return report, questions
+
+
+def validate_frozen_test_setup(config_path: str | Path) -> dict[str, Any]:
+    config_file = Path(config_path).resolve()
+    config = load_config(config_file, strict=True)
+    if config["project"].get("schema_version") != "V6" or PROMPT_VERSION != "V6":
+        raise DatasetValidationError("Final-test validation requires the V6 schema and V6 prompts.")
+    dataset = validate_gsm8k(config, logger=None)
+    report, _ = frozen_selection_report(dataset, config)
+    for key in (
+        "prompt_version", "dataset_split", "frozen_csv_path", "number_of_frozen_ids",
+        "number_of_unique_ids", "first_5_ids", "last_5_ids", "matched_gsm8k_questions",
+        "missing_ids", "duplicate_ids", "expected_interactions", "directions",
+    ):
+        print(f"{key}: {json.dumps(report[key], ensure_ascii=True)}")
+    if report["errors"]:
+        raise DatasetValidationError("Frozen test validation failed: " + "; ".join(report["errors"]))
+    return report
 
 
 def resume_signature(config: dict[str, Any]) -> dict[str, Any]:
@@ -279,14 +390,21 @@ def resume_signature(config: dict[str, Any]) -> dict[str, Any]:
         relative: hashlib.sha256((project_root / relative).read_bytes()).hexdigest()
         for relative in ("configs/prompts.py", "src/models.py", "src/interact.py")
     }
+    dataset_signature = {
+        key: config["dataset"][key]
+        for key in ("name", "config_name", "generation_split", "sample_size", "pilot_size", "random_seed")
+    }
+    frozen_path = resolve_frozen_question_ids_file(config)
+    if frozen_path is not None:
+        dataset_signature.update(
+            selection_mode="frozen_question_ids",
+            frozen_question_ids_sha256=hashlib.sha256(frozen_path.read_bytes()).hexdigest(),
+        )
     return {
         "schema_version": config["project"]["schema_version"],
         "prompt_version": PROMPT_VERSION,
         "source_hashes": source_hashes,
-        "dataset": {
-            key: config["dataset"][key]
-            for key in ("name", "config_name", "generation_split", "sample_size", "pilot_size", "random_seed")
-        },
+        "dataset": dataset_signature,
         "models": config["models"],
         "directions": config["directions"],
         "quantization": config["quantization"],
@@ -299,7 +417,52 @@ def resume_signature(config: dict[str, Any]) -> dict[str, Any]:
 
 
 def load_or_select_questions(dataset: Any, config: dict[str, Any], paths: ArtifactPaths, logger: EventLog) -> list[dict[str, Any]]:
-    settings, train = config["dataset"], dataset["train"]
+    settings = config["dataset"]
+    frozen_path = resolve_frozen_question_ids_file(config)
+    if frozen_path is not None:
+        report, questions = frozen_selection_report(dataset, config)
+        if report["errors"]:
+            raise DatasetValidationError("Frozen test validation failed: " + "; ".join(report["errors"]))
+        if paths.selected_questions.exists():
+            saved = read_json(paths.selected_questions)
+            items = saved.get("selected_question_ids") if isinstance(saved, dict) else None
+            if not isinstance(items, list):
+                raise RuntimeError("selected_questions.json is invalid; refusing to continue.")
+            source = saved.get("dataset", {})
+            expected_source = (settings["name"], settings["config_name"], "test")
+            if (source.get("name"), source.get("config_name"), source.get("split")) != expected_source:
+                raise RuntimeError("selected_questions.json refers to another dataset or split.")
+            if saved.get("selection_mode") != "frozen_question_ids":
+                raise RuntimeError("selected_questions.json was not created from frozen question IDs.")
+            if saved.get("frozen_question_ids_sha256") != report["frozen_csv_sha256"]:
+                raise RuntimeError("Frozen question ID file changed; use a new output_root.")
+            saved_ids = [item.get("question_id") for item in items if isinstance(item, dict)]
+            expected_ids = [question["question_id"] for question in questions]
+            if saved_ids != expected_ids:
+                raise RuntimeError("selected_questions.json does not match the frozen CSV order and IDs.")
+            for item, question in zip(items, questions):
+                if item.get("train_index") != question["train_index"]:
+                    raise RuntimeError("selected_questions.json contains a mismatched GSM8K test index.")
+                if item.get("question_sha256") != question_hash(question["question"]):
+                    raise RuntimeError("Persisted question hash no longer matches GSM8K test.")
+            logger.write("selection_reused", selected_questions_file=str(paths.selected_questions), count=len(questions), selection_mode="frozen_question_ids")
+            return questions
+
+        write_json_atomic(paths.selected_questions, {
+            "schema_version": config["project"]["schema_version"], "created_at": utc_now(),
+            "dataset": {"name": settings["name"], "config_name": settings["config_name"], "split": "test"},
+            "sample_size": len(questions), "selection_mode": "frozen_question_ids",
+            "frozen_question_ids_file": frozen_path.name,
+            "frozen_question_ids_sha256": report["frozen_csv_sha256"],
+            "selected_question_ids": [
+                {"question_id": row["question_id"], "train_index": row["train_index"], "question_sha256": question_hash(row["question"])}
+                for row in questions
+            ],
+        })
+        logger.write("selection_created", selected_questions_file=str(paths.selected_questions), count=len(questions), selection_mode="frozen_question_ids")
+        return questions
+
+    train = dataset["train"]
     if paths.selected_questions.exists():
         saved = read_json(paths.selected_questions)
         items = saved.get("selected_question_ids") if isinstance(saved, dict) else None
@@ -307,8 +470,6 @@ def load_or_select_questions(dataset: Any, config: dict[str, Any], paths: Artifa
             raise RuntimeError("selected_questions.json is invalid; refusing to resample.")
         if int(saved.get("sample_size", -1)) != int(settings["sample_size"]):
             raise RuntimeError("selected_questions.json sample_size does not match config; use a new output_root.")
-        if len(items) != int(settings["sample_size"]):
-            raise RuntimeError("selected_questions.json does not contain the configured number of questions.")
         if int(saved.get("random_seed", -1)) != int(settings["random_seed"]):
             raise RuntimeError("selected_questions.json random_seed does not match config; use a new output_root.")
         source = saved.get("dataset", {})
@@ -635,6 +796,17 @@ class Pipeline:
 
 def write_metadata(config: dict[str, Any], paths: ArtifactPaths, pipeline: Pipeline, status: str, started_at: str) -> None:
     dataset = config["dataset"]
+    dataset_metadata = {
+        key: dataset[key]
+        for key in ("name", "config_name", "source_url", "generation_split", "expected_train_size", "expected_test_size")
+    }
+    frozen_path = resolve_frozen_question_ids_file(config)
+    if frozen_path is not None:
+        dataset_metadata.update(
+            selection_mode="frozen_question_ids",
+            frozen_question_ids_file=frozen_path.name,
+            frozen_question_ids_sha256=hashlib.sha256(frozen_path.read_bytes()).hexdigest(),
+        )
     directions = [{
         "name": direction["name"], "solver_model": pipeline.model_id(direction["solver_model"]), "critic_model": pipeline.model_id(direction["critic_model"]),
         "interaction_file": str(pipeline.raw_files[direction["name"]].relative_to(paths.root)),
@@ -644,7 +816,7 @@ def write_metadata(config: dict[str, Any], paths: ArtifactPaths, pipeline: Pipel
         "resume_signature": pipeline.signature,
         "run_id": pipeline.checkpoint["run_id"], "run_date": pipeline.date, "status": status,
         "started_at": started_at, "updated_at": utc_now(),
-        "dataset": {key: dataset[key] for key in ("name", "config_name", "source_url", "generation_split", "expected_train_size", "expected_test_size")},
+        "dataset": dataset_metadata,
         "sample_size": len(pipeline.questions), "selected_cohort_size": dataset["sample_size"],
         "random_seed": dataset["random_seed"],
         "selected_questions_file": str(paths.selected_questions.relative_to(paths.root)), "quantization": config["quantization"],
@@ -710,12 +882,12 @@ def run_pipeline(
     config_path: str | Path | None = None, output_root: str | Path | None = None, question_limit: int | None = None,
 ) -> dict[str, Any]:
     config_file = Path(config_path or Path(__file__).resolve().parents[1] / "configs" / "config.yaml").resolve()
-    return _run_pipeline_from_config(load_config(config_file), config_file, output_root, question_limit)
+    return _run_pipeline_from_config(load_config(config_file, strict=True), config_file, output_root, question_limit)
 
 
 def run_debug_pipeline(config_path: str | Path | None = None, output_root: str | Path | None = None, sample_size: int = 5, max_new_tokens: int | None = None) -> dict[str, Any]:
     config_file = Path(config_path or Path(__file__).resolve().parents[1] / "configs" / "config.yaml").resolve()
-    config = copy.deepcopy(load_config(config_file))
+    config = copy.deepcopy(load_config(config_file, strict=False))
     if not 1 <= int(sample_size) <= 10:
         raise ValueError("Debug sample_size must be between 1 and 10.")
     # Keep debug artifacts separate from the saved pilot cohort.
@@ -739,7 +911,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--question-limit", type=int, help="Run the first N questions from the saved cohort.")
     parser.add_argument("--debug-sample-size", type=int, help="Run a 1-10 question debug sample.")
     parser.add_argument("--debug-max-new-tokens", type=int, help="Override max_new_tokens for a debug run only.")
+    parser.add_argument("--validate-frozen-test", action="store_true", help="Validate frozen GSM8K test IDs without loading LLMs.")
     args = parser.parse_args(argv)
+    if args.validate_frozen_test:
+        validate_frozen_test_setup(args.config)
+        return 0
     result = run_pipeline(args.config, args.output_root, args.question_limit) if args.debug_sample_size is None else run_debug_pipeline(args.config, args.output_root, args.debug_sample_size, args.debug_max_new_tokens)
     print(json.dumps(result, ensure_ascii=True, indent=2, sort_keys=True))
     return 0

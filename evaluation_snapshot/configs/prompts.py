@@ -1,7 +1,6 @@
 """Frozen prompts for the solver, critic, and revision stages."""
 
-PROMPT_VERSION = "V7"
-REVISION_DECISIONS = frozenset({"KEEP", "CHANGE"})
+PROMPT_VERSION = "V6"
 
 SOLVER_PROMPT = """Solve the following problem step by step. Then give your final answer on a new line in exactly this format:
 FINAL_ANSWER: <number>
