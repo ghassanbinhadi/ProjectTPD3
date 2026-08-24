@@ -1,0 +1,119 @@
+{
+  "blockers_detected": [],
+  "changed_correctness_count": 107,
+  "configured_full_interactions": 2000,
+  "configured_full_questions": 1000,
+  "configured_pilot_questions": 50,
+  "feasibility_evidence": {
+    "at_least_5_changed_correctness_interactions": true,
+    "both_directions_present": true,
+    "helped_cases_present": true,
+    "originally_correct_answers_present": true,
+    "originally_incorrect_answers_present": true,
+    "run_size_matches_configured_scope": true
+  },
+  "interactions_per_direction": {
+    "llama_solver_qwen_critic": 1000,
+    "qwen_solver_llama_critic": 1000
+  },
+  "interactions_processed": 2000,
+  "invalid_count": 19,
+  "originally_correct_count": 1808,
+  "originally_incorrect_count": 189,
+  "parse_success_per_stage": {
+    "critic_independent_solve": {
+      "attempted_count": 1997,
+      "generation_failure_count": 0,
+      "other_failure_count": 0,
+      "parse_failure_count": 5,
+      "parse_success_count": 1992,
+      "parse_success_rate": 0.997496
+    },
+    "critique_verdict": {
+      "attempted_count": 1992,
+      "generation_failure_count": 0,
+      "other_failure_count": 0,
+      "parse_failure_count": 10,
+      "parse_success_count": 1982,
+      "parse_success_rate": 0.99498
+    },
+    "revision": {
+      "attempted_count": 294,
+      "generation_failure_count": 0,
+      "other_failure_count": 0,
+      "parse_failure_count": 1,
+      "parse_success_count": 293,
+      "parse_success_rate": 0.996599
+    },
+    "solver_answer": {
+      "attempted_count": 2000,
+      "generation_failure_count": 0,
+      "other_failure_count": 0,
+      "parse_failure_count": 3,
+      "parse_success_count": 1997,
+      "parse_success_rate": 0.9985
+    }
+  },
+  "pooled_transitions": {
+    "HELPED": 58,
+    "HURT": 49,
+    "STABLE-CORRECT": 1748,
+    "STABLE-WRONG": 126
+  },
+  "projected_helped_range": {
+    "full_scale_interactions_range": [
+      2000,
+      2000
+    ],
+    "note": "Pilot projections are uncertain and must not be treated as exact counts.",
+    "observed_helped_count": 58,
+    "observed_helped_rate": 0.029,
+    "observed_interaction_count": 2000,
+    "observed_transition_eligible_count": 1981,
+    "projected_helped_count_range": [
+      45,
+      75
+    ],
+    "uncertainty_method": "95% Wilson interval applied to the observed pilot HELPED rate."
+  },
+  "prompt_version": "V7",
+  "prompt_versions": [
+    "V7"
+  ],
+  "solver_accuracy": {
+    "denominator": 1997,
+    "numerator": 1808,
+    "parse_failures": 3,
+    "per_direction": {
+      "llama_solver_qwen_critic": {
+        "denominator": 999,
+        "numerator": 899,
+        "parse_failures": 1,
+        "rate": 0.8999
+      },
+      "qwen_solver_llama_critic": {
+        "denominator": 998,
+        "numerator": 909,
+        "parse_failures": 2,
+        "rate": 0.910822
+      }
+    },
+    "rate": 0.905358
+  },
+  "transitions_per_direction": {
+    "llama_solver_qwen_critic": {
+      "HELPED": 41,
+      "HURT": 32,
+      "STABLE-CORRECT": 857,
+      "STABLE-WRONG": 55
+    },
+    "qwen_solver_llama_critic": {
+      "HELPED": 17,
+      "HURT": 17,
+      "STABLE-CORRECT": 891,
+      "STABLE-WRONG": 71
+    }
+  },
+  "unique_questions_processed": 1000,
+  "valid_count": 1981
+}

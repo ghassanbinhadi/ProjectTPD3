@@ -1,0 +1,71 @@
+{
+  "changed_correctness_count": 10,
+  "interactions": 300,
+  "interactions_per_direction": {
+    "llama_solver_qwen_critic": 150,
+    "qwen_solver_llama_critic": 150
+  },
+  "invalid_count": 2,
+  "parse_success_per_stage": {
+    "critic_independent_solve": {
+      "attempted_count": 298,
+      "generation_failure_count": 0,
+      "other_failure_count": 0,
+      "parse_failure_count": 0,
+      "parse_success_count": 298,
+      "parse_success_rate": 1.0
+    },
+    "critique_verdict": {
+      "attempted_count": 298,
+      "generation_failure_count": 0,
+      "other_failure_count": 0,
+      "parse_failure_count": 0,
+      "parse_success_count": 298,
+      "parse_success_rate": 1.0
+    },
+    "revision": {
+      "attempted_count": 37,
+      "generation_failure_count": 0,
+      "other_failure_count": 0,
+      "parse_failure_count": 0,
+      "parse_success_count": 37,
+      "parse_success_rate": 1.0
+    },
+    "solver_answer": {
+      "attempted_count": 300,
+      "generation_failure_count": 0,
+      "other_failure_count": 0,
+      "parse_failure_count": 2,
+      "parse_success_count": 298,
+      "parse_success_rate": 0.993333
+    }
+  },
+  "pooled_transitions": {
+    "HELPED": 5,
+    "HURT": 5,
+    "STABLE-CORRECT": 265,
+    "STABLE-WRONG": 23
+  },
+  "solver_accuracy": {
+    "denominator": 298,
+    "numerator": 270,
+    "parse_failures": 2,
+    "rate": 0.90604
+  },
+  "transitions_per_direction": {
+    "llama_solver_qwen_critic": {
+      "HELPED": 3,
+      "HURT": 2,
+      "STABLE-CORRECT": 132,
+      "STABLE-WRONG": 13
+    },
+    "qwen_solver_llama_critic": {
+      "HELPED": 2,
+      "HURT": 3,
+      "STABLE-CORRECT": 133,
+      "STABLE-WRONG": 10
+    }
+  },
+  "unique_questions": 150,
+  "valid_count": 298
+}

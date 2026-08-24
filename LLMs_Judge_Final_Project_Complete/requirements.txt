@@ -1,0 +1,11 @@
+torch
+transformers==4.46.3
+accelerate
+bitsandbytes
+datasets
+PyYAML
+numpy
+pandas
+scikit-learn
+scipy
+matplotlib

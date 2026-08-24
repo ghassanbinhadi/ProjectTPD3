@@ -1,0 +1,111 @@
+{
+  "completed_interactions": 300,
+  "dataset": {
+    "config_name": "main",
+    "expected_test_size": 1319,
+    "expected_train_size": 7473,
+    "frozen_question_ids_file": "frozen_test_question_ids.csv",
+    "frozen_question_ids_sha256": "b36b02e590402e552edce1227e1919725919e3d4c1883c5fb3044ecd0770e747",
+    "generation_split": "test",
+    "name": "openai/gsm8k",
+    "selection_mode": "frozen_question_ids",
+    "source_url": "https://huggingface.co/datasets/openai/gsm8k"
+  },
+  "decoding": {
+    "do_sample": false,
+    "max_new_tokens": 1024,
+    "retry": {
+      "do_sample": true,
+      "temperature": 0.7
+    }
+  },
+  "directions": [
+    {
+      "critic_model": "meta-llama/Llama-3.2-3B-Instruct",
+      "interaction_file": "data/raw/interactions_Qwen_Qwen2_5_3B_Instruct_meta_llama_Llama_3_2_3B_Instruct_20260816.jsonl",
+      "name": "qwen_solver_llama_critic",
+      "solver_model": "Qwen/Qwen2.5-3B-Instruct"
+    },
+    {
+      "critic_model": "Qwen/Qwen2.5-3B-Instruct",
+      "interaction_file": "data/raw/interactions_meta_llama_Llama_3_2_3B_Instruct_Qwen_Qwen2_5_3B_Instruct_20260816.jsonl",
+      "name": "llama_solver_qwen_critic",
+      "solver_model": "meta-llama/Llama-3.2-3B-Instruct"
+    }
+  ],
+  "prompt_version": "V6",
+  "quantization": {
+    "bnb_4bit_compute_dtype": "float16",
+    "bnb_4bit_quant_type": "nf4",
+    "bnb_4bit_use_double_quant": true,
+    "load_in_4bit": true
+  },
+  "random_seed": 20260725,
+  "resume_signature": {
+    "dataset": {
+      "config_name": "main",
+      "frozen_question_ids_sha256": "b36b02e590402e552edce1227e1919725919e3d4c1883c5fb3044ecd0770e747",
+      "generation_split": "test",
+      "name": "openai/gsm8k",
+      "pilot_size": 50,
+      "random_seed": 20260725,
+      "sample_size": 150,
+      "selection_mode": "frozen_question_ids"
+    },
+    "decoding": {
+      "do_sample": false,
+      "max_new_tokens": 1024,
+      "retry": {
+        "do_sample": true,
+        "temperature": 0.7
+      }
+    },
+    "directions": [
+      {
+        "critic_model": "llama",
+        "name": "qwen_solver_llama_critic",
+        "solver_model": "qwen"
+      },
+      {
+        "critic_model": "qwen",
+        "name": "llama_solver_qwen_critic",
+        "solver_model": "llama"
+      }
+    ],
+    "models": {
+      "llama": {
+        "id": "meta-llama/Llama-3.2-3B-Instruct"
+      },
+      "qwen": {
+        "id": "Qwen/Qwen2.5-3B-Instruct"
+      }
+    },
+    "prompt_version": "V6",
+    "quantization": {
+      "bnb_4bit_compute_dtype": "float16",
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "load_in_4bit": true
+    },
+    "runtime": {
+      "device_map": "auto",
+      "parse_retry_count": 1,
+      "use_chat_template": true
+    },
+    "schema_version": "V6",
+    "source_hashes": {
+      "configs/prompts.py": "87e13b8fad95500bfe81e24e144c43b1194d0b68d6b816c09f4c028212fb14b1",
+      "src/interact.py": "efbc9309ece2a7002f145ac936ce120aa310e50f934950a6bac8a66d20bc91b9",
+      "src/models.py": "fa124b235795be42876e08698c36989defab099701f942b16689ce60e0b4fd7c"
+    }
+  },
+  "run_date": "20260816",
+  "run_id": "915cb8ac-b231-4414-b485-1b062d0cdd67",
+  "sample_size": 150,
+  "schema_version": "V6",
+  "selected_cohort_size": 150,
+  "selected_questions_file": "selected_questions.json",
+  "started_at": "2026-08-16T16:19:45.548768+00:00",
+  "status": "complete",
+  "updated_at": "2026-08-16T19:53:08.976658+00:00"
+}

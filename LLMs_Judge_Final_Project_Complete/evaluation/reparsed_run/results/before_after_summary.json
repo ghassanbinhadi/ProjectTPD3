@@ -1,0 +1,162 @@
+{
+  "after": {
+    "changed_correctness_count": 10,
+    "interactions": 300,
+    "interactions_per_direction": {
+      "llama_solver_qwen_critic": 150,
+      "qwen_solver_llama_critic": 150
+    },
+    "invalid_count": 2,
+    "parse_success_per_stage": {
+      "critic_independent_solve": {
+        "attempted_count": 298,
+        "generation_failure_count": 0,
+        "other_failure_count": 0,
+        "parse_failure_count": 0,
+        "parse_success_count": 298,
+        "parse_success_rate": 1.0
+      },
+      "critique_verdict": {
+        "attempted_count": 298,
+        "generation_failure_count": 0,
+        "other_failure_count": 0,
+        "parse_failure_count": 0,
+        "parse_success_count": 298,
+        "parse_success_rate": 1.0
+      },
+      "revision": {
+        "attempted_count": 37,
+        "generation_failure_count": 0,
+        "other_failure_count": 0,
+        "parse_failure_count": 0,
+        "parse_success_count": 37,
+        "parse_success_rate": 1.0
+      },
+      "solver_answer": {
+        "attempted_count": 300,
+        "generation_failure_count": 0,
+        "other_failure_count": 0,
+        "parse_failure_count": 2,
+        "parse_success_count": 298,
+        "parse_success_rate": 0.993333
+      }
+    },
+    "pooled_transitions": {
+      "HELPED": 5,
+      "HURT": 5,
+      "STABLE-CORRECT": 265,
+      "STABLE-WRONG": 23
+    },
+    "solver_accuracy": {
+      "denominator": 298,
+      "numerator": 270,
+      "parse_failures": 2,
+      "rate": 0.90604
+    },
+    "transitions_per_direction": {
+      "llama_solver_qwen_critic": {
+        "HELPED": 3,
+        "HURT": 2,
+        "STABLE-CORRECT": 132,
+        "STABLE-WRONG": 13
+      },
+      "qwen_solver_llama_critic": {
+        "HELPED": 2,
+        "HURT": 3,
+        "STABLE-CORRECT": 133,
+        "STABLE-WRONG": 10
+      }
+    },
+    "unique_questions": 150,
+    "valid_count": 298
+  },
+  "before": {
+    "changed_correctness_count": 8,
+    "interactions": 300,
+    "interactions_per_direction": {
+      "llama_solver_qwen_critic": 150,
+      "qwen_solver_llama_critic": 150
+    },
+    "invalid_count": 7,
+    "parse_success_per_stage": {
+      "critic_independent_solve": {
+        "attempted_count": 298,
+        "generation_failure_count": 0,
+        "other_failure_count": 0,
+        "parse_failure_count": 0,
+        "parse_success_count": 298,
+        "parse_success_rate": 1.0
+      },
+      "critique_verdict": {
+        "attempted_count": 298,
+        "generation_failure_count": 0,
+        "other_failure_count": 0,
+        "parse_failure_count": 0,
+        "parse_success_count": 298,
+        "parse_success_rate": 1.0
+      },
+      "revision": {
+        "attempted_count": 37,
+        "generation_failure_count": 0,
+        "other_failure_count": 0,
+        "parse_failure_count": 5,
+        "parse_success_count": 32,
+        "parse_success_rate": 0.864865
+      },
+      "solver_answer": {
+        "attempted_count": 300,
+        "generation_failure_count": 0,
+        "other_failure_count": 0,
+        "parse_failure_count": 2,
+        "parse_success_count": 298,
+        "parse_success_rate": 0.993333
+      }
+    },
+    "pooled_transitions": {
+      "HELPED": 3,
+      "HURT": 5,
+      "STABLE-CORRECT": 264,
+      "STABLE-WRONG": 21
+    },
+    "solver_accuracy": {
+      "denominator": 298,
+      "numerator": 270,
+      "parse_failures": 2,
+      "rate": 0.90604
+    },
+    "transitions_per_direction": {
+      "llama_solver_qwen_critic": {
+        "HELPED": 1,
+        "HURT": 2,
+        "STABLE-CORRECT": 131,
+        "STABLE-WRONG": 11
+      },
+      "qwen_solver_llama_critic": {
+        "HELPED": 2,
+        "HURT": 3,
+        "STABLE-CORRECT": 133,
+        "STABLE-WRONG": 10
+      }
+    },
+    "unique_questions": 150,
+    "valid_count": 293
+  },
+  "demo_interaction_ids": [
+    "llama_solver_qwen_critic::gsm8k-test-922",
+    "qwen_solver_llama_critic::gsm8k-test-252"
+  ],
+  "gold_used_for_parsing": false,
+  "reparse": {
+    "attempted_count": 5,
+    "recovered_count": 5,
+    "selected_attempts": {
+      "1": 5,
+      "2": 0
+    },
+    "still_invalid_count": 0
+  },
+  "reparse_rule": "Allow arbitrary preamble before one exact REASONING marker; require exactly one DECISION line containing KEEP or CHANGE; use the last FINAL_ANSWER marker and strictly parse the first non-empty line after it as one signed integer or decimal. Process attempts in original order and select the earliest parseable attempt.",
+  "rule_id": "v6_final_test_revision_reparse_r1",
+  "source_archive": "/kaggle/working/pipeline_artifacts_v6_final_test_150_source.zip",
+  "source_archive_sha256": "91b83653908db2bd43c630606ffb71144dc4d9b6b438f64869dadb10b93aa5e2"
+}

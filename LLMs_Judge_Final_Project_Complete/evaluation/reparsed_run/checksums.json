@@ -1,0 +1,12 @@
+{
+  "audit/revision_reparse_audit.csv": "9061c58fe2c9450a9c23e78e656b220ba2065fc667029141cd30931c7295f357",
+  "audit/revision_reparse_audit.jsonl": "f27fb4dc688aab8eae63372092204ac5714bc02b8f50aa40b93238ef7d0b629c",
+  "data/processed/dataset_reparsed.csv": "8c496932c3baf5b0b1438d8c4839712a93f6e8656b9177244e1ad1bcc19fc6bd",
+  "data/reparsed/interactions_Qwen_Qwen2_5_3B_Instruct_meta_llama_Llama_3_2_3B_Instruct_20260816.jsonl": "d94402db7800024e5d1433f61fabce24bda734bd9edfc1e5ad1c3a0cbc08e2bb",
+  "data/reparsed/interactions_meta_llama_Llama_3_2_3B_Instruct_Qwen_Qwen2_5_3B_Instruct_20260816.jsonl": "ca1fdebc537e03ce9276e08f6d2fb1ce76fcf26d6eedde89e1df8689903328e7",
+  "demos/demo_cases.json": "24ced65bbbc77fc2cf0c17c5583625a5baf4e40c0d120f88b937b0b1e3c94011",
+  "demos/demo_cases.md": "8e94af38f68ffa32adb023e188ef1259e8a77847d991bc9e1e60894ff91dbe33",
+  "results/before_after_summary.json": "8d98d934bda7d48c5d0db90f95681f6d1456f7c400af177463b30f72e4326c1c",
+  "results/before_after_summary.md": "de235be487c579dd89c407f0aa783de9e0258b5afac4aaf58453c124cce9bc51",
+  "results/metrics_reparsed.json": "22bf45a0f56f869a82a5be552f103f0f72bca69f02a16324290ee702d3a74f03"
+}

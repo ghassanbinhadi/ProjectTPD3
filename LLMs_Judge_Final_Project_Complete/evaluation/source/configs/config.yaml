@@ -1,0 +1,60 @@
+project:
+  name: LLMs_Judge
+  schema_version: V6
+
+dataset:
+  name: openai/gsm8k
+  config_name: main
+  source_url: https://huggingface.co/datasets/openai/gsm8k
+  generation_split: train
+  expected_train_size: 7473
+  expected_test_size: 1319
+  # Save one fixed 400-question cohort and reuse it for the pilot and full run.
+  sample_size: 400
+  pilot_size: 50
+  random_seed: 20260725
+
+models:
+  qwen:
+    id: Qwen/Qwen2.5-3B-Instruct
+  llama:
+    id: meta-llama/Llama-3.2-3B-Instruct
+
+directions:
+  - name: qwen_solver_llama_critic
+    solver_model: qwen
+    critic_model: llama
+  - name: llama_solver_qwen_critic
+    solver_model: llama
+    critic_model: qwen
+
+quantization:
+  load_in_4bit: true
+  bnb_4bit_quant_type: nf4
+  bnb_4bit_compute_dtype: float16
+  bnb_4bit_use_double_quant: true
+
+decoding:
+  # Initial decoding is deterministic so primary outputs are reproducible.
+  do_sample: false
+  max_new_tokens: 1024
+  retry:
+    # Only the single parse retry samples a different completion.
+    do_sample: true
+    temperature: 0.7
+
+runtime:
+  device_map: auto
+  use_chat_template: true
+  parse_retry_count: 1
+
+paths:
+  kaggle_working_dir: /kaggle/working
+  kaggle_project_dir: /kaggle/working/project_v6_400
+  raw_dir: data/raw
+  selected_questions_file: selected_questions.json
+  checkpoint_file: checkpoint.json
+  metadata_file: run_metadata.json
+  execution_log_file: execution_log.jsonl
+  pipeline_outputs_file: pipeline_outputs.jsonl
+  archive_file: pipeline_artifacts_v6_400.zip
