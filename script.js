@@ -26,10 +26,12 @@
   const sections=['hero','background','method','results','demo','policy','team'];
   const railDots=document.querySelectorAll('.rail-dot');
   const navLinks=document.querySelectorAll('.topnav__links a');
+  let currentSection = 'hero';
   const observer=new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
       if(entry.isIntersecting){
         const id=entry.target.id;
+        currentSection = id;
         railDots.forEach(d=> d.classList.toggle('active', d.getAttribute('data-scroll-to')===id));
         navLinks.forEach(l=> l.classList.toggle('active', l.getAttribute('data-scroll-to')===id));
         driveBySection(id);
@@ -39,6 +41,25 @@
   sections.forEach(id=>{
     const el=document.getElementById(id);
     if(el) observer.observe(el);
+  });
+
+  // ============ Keyboard slide navigation (Up/Down) ============
+  document.addEventListener('keydown', function(e){
+    if(e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA' || e.target.tagName==='SELECT' || e.target.isContentEditable) return;
+    const idx = sections.indexOf(currentSection);
+    if(e.key==='ArrowDown' || e.key==='PageDown'){
+      e.preventDefault();
+      const next = sections[Math.min(idx+1, sections.length-1)];
+      document.getElementById(next).scrollIntoView({behavior:'smooth', block:'start'});
+    } else if(e.key==='ArrowUp' || e.key==='PageUp'){
+      e.preventDefault();
+      const prev = sections[Math.max(idx-1, 0)];
+      document.getElementById(prev).scrollIntoView({behavior:'smooth', block:'start'});
+    } else if(e.key==='Home'){
+      e.preventDefault(); document.getElementById('hero').scrollIntoView({behavior:'smooth'});
+    } else if(e.key==='End'){
+      e.preventDefault(); document.getElementById('team').scrollIntoView({behavior:'smooth'});
+    }
   });
 
   // ============ Drive 3D scene from scroll section ============
@@ -126,7 +147,7 @@
           { eyebrow:'Critic verdict — Qwen', tag:{text:'INCORRECT', cls:'tag-wrong'}, body:'Qwen: "the other model likely did not account for the fact that Martha collects one shell each month for 60 months."' },
           { eyebrow:'Critic’s proposed answer', tag:{text:'Proposed: 60', cls:'tag-neutral'}, body:'Qwen computes 5 years × 12 months = 60 shells and proposes 60.' },
           { eyebrow:'Solver revision', tag:{text:'Revised: 60', cls:'tag-right'}, body:'Llama revises to 60 shells.' },
-          { eyebrow:'Outcome', tag:{text:'HELPED — gold 60', cls:'tag-right'}, body:'Revision correct. Real poster example; counts toward the 29.1% HELPED rate for Llama→Qwen.' }
+          { eyebrow:'Outcome', tag:{text:'HELPED — GOLD 60', cls:'tag-success'}, body:'Revision correct. Real poster example; counts toward the 29.1% HELPED rate for Llama→Qwen.' }
         ]
       },
       train:{
@@ -138,7 +159,7 @@
           { eyebrow:'Critic verdict — Qwen', tag:{text:'INCORRECT', cls:'tag-wrong'}, body:'Qwen: "the solver multiplied the total distance by 4 instead of first finding the speed per hour."' },
           { eyebrow:'Critic’s proposed answer', tag:{text:'Proposed: 160', cls:'tag-neutral'}, body:'Qwen finds 40 mph (60 / 1.5) and proposes 160 miles (40 × 4).' },
           { eyebrow:'Solver revision', tag:{text:'Revised: 160', cls:'tag-right'}, body:'Llama revises to 160 miles.' },
-          { eyebrow:'Outcome', tag:{text:'HELPED — gold 160', cls:'tag-right'}, body:'Representative example (illustrative).' }
+          { eyebrow:'Outcome', tag:{text:'HELPED — GOLD 160', cls:'tag-success'}, body:'Representative example (illustrative).' }
         ]
       },
       flour:{
@@ -150,7 +171,7 @@
           { eyebrow:'Critic verdict — Qwen', tag:{text:'INCORRECT', cls:'tag-wrong'}, body:'Qwen: "the solver used a 2x scaling factor instead of the correct 2.5x scaling factor for 30 cookies."' },
           { eyebrow:'Critic’s proposed answer', tag:{text:'Proposed: 5', cls:'tag-neutral'}, body:'Qwen proposes 5 cups (2 × 2.5).' },
           { eyebrow:'Solver revision', tag:{text:'Revised: 5', cls:'tag-right'}, body:'Llama revises to 5 cups.' },
-          { eyebrow:'Outcome', tag:{text:'HELPED — gold 5', cls:'tag-right'}, body:'Representative example (illustrative).' }
+          { eyebrow:'Outcome', tag:{text:'HELPED — GOLD 5', cls:'tag-success'}, body:'Representative example (illustrative).' }
         ]
       },
       ali:{
@@ -162,7 +183,7 @@
           { eyebrow:'Critic verdict — Llama', tag:{text:'INCORRECT', cls:'tag-wrong'}, body:'Llama: "the solver calculated total savings but forgot to subtract the $20 spent on the toy."' },
           { eyebrow:'Critic’s proposed answer', tag:{text:'Proposed: 28', cls:'tag-neutral'}, body:'Llama proposes 28 (48 − 20).' },
           { eyebrow:'Solver revision', tag:{text:'Revised: 28', cls:'tag-right'}, body:'Qwen revises to 28.' },
-          { eyebrow:'Outcome', tag:{text:'HELPED — gold 28', cls:'tag-right'}, body:'Representative example (illustrative).' }
+          { eyebrow:'Outcome', tag:{text:'HELPED — GOLD 28', cls:'tag-success'}, body:'Representative example (illustrative).' }
         ]
       },
       garden:{
@@ -174,7 +195,7 @@
           { eyebrow:'Critic verdict — Llama', tag:{text:'INCORRECT', cls:'tag-wrong'}, body:'Llama: "the solver found the total planted but didn\'t subtract the 12 plants that died."' },
           { eyebrow:'Critic’s proposed answer', tag:{text:'Proposed: 108', cls:'tag-neutral'}, body:'Llama proposes 108 (120 − 12).' },
           { eyebrow:'Solver revision', tag:{text:'Revised: 108', cls:'tag-right'}, body:'Qwen revises to 108.' },
-          { eyebrow:'Outcome', tag:{text:'HELPED — gold 108', cls:'tag-right'}, body:'Representative example (illustrative).' }
+          { eyebrow:'Outcome', tag:{text:'HELPED — GOLD 108', cls:'tag-success'}, body:'Representative example (illustrative).' }
         ]
       },
       sara:{
@@ -186,7 +207,7 @@
           { eyebrow:'Critic verdict — Llama', tag:{text:'INCORRECT', cls:'tag-wrong'}, body:'Llama: "the solver divided the full book length by the daily pace without subtracting the 96 pages already read."' },
           { eyebrow:'Critic’s proposed answer', tag:{text:'Proposed: 9', cls:'tag-neutral'}, body:'Llama proposes 9 days ((312 − 96) / 24).' },
           { eyebrow:'Solver revision', tag:{text:'Revised: 9', cls:'tag-right'}, body:'Qwen revises to 9 days.' },
-          { eyebrow:'Outcome', tag:{text:'HELPED — gold 9', cls:'tag-right'}, body:'Representative example (illustrative).' }
+          { eyebrow:'Outcome', tag:{text:'HELPED — GOLD 9', cls:'tag-success'}, body:'Representative example (illustrative).' }
         ]
       }
     };

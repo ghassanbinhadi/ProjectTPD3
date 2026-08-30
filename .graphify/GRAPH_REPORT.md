@@ -1,24 +1,24 @@
 # Graph Report - .  (2026-08-30)
 
 ## Corpus Check
-- Corpus is ~19,667 words - fits in a single context window. You may not need a graph.
+- Corpus is ~19,895 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 63 nodes · 70 edges · 10 communities detected
-- Extraction: 84% EXTRACTED · 16% INFERRED · 0% AMBIGUOUS · INFERRED: 11 edges (avg confidence: 0.82)
+- 64 nodes · 72 edges · 10 communities detected
+- Extraction: 85% EXTRACTED · 15% INFERRED · 0% AMBIGUOUS · INFERRED: 11 edges (avg confidence: 0.82)
 - Token cost: 0 input · 0 output
-- Edge kinds: contains: 39 · references: 14 · calls: 5 · conceptually_related_to: 5 · shares_data_with: 4 · affiliated_with: 1 · implements: 1 · semantically_similar_to: 1
+- Edge kinds: contains: 40 · references: 14 · calls: 6 · conceptually_related_to: 5 · shares_data_with: 4 · affiliated_with: 1 · implements: 1 · semantically_similar_to: 1
 
 
 ## Input Scope
 - Requested: auto
 - Resolved: committed (source: default-auto)
 - Included files: 11 · Candidates: 24
-- Excluded: 0 untracked · 3918 ignored · 0 sensitive · 1 missing committed
+- Excluded: 2 untracked · 3923 ignored · 0 sensitive · 1 missing committed
 - Recommendation: Use --scope all or graphify.yaml inputs.corpus for a knowledge-base folder.
 
 ## Graph Freshness
-- Built from Git commit: `4135049`
+- Built from Git commit: `9b3666a`
 - Compare this hash to `git rev-parse HEAD` before trusting freshness-sensitive graph output.
 ## God Nodes (most connected - your core abstractions)
 1. `Graphify Pipeline` - 8 edges
@@ -27,10 +27,10 @@
 4. `Direction Toggle` - 5 edges
 5. `loadCase()` - 4 edges
 6. `Hero Section` - 4 edges
-7. `Community Detection` - 3 edges
-8. `Hero WebGL Scene` - 3 edges
-9. `KAUST Academy` - 3 edges
-10. `rnd()` - 2 edges
+7. `rnd()` - 3 edges
+8. `Community Detection` - 3 edges
+9. `Hero WebGL Scene` - 3 edges
+10. `KAUST Academy` - 3 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Graphify Knowledge Graph` --conceptually_related_to--> `PeerGPT Project`  [INFERRED]
@@ -65,12 +65,12 @@ Cohesion: 0.27
 Nodes (10): 3-Way Feature Ablation Chart, Benefit per Revision Chart, Correction Effectiveness Chart, False Alarm Rate Chart, Llama-solver Qwen-critic Direction, Qwen-solver Llama-critic Direction, Direction Toggle, Hero WebGL Scene (+2 more)
 
 ### Community 4 - "Graphify Tooling"
-Cohesion: 0.29
-Nodes (8): Abdullah Asiri, Dr. Eman Alnabati, Farah Alshammari, Ghassan Alqahtani, Hero Section, Team Section, KAUST Academy, Lama Alshammari
+Cohesion: 0.28
+Nodes (3): buildBrain(), buildCluster(), rnd()
 
 ### Community 5 - "3D Scene Rendering"
 Cohesion: 0.29
-Nodes (2): buildCluster(), rnd()
+Nodes (8): Abdullah Asiri, Dr. Eman Alnabati, Farah Alshammari, Ghassan Alqahtani, Hero Section, Team Section, KAUST Academy, Lama Alshammari
 
 ### Community 6 - "Graph Value Propositions"
 Cohesion: 1.00
@@ -91,8 +91,6 @@ Nodes (1): Roll Dice Skill
 ## Knowledge Gaps
 - **18 isolated node(s):** `outcomeHint`, `CLAUDE.md Configuration`, `Roll Dice Skill`, `Graphify MCP Server`, `Neo4j Export` (+13 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `3D Scene Rendering`** (2 nodes): `buildCluster()`, `rnd()`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Interactivity Logic`** (1 nodes): `Graphify MCP Server`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Search Question Paper`** (1 nodes): `When Should an LLM Listen to Another LLM?`
@@ -103,12 +101,12 @@ Nodes (1): Roll Dice Skill
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Team Section` connect `Graphify Tooling` to `Team & Authors`?**
-  _High betweenness centrality (0.063) - this node is a cross-community bridge._
+- **Why does `Team Section` connect `3D Scene Rendering` to `Team & Authors`?**
+  _High betweenness centrality (0.061) - this node is a cross-community bridge._
 - **Why does `Results Charts Section` connect `Graphify Extraction Pipeline` to `Team & Authors`?**
-  _High betweenness centrality (0.056) - this node is a cross-community bridge._
-- **Why does `Hero Section` connect `Graphify Tooling` to `Graphify Extraction Pipeline`, `Team & Authors`?**
-  _High betweenness centrality (0.041) - this node is a cross-community bridge._
+  _High betweenness centrality (0.054) - this node is a cross-community bridge._
+- **Why does `Hero Section` connect `3D Scene Rendering` to `Graphify Extraction Pipeline`, `Team & Authors`?**
+  _High betweenness centrality (0.040) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `Direction Toggle` (e.g. with `3-Way Feature Ablation Chart` and `Hero WebGL Scene`) actually correct?**
   _`Direction Toggle` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `outcomeHint`, `CLAUDE.md Configuration`, `Roll Dice Skill` to the rest of the system?**

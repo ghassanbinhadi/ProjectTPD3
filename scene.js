@@ -148,122 +148,110 @@
   );
   BOX.add(innerBox);
 
-  // ============ Two clusters inside box ============
-  const nodeMats = [];
-  function glowSpriteTexture(){
-    const c=document.createElement('canvas'); c.width=64; c.height=64;
-    const g=c.getContext('2d');
-    const grd=g.createRadialGradient(32,32,0,32,32,32);
-    grd.addColorStop(0,'rgba(255,255,255,0.9)');
-    grd.addColorStop(0.2,'rgba(255,255,255,0.35)');
-    grd.addColorStop(0.45,'rgba(255,255,255,0.08)');
-    grd.addColorStop(1,'rgba(255,255,255,0)');
-    g.fillStyle=grd; g.fillRect(0,0,64,64);
-    const tex=new THREE.CanvasTexture(c);
-    return tex;
-  }
-  const glowTex = glowSpriteTexture();
-
-  function buildCluster(cx, count, radius, tint){
+  // ============ Two 3D Brain Point Clouds (solver / critic) — talking to each other ============
+  // Each brain is a BufferGeometry + PointsMaterial dual-hemisphere cloud, facing inward
+  function buildBrain(cx, count, radius, tint){
     const g=new THREE.Group();
     g.position.set(cx,0,0);
     BOX.add(g);
-    const positions=[];
     let s = cx<0? 7:13;
     function rnd(){ s=(s*16807)%2147483647; return s/2147483647; }
-    const baseColor = new THREE.Color(tint);
-    const facing = cx < 0 ? 1 : -1; // left brain faces right, right brain faces left (talking to each other)
+    const facing = cx < 0 ? 1 : -1; // left brain faces right, right faces left
     function insideBrain(x,y){
       const fx = x * facing;
-      // main brain oval
       const oval = (fx/0.62)*(fx/0.62) + (y/0.42)*(y/0.42);
       if (oval > 1) return false;
-      // frontal bulge (forehead) extra
       if (fx > 0.18 && Math.abs(y) < 0.22) {
         const bulge = ((fx-0.18)/0.38)*((fx-0.18)/0.38) + (y/0.28)*(y/0.28);
         if (bulge < 1) return true;
       }
-      // lower jaw / brain stem cut — small indent
       if (fx > 0.12 && y < -0.30) {
         if (y < -0.33 - (fx-0.12)*0.28) return false;
       }
-      // gentle top indent (longitudinal fissure hint)
-      if (Math.abs(y) < 0.06 && fx < -0.35) {
-        // slight waist, allow
-      }
       return oval <= 1;
     }
+    const posArray = new Float32Array(count*3);
+    const colArray = new Float32Array(count*3);
+    const baseColor = new THREE.Color(tint);
     let attempts=0;
     for(let i=0;i<count;i++){
-      let x,y,z;
-      // rejection sample inside brain silhouette
+      let x,y;
       do {
-        x = (rnd()*2-1)*0.70;
-        y = (rnd()*2-1)*0.50;
+        x=(rnd()*2-1)*0.70; y=(rnd()*2-1)*0.50;
         attempts++; if(attempts>500) break;
       } while(!insideBrain(x,y));
-      x *= radius*1.05; y *= radius*1.15;
-      z = (rnd()*2-1)*0.22 * radius;
-      const mat=new THREE.MeshBasicMaterial({ color:baseColor, transparent:true, opacity:0.78 });
-      const sph=new THREE.Mesh(new THREE.SphereGeometry(0.055 + 0.04*rnd(), 10,10), mat);
-      sph.position.set(x,y,z);
-      g.add(sph);
-      // glow halo sprite behind each node
-      const spr=new THREE.Sprite(new THREE.SpriteMaterial({ map:glowTex, color:baseColor, transparent:true, opacity:0.22, blending:THREE.AdditiveBlending, depthWrite:false }));
-      spr.scale.set(0.32,0.32,1);
-      spr.position.copy(sph.position);
-      g.add(spr);
-      positions.push({ mesh:sph, sprite:spr, mat:mat, base:mat.opacity, pos:sph.position });
-      nodeMats.push(mat);
-    }
-    // intra-cluster edges
-    const segs=[];
-    for(let i=0;i<positions.length;i++){
-      for(let j=i+1;j<positions.length;j++){
-        const d=positions[i].pos.distanceTo(positions[j].pos);
-        if(d<radius*1.05){
-          segs.push(positions[i].pos.x,positions[i].pos.y,positions[i].pos.z,
-                    positions[j].pos.x,positions[j].pos.y,positions[j].pos.z);
-        }
-      }
+      x*=radius*1.05; y*=radius*1.15;
+      const z=(rnd()*2-1)*0.22*radius;
+      posArray[i*3]=x; posArray[i*3+1]=y; posArray[i*3+2]=z;
+      // subtle color variation per particle
+      const v = 0.92 + rnd()*0.08;
+      colArray[i*3]=baseColor.r*v; colArray[i*3+1]=baseColor.g*v; colArray[i*3+2]=baseColor.b*v;
     }
     const geo=new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.Float32BufferAttribute(segs,3));
-    const seg=new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color:0xffffff, transparent:true, opacity:0.18 }));
-    g.add(seg);
-    // subtle core
+    geo.setAttribute('position', new THREE.BufferAttribute(posArray,3));
+    geo.setAttribute('color', new THREE.BufferAttribute(colArray,3));
+    const mat=new THREE.PointsMaterial({
+      size:0.095, vertexColors:true, transparent:true, opacity:0.92,
+      blending:THREE.AdditiveBlending, depthWrite:false, sizeAttenuation:true
+    });
+    const points=new THREE.Points(geo, mat);
+    g.add(points);
+    // faint inner glow core (additive sphere)
     const core=new THREE.Mesh(
-      new THREE.SphereGeometry(radius*0.22,16,16),
-      new THREE.MeshBasicMaterial({ color:baseColor, transparent:true, opacity:0.08, blending:THREE.AdditiveBlending })
+      new THREE.SphereGeometry(radius*0.24,16,16),
+      new THREE.MeshBasicMaterial({ color:tint, transparent:true, opacity:0.07, blending:THREE.AdditiveBlending, depthWrite:false })
     );
     g.add(core);
-    return { group:g, nodes:positions, core:core, seg:seg };
+    // internal edges as faint wire between nearby brain points (like sulci)
+    // keep light: connect only a few nearest
+    return { group:g, geo:geo, mat:mat, core:core, posArray:posArray };
   }
 
-  const SOLVER = buildCluster(-1.05, 14, 1.02, 0xECE8DC);
-  const CRITIC = buildCluster( 1.05, 14, 1.02, 0xECE8DC);
+  const SOLVER = buildBrain(-1.05, 110, 1.02, 0xECE8DC);
+  const CRITIC = buildBrain( 1.05, 110, 1.02, 0xECE8DC);
 
-  // ============ Critique stream (Critic -> Solver) inside box ============
-  // Curve in BOX local space: from CRITIC cluster to SOLVER cluster with arc
-  const CURVE = new THREE.CatmullRomCurve3([
-    new THREE.Vector3( 1.15, 0.12, 0.18),
-    new THREE.Vector3( 0.35, 0.95, 0.42),
-    new THREE.Vector3(-0.45, 0.65,-0.18),
-    new THREE.Vector3(-1.15, 0.10, 0.10)
+  // ============ Bidirectional communication stream (brains talking) ============
+  // Two opposing neon streams + pulsing wave rings
+  const CURVE_A = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-1.05, 0.10, 0.12), // solver -> critic
+    new THREE.Vector3(-0.25, 0.85, 0.32),
+    new THREE.Vector3( 0.30, 0.70,-0.18),
+    new THREE.Vector3( 1.05, 0.12, 0.14)
   ]);
-  const PCOUNT=48;
-  const pPos=new Float32Array(PCOUNT*3);
-  const pGeo=new THREE.BufferGeometry();
-  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos,3));
-  const streamMat=new THREE.PointsMaterial({
-    size:0.13, transparent:true, opacity:0,
-    color:new THREE.Color(COLORS.lq.r, COLORS.lq.g, COLORS.lq.b),
+  const CURVE_B = new THREE.CatmullRomCurve3([
+    new THREE.Vector3( 1.05, 0.12, 0.14), // critic -> solver
+    new THREE.Vector3( 0.30, 0.95, 0.38),
+    new THREE.Vector3(-0.30, 0.78,-0.14),
+    new THREE.Vector3(-1.05, 0.10, 0.12)
+  ]);
+  const PCOUNT=42;
+  const pPosA=new Float32Array(PCOUNT*3);
+  const pPosB=new Float32Array(PCOUNT*3);
+  const pGeoA=new THREE.BufferGeometry(); pGeoA.setAttribute('position', new THREE.BufferAttribute(pPosA,3));
+  const pGeoB=new THREE.BufferGeometry(); pGeoB.setAttribute('position', new THREE.BufferAttribute(pPosB,3));
+  const streamMatA=new THREE.PointsMaterial({
+    size:0.11, transparent:true, opacity:0,
+    color:new THREE.Color(COLORS.lq.r, COLORS.lq.g, COLORS.lq.b), // amber
     depthWrite:false, blending:THREE.AdditiveBlending
   });
-  const streamPoints=new THREE.Points(pGeo, streamMat);
-  BOX.add(streamPoints);
+  const streamMatB=new THREE.PointsMaterial({
+    size:0.11, transparent:true, opacity:0,
+    color:new THREE.Color(COLORS.ql.r, COLORS.ql.g, COLORS.ql.b), // cyan
+    depthWrite:false, blending:THREE.AdditiveBlending
+  });
+  const streamA=new THREE.Points(pGeoA, streamMatA);
+  const streamB=new THREE.Points(pGeoB, streamMatB);
+  BOX.add(streamA); BOX.add(streamB);
+  // pulsing signal waves (ring-like via small torus wire or expanding circles)
+  const waveGeo=new THREE.RingGeometry(0.12,0.14,20);
+  waveGeo.rotateX(Math.PI/2);
+  const waveMatA=new THREE.MeshBasicMaterial({ color:0xE2A233, transparent:true, opacity:0, side:THREE.DoubleSide, blending:THREE.AdditiveBlending, depthWrite:false });
+  const waveMatB=new THREE.MeshBasicMaterial({ color:0x3EC0AE, transparent:true, opacity:0, side:THREE.DoubleSide, blending:THREE.AdditiveBlending, depthWrite:false });
+  const waveA=new THREE.Mesh(waveGeo, waveMatA);
+  const waveB=new THREE.Mesh(waveGeo, waveMatB);
+  BOX.add(waveA); BOX.add(waveB);
 
-  // ---- State ----
+  // ---- State (bidirectional) ----
   let direction = document.body.getAttribute('data-direction')||'lq';
   let streamOn=false;
   let outcome='idle';
@@ -272,8 +260,11 @@
 
   function applyColor(){
     const c=new THREE.Color(COLORS[direction].r, COLORS[direction].g, COLORS[direction].b);
-    streamMat.color.copy(c);
     canvas.dataset.streamColor='#'+c.getHexString();
+    // subtle tint pulse on the brain that is currently solver
+    const solverIsLeft = direction==='lq';
+    SOLVER.mat.color.set(solverIsLeft ? 0xFFF0C0 : 0xE8E6E1);
+    CRITIC.mat.color.set(solverIsLeft ? 0xE8E6E1 : 0xC0FFF0);
   }
   const api={
     mode:'webgl',
@@ -347,43 +338,53 @@
       }
     });
 
-    // node pulse + subtle vertical rain
-    [SOLVER,CRITIC].forEach(function(cl){
-      for(let i=0;i<cl.nodes.length;i++){
-        const n=cl.nodes[i];
-        const s=Math.sin(t*1.2 + i*1.7);
-        n.pos.y += Math.cos(t*0.9 + i)*0.00035;
-        const targetOp = n.base + s*0.16;
-        n.mat.opacity += (targetOp - n.mat.opacity)*0.06;
-        if(n.sprite) n.sprite.material.opacity = 0.18 + s*0.06;
-      }
-    });
+    // brain pulse + subtle drift (PointsMaterial opacity + tiny pos jitter)
+    const pulseA = 0.88 + Math.sin(t*1.3)*0.10;
+    const pulseB = 0.88 + Math.sin(t*1.1+1.7)*0.10;
+    SOLVER.mat.opacity = pulseA + (outcomeFlash>0 ? outcomeFlash*0.18 : 0);
+    CRITIC.mat.opacity = pulseB;
+    // faint vertical drift via small group bob
+    SOLVER.group.position.y = Math.sin(t*0.9)*0.05;
+    CRITIC.group.position.y = Math.cos(t*0.85)*0.05;
 
-    // outcome brighten
+    // outcome brighten — solver brain that is currently active solver
     if(outcomeFlash>0){
       outcomeFlash=Math.max(0, outcomeFlash - dt*1.35);
-      SOLVER.nodes.forEach(function(n){ n.mat.opacity=Math.min(1.15, n.base + outcomeFlash*0.6); });
-      SOLVER.core.scale.setScalar(1 + outcomeFlash*1.05);
-      if(SOLVER.seg) SOLVER.seg.material.opacity = 0.18 + outcomeFlash*0.35;
+      const activeBrain = (direction==='lq') ? SOLVER : CRITIC;
+      activeBrain.core.scale.setScalar(1 + outcomeFlash*0.9);
+      activeBrain.mat.opacity = Math.min(1.05, 0.92 + outcomeFlash*0.35);
     } else if(outcome==='idle'){
       SOLVER.core.scale.lerp(new THREE.Vector3(1,1,1),0.05);
-      if(SOLVER.seg) SOLVER.seg.material.opacity += (0.18 - SOLVER.seg.material.opacity)*0.05;
+      CRITIC.core.scale.lerp(new THREE.Vector3(1,1,1),0.05);
     }
 
     const deflectTarget = (outcome==='hurt' && streamOn)?1:0;
     deflectAmt += (deflectTarget - deflectAmt)*0.06;
     const streamTarget = streamOn?1:0;
-    streamMat.opacity += (streamTarget*(1-deflectAmt) - streamMat.opacity)*0.08;
+    streamMatA.opacity += (streamTarget*(1-deflectAmt*0.6) - streamMatA.opacity)*0.08;
+    streamMatB.opacity += (streamTarget*(1-deflectAmt*0.6) - streamMatB.opacity)*0.08;
+    waveMatA.opacity = streamMatA.opacity * 0.35 * (0.6 + Math.sin(t*3.2)*0.4);
+    waveMatB.opacity = streamMatB.opacity * 0.35 * (0.6 + Math.sin(t*3.2+1.1)*0.4);
 
-    if(streamMat.opacity>0.001){
+    if(streamMatA.opacity>0.001){
       for(let i=0;i<PCOUNT;i++){
-        const phase=(t*0.55 + i/PCOUNT)%1;
-        const bend = deflectAmt*1.4;
-        const p=CURVE.getPoint(phase);
-        p.x += bend * Math.max(0,(phase-0.48)) * Math.sin(phase*30);
-        pPos[i*3]=p.x; pPos[i*3+1]=p.y + Math.sin(phase*60 + i)*0.10; pPos[i*3+2]=p.z;
+        const phaseA=(t*0.55 + i/PCOUNT)%1;
+        const pA=CURVE_A.getPoint(phaseA);
+        pPosA[i*3]=pA.x; pPosA[i*3+1]=pA.y + Math.sin(phaseA*40 + i)*0.07; pPosA[i*3+2]=pA.z;
+        const phaseB=(1 - (t*0.52 + i/PCOUNT)%1); // opposite direction
+        const bend = deflectAmt*1.2;
+        const pB=CURVE_B.getPoint(phaseB);
+        pB.x += bend * Math.max(0,(phaseB-0.45))*Math.sin(phaseB*26);
+        pPosB[i*3]=pB.x; pPosB[i*3+1]=pB.y + Math.sin(phaseB*40 + i)*0.07; pPosB[i*3+2]=pB.z;
       }
-      pGeo.attributes.position.needsUpdate=true;
+      pGeoA.attributes.position.needsUpdate=true;
+      pGeoB.attributes.position.needsUpdate=true;
+      // waves travel mid-gap
+      const midA = CURVE_A.getPoint((t*0.35)%1);
+      const midB = CURVE_B.getPoint((t*0.35+0.5)%1);
+      waveA.position.copy(midA); waveA.scale.setScalar(0.6 + (t*0.35%1)*1.4);
+      waveB.position.copy(midB); waveB.scale.setScalar(0.6 + ((t*0.35+0.5)%1)*1.4);
+      waveA.rotation.z = t*0.6; waveB.rotation.z = -t*0.6;
     }
 
     // camera parallax
