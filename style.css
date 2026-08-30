@@ -203,14 +203,16 @@ body.no-webgl #scene-fallback{ display:block; }
   transition:opacity .6s ease, text-shadow .6s ease, transform .6s ease;
   white-space:nowrap;
 }
-.note-query{ left:22%; top:28%; color:#E2A233; border-color:rgba(226,162,51,.18); }
-.note-critique{ right:18%; top:30%; color:#3EC0AE; border-color:rgba(62,192,174,.18); }
-.note-prerev{ left:50%; bottom:28%; transform:translateX(-50%); color:#fff; border-color:rgba(255,255,255,.12); font-size:8.5px; }
-.note-correction{ right:16%; bottom:22%; color:#7FF0E0; border-color:rgba(62,192,174,.18); }
+.note-query{ left:16%; top:34%; color:#FFAA00; border-color:rgba(255,170,0,.2); }
+.note-critique{ right:14%; top:34%; color:#00F2FE; border-color:rgba(0,242,254,.2); }
+.note-gate{ left:50%; top:47%; transform:translateX(-50%); color:#fff; border-color:rgba(255,255,255,.16); font-size:8.5px; }
+.note-prerev{ left:50%; bottom:30%; transform:translateX(-50%); color:#fff; border-color:rgba(255,255,255,.12); font-size:8.5px; }
+.note-correct{ left:50%; bottom:16%; transform:translateX(-50%); color:#7FF0E0; border-color:rgba(0,242,254,.2); font-size:8.5px; }
+.note-active{ transform:translateX(-50%) scale(1.06); }
 @media (max-width: 640px){
   .brain-note{ font-size:7.5px; padding:2px 4px; }
-  .note-query{ left:10%; top:26%; } .note-critique{ right:8%; top:28%; }
-  .note-prerev{ bottom:26%; } .note-correction{ right:6%; bottom:20%; }
+  .note-query{ left:8%; top:32%; } .note-critique{ right:6%; top:32%; }
+  .note-gate{ left:50%; top:46%; } .note-prerev{ bottom:32%; } .note-correct{ bottom:18%; }
 }
 
 /* inner constraint — varied per section */
