@@ -9,7 +9,7 @@
   "mcp": {
     "playwright": {
       "type": "local",
-      "command": ["npx", "-y", "@playwright/mcp"],
+      "command": ["/Users/rev/Documents/weppage/ProjectTPD3/.tools/node_modules/.bin/playwright-mcp", "--browser", "chrome"],
       "enabled": true
     }
   }
