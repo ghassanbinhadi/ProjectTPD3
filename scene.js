@@ -155,7 +155,9 @@
   let deflectAmt = 0;           // >0 when hurting (stream fades before reaching solver)
 
   function applyColor() {
-    streamMat.color.setRGB(COLORS[direction].r, COLORS[direction].g, COLORS[direction].b);
+    const c = new THREE.Color(COLORS[direction].r, COLORS[direction].g, COLORS[direction].b);
+    streamMat.color.copy(c);
+    canvas.dataset.streamColor = '#' + c.getHexString();
   }
 
   const api = {

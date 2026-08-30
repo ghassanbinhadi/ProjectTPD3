@@ -404,6 +404,7 @@ body[data-direction="ql"] .row-ql .bar-label{ color: var(--text-dark); font-weig
   .net-left::after, .net-right::after{ animation: none; }
   .fallback-net{ animation: none; opacity: 1; }
   .fallback-stream{ opacity: 0; }
+  #fallbackStreamPath{ animation: none; }
   .demo-track{ transition: none; }
   *{ scroll-behavior: auto !important; }
 }
