@@ -23,21 +23,22 @@ CSS-only version of the same scene (`body.no-webgl`).
 
 ## Deploy on GitHub Pages
 
-The repo is already initialized and configured with a remote. To publish:
+The repo is already initialized and configured with a remote. The site lives on
+the `Project-Page-clean` branch (kept separate from `main`, which holds the
+earlier research/modeling code). To publish:
 
-1. Make sure the branch you deploy from is `main`:
+1. Make sure the latest build is pushed:
    ```bash
-   git branch -M main
-   git push -u origin main
+   git push -u origin Project-Page-clean
    ```
 2. On GitHub: go to the repo → **Settings → Pages**.
 3. Under **Build and deployment → Source**, choose **Deploy from a branch**.
-4. Branch: `main`, folder: `/ (root)` → **Save**.
+4. Branch: `Project-Page-clean`, folder: `/ (root)` → **Save**.
 5. Wait ~1 minute — your site will be live at
    `https://<your-username>.github.io/<repo-name>/`.
 
-If you deploy from a different branch or prefer `/docs`, adjust steps 2–4
-accordingly. The static files live at the repo root, so no build step is needed.
+If you'd rather publish from `main` instead, change the branch in step 4. The
+static files live at the repo root, so no build step is needed.
 
 ## Things to swap in before you publish
 
