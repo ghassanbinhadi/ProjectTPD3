@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>graphify - graph.html</title>
+<script src="https://unpkg.com/vis-network@9.1.6/standalone/umd/vis-network.min.js" integrity="sha384-Ux6phic9PEHJ38YtrijhkzyJ8yQlH8i/+buBR8s3mAZOJrP1gwyvAcIYl3GWtpX1" crossorigin="anonymous"></script>
+<style>
+  :root {
+  --st-foundation-color-blue-10: oklch(97% 0.02 242);
+  --st-color-blue-10: oklch(97% 0.02 242);
+  --st-foundation-color-blue-60: oklch(50% 0.134 242.749);
+  --st-color-blue-60: oklch(50% 0.134 242.749);
+  --st-foundation-color-blue-80: oklch(32% 0.11 242);
+  --st-color-blue-80: oklch(32% 0.11 242);
+  --st-foundation-color-cyan-10: oklch(96% 0.04 195);
+  --st-color-cyan-10: oklch(96% 0.04 195);
+  --st-foundation-color-cyan-50: oklch(70.4% 0.14 182.503);
+  --st-color-cyan-50: oklch(70.4% 0.14 182.503);
+  --st-foundation-color-cyan-70: oklch(48% 0.12 190);
+  --st-color-cyan-70: oklch(48% 0.12 190);
+  --st-foundation-color-slate-0: #ffffff;
+  --st-color-slate-0: #ffffff;
+  --st-foundation-color-slate-10: #f8fafc;
+  --st-color-slate-10: #f8fafc;
+  --st-foundation-color-slate-20: #e2e8f0;
+  --st-color-slate-20: #e2e8f0;
+  --st-foundation-color-slate-60: #475569;
+  --st-color-slate-60: #475569;
+  --st-foundation-color-slate-80: #1e293b;
+  --st-color-slate-80: #1e293b;
+  --st-foundation-color-slate-90: #0f172a;
+  --st-color-slate-90: #0f172a;
+  --st-foundation-color-feedback-success: #16a34a;
+  --st-color-feedback-success: #16a34a;
+  --st-foundation-color-feedback-warning: #d97706;
+  --st-color-feedback-warning: #d97706;
+  --st-foundation-color-feedback-error: #dc2626;
+  --st-color-feedback-error: #dc2626;
+  --st-foundation-color-feedback-info: #2563eb;
+  --st-color-feedback-info: #2563eb;
+  --st-foundation-font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --st-font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --st-foundation-font-display: Inter, system-ui, sans-serif;
+  --st-font-display: Inter, system-ui, sans-serif;
+  --st-foundation-font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --st-font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --st-foundation-spacing-0: 0;
+  --st-spacing-0: 0;
+  --st-foundation-spacing-1: 0.25rem;
+  --st-spacing-1: 0.25rem;
+  --st-foundation-spacing-2: 0.5rem;
+  --st-spacing-2: 0.5rem;
+  --st-foundation-spacing-3: 0.75rem;
+  --st-spacing-3: 0.75rem;
+  --st-foundation-spacing-4: 1rem;
+  --st-spacing-4: 1rem;
+  --st-foundation-spacing-6: 1.5rem;
+  --st-spacing-6: 1.5rem;
+  --st-foundation-spacing-8: 2rem;
+  --st-spacing-8: 2rem;
+  --st-foundation-spacing-12: 3rem;
+  --st-spacing-12: 3rem;
+  --st-foundation-spacing-16: 4rem;
+  --st-spacing-16: 4rem;
+  --st-foundation-radius-none: 0;
+  --st-radius-none: 0;
+  --st-foundation-radius-sm: 0.25rem;
+  --st-radius-sm: 0.25rem;
+  --st-foundation-radius-md: 0.375rem;
+  --st-radius-md: 0.375rem;
+  --st-foundation-radius-lg: 0.5rem;
+  --st-radius-lg: 0.5rem;
+  --st-foundation-radius-pill: 999px;
+  --st-radius-pill: 999px;
+  --st-foundation-shadow-subtle: 0 1px 2px rgb(15 23 42 / 0.08);
+  --st-shadow-subtle: 0 1px 2px rgb(15 23 42 / 0.08);
+  --st-foundation-shadow-medium: 0 8px 24px rgb(15 23 42 / 0.12);
+  --st-shadow-medium: 0 8px 24px rgb(15 23 42 / 0.12);
+  --st-foundation-shadow-floating: 0 18px 45px rgb(15 23 42 / 0.18);
+  --st-shadow-floating: 0 18px 45px rgb(15 23 42 / 0.18);
+  --st-foundation-motion-fast: 120ms;
+  --st-motion-fast: 120ms;
+  --st-foundation-motion-normal: 180ms;
+  --st-motion-normal: 180ms;
+  --st-foundation-motion-slow: 280ms;
+  --st-motion-slow: 280ms;
+  --st-foundation-motion-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --st-motion-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --st-foundation-z-header: 50;
+  --st-z-header: 50;
+  --st-zindex-header: 50;
+  --st-foundation-z-toast: 60;
+  --st-z-toast: 60;
+  --st-zindex-toast: 60;
+  --st-foundation-z-overlay: 80;
+  --st-z-overlay: 80;
+  --st-zindex-overlay: 80;
+  --st-foundation-z-modal: 100;
+  --st-z-modal: 100;
+  --st-zindex-modal: 100;
+  --st-foundation-z-chat: 110;
+  --st-z-chat: 110;
+  --st-zindex-chat: 110;
+  --st-foundation-borderWidth-none: 0;
+  --st-borderWidth-none: 0;
+  --st-foundation-borderWidth-thin: 1px;
+  --st-borderWidth-thin: 1px;
+  --st-foundation-borderWidth-thick: 2px;
+  --st-borderWidth-thick: 2px;
+  --st-foundation-borderStyle-solid: solid;
+  --st-borderStyle-solid: solid;
+  --st-foundation-density-sm-controlHeight: 2rem;
+  --st-density-sm-controlHeight: 2rem;
+  --st-foundation-density-sm-paddingBlock: 0;
+  --st-density-sm-paddingBlock: 0;
+  --st-foundation-density-sm-paddingInline: 0.75rem;
+  --st-density-sm-paddingInline: 0.75rem;
+  --st-foundation-density-sm-gap: 0.375rem;
+  --st-density-sm-gap: 0.375rem;
+  --st-foundation-density-sm-minWidth: 2rem;
+  --st-density-sm-minWidth: 2rem;
+  --st-foundation-density-md-controlHeight: 2.5rem;
+  --st-density-md-controlHeight: 2.5rem;
+  --st-foundation-density-md-paddingBlock: 0;
+  --st-density-md-paddingBlock: 0;
+  --st-foundation-density-md-paddingInline: 1rem;
+  --st-density-md-paddingInline: 1rem;
+  --st-foundation-density-md-gap: 0.5rem;
+  --st-density-md-gap: 0.5rem;
+  --st-foundation-density-md-minWidth: 2.5rem;
+  --st-density-md-minWidth: 2.5rem;
+  --st-foundation-density-lg-controlHeight: 3rem;
+  --st-density-lg-controlHeight: 3rem;
+  --st-foundation-density-lg-paddingBlock: 0;
+  --st-density-lg-paddingBlock: 0;
+  --st-foundation-density-lg-paddingInline: 1.25rem;
+  --st-density-lg-paddingInline: 1.25rem;
+  --st-foundation-density-lg-gap: 0.5rem;
+  --st-density-lg-gap: 0.5rem;
+  --st-foundation-density-lg-minWidth: 3rem;
+  --st-density-lg-minWidth: 3rem;
+  --st-foundation-typography-control-family: var(--st-font-sans);
+  --st-typography-control-family: var(--st-font-sans);
+  --st-foundation-typography-control-size: 0.9375rem;
+  --st-typography-control-size: 0.9375rem;
+  --st-foundation-typography-control-weight: 600;
+  --st-typography-control-weight: 600;
+  --st-foundation-typography-control-lineHeight: 1.2;
+  --st-typography-control-lineHeight: 1.2;
+  --st-foundation-typography-control-letterSpacing: 0;
+  --st-typography-control-letterSpacing: 0;
+  --st-foundation-typography-control-textTransform: none;
+  --st-typography-control-textTransform: none;
+  --st-foundation-typography-control-textDecoration: none;
+  --st-typography-control-textDecoration: none;
+  --st-foundation-typography-control-decorationThickness: auto;
+  --st-typography-control-decorationThickness: auto;
+  --st-foundation-typography-control-decorationOffset: auto;
+  --st-typography-control-decorationOffset: auto;
+  --st-foundation-typography-field-family: var(--st-font-sans);
+  --st-typography-field-family: var(--st-font-sans);
+  --st-foundation-typography-field-size: 1rem;
+  --st-typography-field-size: 1rem;
+  --st-foundation-typography-field-weight: 400;
+  --st-typography-field-weight: 400;
+  --st-foundation-typography-field-lineHeight: 1.5;
+  --st-typography-field-lineHeight: 1.5;
+  --st-foundation-typography-field-letterSpacing: 0;
+  --st-typography-field-letterSpacing: 0;
+  --st-foundation-typography-field-textTransform: none;
+  --st-typography-field-textTransform: none;
+  --st-foundation-typography-field-textDecoration: none;
+  --st-typography-field-textDecoration: none;
+  --st-foundation-typography-field-decorationThickness: auto;
+  --st-typography-field-decorationThickness: auto;
+  --st-foundation-typography-field-decorationOffset: auto;
+  --st-typography-field-decorationOffset: auto;
+  --st-foundation-typography-label-family: var(--st-font-sans);
+  --st-typography-label-family: var(--st-font-sans);
+  --st-foundation-typography-label-size: 0.875rem;
+  --st-typography-label-size: 0.875rem;
+  --st-foundation-typography-label-weight: 600;
+  --st-typography-label-weight: 600;
+  --st-foundation-typography-label-lineHeight: 1.4;
+  --st-typography-label-lineHeight: 1.4;
+  --st-foundation-typography-label-letterSpacing: 0;
+  --st-typography-label-letterSpacing: 0;
+  --st-foundation-typography-label-textTransform: none;
+  --st-typography-label-textTransform: none;
+  --st-foundation-typography-label-textDecoration: none;
+  --st-typography-label-textDecoration: none;
+  --st-foundation-typography-label-decorationThickness: auto;
+  --st-typography-label-decorationThickness: auto;
+  --st-foundation-typography-label-decorationOffset: auto;
+  --st-typography-label-decorationOffset: auto;
+  --st-foundation-typography-link-family: inherit;
+  --st-typography-link-family: inherit;
+  --st-foundation-typography-link-size: inherit;
+  --st-typography-link-size: inherit;
+  --st-foundation-typography-link-weight: inherit;
+  --st-typography-link-weight: inherit;
+  --st-foundation-typography-link-lineHeight: inherit;
+  --st-typography-link-lineHeight: inherit;
+  --st-foundation-typography-link-letterSpacing: 0;
+  --st-typography-link-letterSpacing: 0;
+  --st-foundation-typography-link-textTransform: none;
+  --st-typography-link-textTransform: none;
+  --st-foundation-typography-link-textDecoration: underline;
+  --st-typography-link-textDecoration: underline;
+  --st-foundation-typography-link-decorationThickness: auto;
+  --st-typography-link-decorationThickness: auto;
+  --st-foundation-typography-link-decorationOffset: 0.18em;
+  --st-typography-link-decorationOffset: 0.18em;
+  --st-foundation-disabledOpacity: 0.55;
+  --st-disabledOpacity: 0.55;
+  --st-foundation-transition-property: background-color, border-color, color, box-shadow, outline-color;
+  --st-transition-property: background-color, border-color, color, box-shadow, outline-color;
+  --st-foundation-transition-duration: 120ms;
+  --st-transition-duration: 120ms;
+  --st-foundation-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --st-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --st-foundation-cursor-interactive: pointer;
+  --st-cursor-interactive: pointer;
+  --st-foundation-cursor-disabled: not-allowed;
+  --st-cursor-disabled: not-allowed;
+  --st-foundation-cursor-text: text;
+  --st-cursor-text: text;
+  --st-foundation-iconSize-sm: 1rem;
+  --st-iconSize-sm: 1rem;
+  --st-foundation-iconSize-md: 1.125rem;
+  --st-iconSize-md: 1.125rem;
+  --st-foundation-iconSize-lg: 1.25rem;
+  --st-iconSize-lg: 1.25rem;
+  --st-foundation-focus-strategy: outline;
+  --st-focus-strategy: outline;
+  --st-foundation-focus-width: 2px;
+  --st-focus-width: 2px;
+  --st-foundation-focus-offset: 2px;
+  --st-focus-offset: 2px;
+  --st-foundation-focus-color: var(--st-semantic-border-interactive);
+  --st-focus-color: var(--st-semantic-border-interactive);
+  --st-foundation-focus-inset: 0;
+  --st-focus-inset: 0;
+  --st-foundation-field-style: outline;
+  --st-field-style: outline;
+  --st-foundation-field-fillBg: var(--st-semantic-surface-default);
+  --st-field-fillBg: var(--st-semantic-surface-default);
+  --st-foundation-field-underlineColor: var(--st-semantic-border-strong);
+  --st-field-underlineColor: var(--st-semantic-border-strong);
+  --st-foundation-field-underlineWidth: 1px;
+  --st-field-underlineWidth: 1px;
+  --st-semantic-surface-default: #ffffff;
+  --st-semantic-surface-subtle: #f8fafc;
+  --st-semantic-surface-raised: #ffffff;
+  --st-semantic-surface-inverse: #0f172a;
+  --st-semantic-surface-overlay: rgb(15 23 42 / 0.48);
+  --st-semantic-text-primary: #0f172a;
+  --st-semantic-text-secondary: #475569;
+  --st-semantic-text-muted: #64748b;
+  --st-semantic-text-inverse: #ffffff;
+  --st-semantic-text-link: oklch(50% 0.134 242.749);
+  --st-semantic-border-subtle: #e2e8f0;
+  --st-semantic-border-strong: #94a3b8;
+  --st-semantic-border-interactive: oklch(50% 0.134 242.749);
+  --st-semantic-action-primary: oklch(50% 0.134 242.749);
+  --st-semantic-action-primaryHover: oklch(32% 0.11 242);
+  --st-semantic-action-primaryText: #ffffff;
+  --st-semantic-action-secondary: #f8fafc;
+  --st-semantic-action-secondaryHover: #e2e8f0;
+  --st-semantic-action-secondaryText: #0f172a;
+  --st-semantic-action-danger: #dc2626;
+  --st-semantic-feedback-success: #16a34a;
+  --st-semantic-feedback-warning: #d97706;
+  --st-semantic-feedback-error: #dc2626;
+  --st-semantic-feedback-info: #2563eb;
+  --st-semantic-status-pending: #d97706;
+  --st-semantic-status-processing: #2563eb;
+  --st-semantic-status-completed: #16a34a;
+  --st-semantic-status-failed: #dc2626;
+  --st-semantic-data-category1: #4E79A7;
+  --st-semantic-data-category2: #F28E2B;
+  --st-semantic-data-category3: #E15759;
+  --st-semantic-data-category4: #76B7B2;
+  --st-semantic-data-category5: #59A14F;
+  --st-semantic-data-category6: #EDC948;
+  --st-semantic-data-category7: #B07AA1;
+  --st-semantic-data-category8: #FF9DA7;
+  --st-component-button-radius: 0.375rem;
+  --st-component-button-primaryBackground: oklch(50% 0.134 242.749);
+  --st-component-button-primaryText: #ffffff;
+  --st-component-button-secondaryBackground: #f8fafc;
+  --st-component-button-secondaryBorder: #e2e8f0;
+  --st-component-button-secondaryHoverBackground: #e2e8f0;
+  --st-component-button-secondaryText: #0f172a;
+  --st-component-button-anatomy-shape-radius: 0.375rem;
+  --st-component-button-anatomy-shape-borderWidth: 1px;
+  --st-component-button-anatomy-shape-borderStyle: solid;
+  --st-component-button-anatomy-density-sm-controlHeight: 2rem;
+  --st-component-button-anatomy-density-sm-paddingBlock: 0;
+  --st-component-button-anatomy-density-sm-paddingInline: 0.75rem;
+  --st-component-button-anatomy-density-sm-gap: 0.375rem;
+  --st-component-button-anatomy-density-sm-minWidth: 2rem;
+  --st-component-button-anatomy-density-sm-fontSize: 0.875rem;
+  --st-component-button-anatomy-density-sm-paddingInlineEnd: 0.75rem;
+  --st-component-button-anatomy-density-md-controlHeight: 2.5rem;
+  --st-component-button-anatomy-density-md-paddingBlock: 0;
+  --st-component-button-anatomy-density-md-paddingInline: 1rem;
+  --st-component-button-anatomy-density-md-gap: 0.5rem;
+  --st-component-button-anatomy-density-md-minWidth: 2.5rem;
+  --st-component-button-anatomy-density-md-fontSize: 0.9375rem;
+  --st-component-button-anatomy-density-md-paddingInlineEnd: 1rem;
+  --st-component-button-anatomy-density-lg-controlHeight: 3rem;
+  --st-component-button-anatomy-density-lg-paddingBlock: 0;
+  --st-component-button-anatomy-density-lg-paddingInline: 1.25rem;
+  --st-component-button-anatomy-density-lg-gap: 0.5rem;
+  --st-component-button-anatomy-density-lg-minWidth: 3rem;
+  --st-component-button-anatomy-density-lg-fontSize: 1rem;
+  --st-component-button-anatomy-density-lg-paddingInlineEnd: 1.25rem;
+  --st-component-button-anatomy-typography-family: var(--st-font-sans);
+  --st-component-button-anatomy-typography-size: 0.9375rem;
+  --st-component-button-anatomy-typography-weight: 600;
+  --st-component-button-anatomy-typography-lineHeight: 1.2;
+  --st-component-button-anatomy-typography-letterSpacing: 0;
+  --st-component-button-anatomy-typography-textTransform: none;
+  --st-component-button-anatomy-typography-textDecoration: none;
+  --st-component-button-anatomy-typography-decorationThickness: auto;
+  --st-component-button-anatomy-typography-decorationOffset: auto;
+  --st-component-button-anatomy-focus-strategy: outline;
+  --st-component-button-anatomy-focus-width: 2px;
+  --st-component-button-anatomy-focus-offset: 2px;
+  --st-component-button-anatomy-focus-color: var(--st-semantic-border-interactive);
+  --st-component-button-anatomy-focus-inset: 0;
+  --st-component-button-anatomy-focus-outline: 2px solid var(--st-semantic-border-interactive);
+  --st-component-button-anatomy-focus-boxShadow: none;
+  --st-component-button-anatomy-icon-size: 1.125rem;
+  --st-component-button-anatomy-icon-gap: 0.5rem;
+  --st-component-button-anatomy-states-hover-bg: oklch(32% 0.11 242);
+  --st-component-button-anatomy-states-hover-transform: none;
+  --st-component-button-anatomy-states-active-transform: none;
+  --st-component-button-anatomy-states-disabled-opacity: 0.55;
+  --st-component-link-text: oklch(50% 0.134 242.749);
+  --st-component-link-hoverText: oklch(50% 0.134 242.749);
+  --st-component-link-disabledText: #64748b;
+  --st-component-link-focusRing: oklch(50% 0.134 242.749);
+  --st-component-link-anatomy-shape-radius: 0.25rem;
+  --st-component-link-anatomy-shape-borderWidth: 0;
+  --st-component-link-anatomy-shape-borderStyle: solid;
+  --st-component-link-anatomy-typography-family: inherit;
+  --st-component-link-anatomy-typography-size: inherit;
+  --st-component-link-anatomy-typography-weight: inherit;
+  --st-component-link-anatomy-typography-lineHeight: inherit;
+  --st-component-link-anatomy-typography-letterSpacing: 0;
+  --st-component-link-anatomy-typography-textTransform: none;
+  --st-component-link-anatomy-typography-textDecoration: underline;
+  --st-component-link-anatomy-typography-decorationThickness: auto;
+  --st-component-link-anatomy-typography-decorationOffset: 0.18em;
+  --st-component-link-anatomy-typography-textDecorationHover: underline;
+  --st-component-link-anatomy-focus-strategy: outline;
+  --st-component-link-anatomy-focus-width: 2px;
+  --st-component-link-anatomy-focus-offset: 2px;
+  --st-component-link-anatomy-focus-color: var(--st-semantic-border-interactive);
+  --st-component-link-anatomy-focus-inset: 0;
+  --st-component-link-anatomy-focus-outline: 2px solid var(--st-semantic-border-interactive);
+  --st-component-link-anatomy-focus-boxShadow: none;
+  --st-component-link-anatomy-states-hover-text: oklch(50% 0.134 242.749);
+  --st-component-link-anatomy-states-hover-decoration: underline;
+  --st-component-link-anatomy-states-disabled-text: #64748b;
+  --st-component-link-anatomy-states-disabled-decoration: none;
+  --st-component-link-anatomy-states-disabled-opacity: 0.55;
+  --st-component-alert-background: #ffffff;
+  --st-component-alert-text: #0f172a;
+  --st-component-alert-border: #e2e8f0;
+  --st-component-alert-infoBorder: #2563eb;
+  --st-component-alert-successBorder: #16a34a;
+  --st-component-alert-warningBorder: #d97706;
+  --st-component-alert-errorBorder: #dc2626;
+  --st-component-alert-radius: 0.5rem;
+  --st-component-alert-borderTop: 1px solid #e2e8f0;
+  --st-component-alert-borderRight: 1px solid #e2e8f0;
+  --st-component-alert-borderBottom: 1px solid #e2e8f0;
+  --st-component-alert-accentWidth: 0.25rem;
+  --st-component-alert-filetWidth: 0;
+  --st-component-alert-paddingTop: 1rem;
+  --st-component-alert-paddingRight: 1rem;
+  --st-component-alert-paddingBottom: 1rem;
+  --st-component-alert-paddingLeft: 1rem;
+  --st-component-alert-fontSize: inherit;
+  --st-component-alert-lineHeight: normal;
+  --st-component-alert-letterSpacing: normal;
+  --st-component-accordion-text: #0f172a;
+  --st-component-accordion-paddingBlock: 0.875rem;
+  --st-component-accordion-paddingInline: 0.5rem;
+  --st-component-accordion-fontSize: inherit;
+  --st-component-accordion-fontWeight: 600;
+  --st-component-accordion-lineHeight: normal;
+  --st-component-tag-radius: 999px;
+  --st-component-tag-paddingBlock: 0.25rem;
+  --st-component-tag-paddingInline: 0.625rem;
+  --st-component-tag-fontSize: 0.75rem;
+  --st-component-tag-fontWeight: 600;
+  --st-component-tag-lineHeight: 1;
+  --st-component-tag-letterSpacing: normal;
+  --st-component-tag-textTransform: none;
+  --st-component-tag-minHeight: 0;
+  --st-component-tag-neutralBackground: #f8fafc;
+  --st-component-tag-neutralText: #475569;
+  --st-component-badge-radius: 999px;
+  --st-component-badge-paddingBlock: 0.25rem;
+  --st-component-badge-paddingInline: 0.5rem;
+  --st-component-badge-fontSize: 0.75rem;
+  --st-component-badge-fontWeight: 650;
+  --st-component-badge-lineHeight: 1;
+  --st-component-badge-letterSpacing: normal;
+  --st-component-badge-textTransform: none;
+  --st-component-badge-minHeight: 0;
+  --st-component-badge-infoBackground: color-mix(in srgb, #2563eb 14%, white);
+  --st-component-badge-infoText: #2563eb;
+  --st-component-card-background: #ffffff;
+  --st-component-card-border: #e2e8f0;
+  --st-component-card-radius: 0.5rem;
+  --st-component-card-shadow: 0 1px 2px rgb(15 23 42 / 0.08);
+  --st-component-card-anatomy-shape-radius: 0.5rem;
+  --st-component-card-anatomy-shape-borderWidth: 1px;
+  --st-component-card-anatomy-shape-borderStyle: solid;
+  --st-component-card-anatomy-typography-family: var(--st-font-sans);
+  --st-component-card-anatomy-typography-size: inherit;
+  --st-component-card-anatomy-typography-weight: 400;
+  --st-component-card-anatomy-typography-lineHeight: normal;
+  --st-component-card-anatomy-typography-letterSpacing: normal;
+  --st-component-card-anatomy-typography-textTransform: none;
+  --st-component-card-anatomy-typography-textDecoration: none;
+  --st-component-card-anatomy-typography-decorationThickness: auto;
+  --st-component-card-anatomy-typography-decorationOffset: auto;
+  --st-component-card-anatomy-focus-strategy: outline;
+  --st-component-card-anatomy-focus-width: 2px;
+  --st-component-card-anatomy-focus-offset: 2px;
+  --st-component-card-anatomy-focus-color: var(--st-semantic-border-interactive);
+  --st-component-card-anatomy-focus-inset: 0;
+  --st-component-card-anatomy-focus-outline: 2px solid var(--st-semantic-border-interactive);
+  --st-component-card-anatomy-focus-boxShadow: none;
+  --st-component-card-anatomy-states-hover-transform: translateY(-1px);
+  --st-component-menu-background: #ffffff;
+  --st-component-menu-border: #e2e8f0;
+  --st-component-menu-text: #0f172a;
+  --st-component-menu-itemHoverBackground: #f8fafc;
+  --st-component-menu-disabledText: #64748b;
+  --st-component-menu-radius: 0.375rem;
+  --st-component-menu-shadow: 0 8px 24px rgb(15 23 42 / 0.12);
+  --st-component-popover-background: #ffffff;
+  --st-component-popover-border: #e2e8f0;
+  --st-component-popover-text: #0f172a;
+  --st-component-popover-shadow: 0 18px 45px rgb(15 23 42 / 0.18);
+  --st-component-popover-radius: 0.5rem;
+  --st-component-popover-zIndex: 80;
+  --st-component-dropdown-background: #ffffff;
+  --st-component-dropdown-border: #e2e8f0;
+  --st-component-dropdown-text: #0f172a;
+  --st-component-dropdown-optionHoverBackground: #f8fafc;
+  --st-component-dropdown-selectedBackground: oklch(50% 0.134 242.749);
+  --st-component-dropdown-selectedText: #ffffff;
+  --st-component-dropdown-radius: 0.375rem;
+  --st-component-dropdown-shadow: 0 8px 24px rgb(15 23 42 / 0.12);
+  --st-component-input-background: #ffffff;
+  --st-component-input-border: #e2e8f0;
+  --st-component-input-focusRing: oklch(50% 0.134 242.749);
+  --st-component-input-radius: 0.375rem;
+  --st-component-field-labelText: #0f172a;
+  --st-component-field-helpText: #475569;
+  --st-component-field-errorText: #dc2626;
+  --st-component-field-gap: 0.5rem;
+  --st-component-field-maxWidth: 28rem;
+  --st-component-field-labelTypography-family: var(--st-font-sans);
+  --st-component-field-labelTypography-size: 0.875rem;
+  --st-component-field-labelTypography-weight: 600;
+  --st-component-field-labelTypography-lineHeight: 1.4;
+  --st-component-field-labelTypography-letterSpacing: 0;
+  --st-component-field-labelTypography-textTransform: none;
+  --st-component-field-labelTypography-textDecoration: none;
+  --st-component-field-labelTypography-decorationThickness: auto;
+  --st-component-field-labelTypography-decorationOffset: auto;
+  --st-component-control-background: #ffffff;
+  --st-component-control-text: #0f172a;
+  --st-component-control-placeholderText: #64748b;
+  --st-component-control-border: #e2e8f0;
+  --st-component-control-hoverBorder: #94a3b8;
+  --st-component-control-focusRing: oklch(50% 0.134 242.749);
+  --st-component-control-invalidBorder: #dc2626;
+  --st-component-control-disabledBackground: #f8fafc;
+  --st-component-control-disabledText: #64748b;
+  --st-component-control-radius: 0.375rem;
+  --st-component-control-smHeight: 2rem;
+  --st-component-control-mdHeight: 2.5rem;
+  --st-component-control-lgHeight: 3rem;
+  --st-component-control-anatomy-shape-radius: 0.375rem;
+  --st-component-control-anatomy-shape-borderWidth: 1px;
+  --st-component-control-anatomy-shape-borderStyle: solid;
+  --st-component-control-anatomy-density-sm-controlHeight: 2rem;
+  --st-component-control-anatomy-density-sm-paddingBlock: 0;
+  --st-component-control-anatomy-density-sm-paddingInline: 0.75rem;
+  --st-component-control-anatomy-density-sm-gap: 0.375rem;
+  --st-component-control-anatomy-density-sm-minWidth: 2rem;
+  --st-component-control-anatomy-density-sm-fontSize: 0.875rem;
+  --st-component-control-anatomy-density-md-controlHeight: 2.5rem;
+  --st-component-control-anatomy-density-md-paddingBlock: 0;
+  --st-component-control-anatomy-density-md-paddingInline: 1rem;
+  --st-component-control-anatomy-density-md-gap: 0.5rem;
+  --st-component-control-anatomy-density-md-minWidth: 2.5rem;
+  --st-component-control-anatomy-density-md-fontSize: 0.9375rem;
+  --st-component-control-anatomy-density-lg-controlHeight: 3rem;
+  --st-component-control-anatomy-density-lg-paddingBlock: 0;
+  --st-component-control-anatomy-density-lg-paddingInline: 1.25rem;
+  --st-component-control-anatomy-density-lg-gap: 0.5rem;
+  --st-component-control-anatomy-density-lg-minWidth: 3rem;
+  --st-component-control-anatomy-density-lg-fontSize: 1rem;
+  --st-component-control-anatomy-typography-family: var(--st-font-sans);
+  --st-component-control-anatomy-typography-size: 1rem;
+  --st-component-control-anatomy-typography-weight: 400;
+  --st-component-control-anatomy-typography-lineHeight: 1.5;
+  --st-component-control-anatomy-typography-letterSpacing: 0;
+  --st-component-control-anatomy-typography-textTransform: none;
+  --st-component-control-anatomy-typography-textDecoration: none;
+  --st-component-control-anatomy-typography-decorationThickness: auto;
+  --st-component-control-anatomy-typography-decorationOffset: auto;
+  --st-component-control-anatomy-focus-strategy: outline;
+  --st-component-control-anatomy-focus-width: 2px;
+  --st-component-control-anatomy-focus-offset: 2px;
+  --st-component-control-anatomy-focus-color: var(--st-semantic-border-interactive);
+  --st-component-control-anatomy-focus-inset: 0;
+  --st-component-control-anatomy-focus-outline: 2px solid var(--st-semantic-border-interactive);
+  --st-component-control-anatomy-focus-boxShadow: none;
+  --st-component-control-anatomy-field-style: outline;
+  --st-component-control-anatomy-field-fillBg: var(--st-semantic-surface-default);
+  --st-component-control-anatomy-field-borderTop: 1px solid #e2e8f0;
+  --st-component-control-anatomy-field-borderRight: 1px solid #e2e8f0;
+  --st-component-control-anatomy-field-borderBottom: 1px solid #e2e8f0;
+  --st-component-control-anatomy-field-borderLeft: 1px solid #e2e8f0;
+  --st-component-control-anatomy-field-radiusTop: 0.375rem;
+  --st-component-control-anatomy-field-underline: none;
+  --st-component-control-anatomy-field-focusShadow: none;
+  --st-component-control-anatomy-field-selectAppearance: auto;
+  --st-component-control-anatomy-field-selectChevron: none;
+  --st-component-control-anatomy-field-selectPaddingRight: 2rem;
+  --st-component-control-anatomy-states-hover-border: #94a3b8;
+  --st-component-control-anatomy-states-focus-border: oklch(50% 0.134 242.749);
+  --st-component-control-anatomy-states-disabled-bg: #f8fafc;
+  --st-component-control-anatomy-states-disabled-text: #64748b;
+  --st-component-selection-checkedBackground: oklch(50% 0.134 242.749);
+  --st-component-selection-checkedText: #ffffff;
+  --st-component-selection-border: #e2e8f0;
+  --st-component-selection-switchTrack: #94a3b8;
+  --st-component-selection-switchTrackChecked: oklch(50% 0.134 242.749);
+  --st-component-selection-switchThumb: #ffffff;
+  --st-component-selection-choiceLabelFontSize: 0.9375rem;
+  --st-component-selection-choiceLabelLineHeight: normal;
+  --st-component-selection-choiceRadioLineHeight: normal;
+  --st-component-selection-choiceLabelLetterSpacing: normal;
+  --st-component-selection-choiceLabelColor: #0f172a;
+  --st-component-selection-toggleTrackRadius: 999px;
+  --st-component-selection-toggleTrackPadding: 0.125rem;
+  --st-component-selection-toggleTrackWidth: 2.25rem;
+  --st-component-selection-toggleTrackHeight: 1.25rem;
+  --st-component-selection-toggleThumbSize: 1rem;
+  --st-component-selection-toggleFontSize: inherit;
+  --st-component-selection-toggleLineHeight: normal;
+  --st-component-selection-toggleLetterSpacing: normal;
+  --st-component-selection-toggleTextColor: #0f172a;
+  --st-component-search-paddingBlock: 0;
+  --st-component-search-paddingInline: 0;
+  --st-component-search-fontSize: 1rem;
+  --st-component-search-lineHeight: normal;
+  --st-component-search-letterSpacing: normal;
+  --st-component-overlay-backdrop: rgb(15 23 42 / 0.48);
+  --st-component-overlay-surface: #ffffff;
+  --st-component-overlay-border: #e2e8f0;
+  --st-component-overlay-shadow: 0 18px 45px rgb(15 23 42 / 0.18);
+  --st-component-overlay-radius: 0.5rem;
+  --st-component-overlay-zIndex: 100;
+  --st-component-drawer-backdrop: rgb(15 23 42 / 0.48);
+  --st-component-drawer-surface: #ffffff;
+  --st-component-drawer-border: #e2e8f0;
+  --st-component-drawer-shadow: 0 18px 45px rgb(15 23 42 / 0.18);
+  --st-component-drawer-width: 24rem;
+  --st-component-drawer-zIndex: 100;
+  --st-component-emptyState-background: #f8fafc;
+  --st-component-emptyState-border: #e2e8f0;
+  --st-component-emptyState-titleText: #0f172a;
+  --st-component-emptyState-messageText: #475569;
+  --st-component-emptyState-radius: 0.5rem;
+  --st-component-loadingState-indicator: oklch(50% 0.134 242.749);
+  --st-component-loadingState-track: #f8fafc;
+  --st-component-loadingState-text: #475569;
+  --st-component-loadingState-radius: 999px;
+  --st-component-tooltip-background: #0f172a;
+  --st-component-tooltip-text: #ffffff;
+  --st-component-tooltip-radius: 0.375rem;
+  --st-component-tooltip-shadow: 0 8px 24px rgb(15 23 42 / 0.12);
+  --st-component-tooltip-zIndex: 80;
+  --st-component-toast-background: #ffffff;
+  --st-component-toast-text: #0f172a;
+  --st-component-toast-border: #e2e8f0;
+  --st-component-toast-shadow: 0 18px 45px rgb(15 23 42 / 0.18);
+  --st-component-toast-radius: 0.5rem;
+  --st-component-toast-infoBorder: #2563eb;
+  --st-component-toast-successBorder: #16a34a;
+  --st-component-toast-warningBorder: #d97706;
+  --st-component-toast-errorBorder: #dc2626;
+  --st-component-toast-zIndex: 60;
+  --st-component-dataTable-headerBackground: #f8fafc;
+  --st-component-dataTable-rowBackground: #ffffff;
+  --st-component-dataTable-rowHoverBackground: #f8fafc;
+  --st-component-dataTable-border: #e2e8f0;
+  --st-component-dataTable-text: #0f172a;
+  --st-component-dataTable-captionText: #475569;
+  --st-component-dataTable-radius: 0.5rem;
+  --st-component-tabs-activeText: #0f172a;
+  --st-component-tabs-activeBackground: transparent;
+  --st-component-tabs-inactiveBackground: transparent;
+  --st-component-tabs-activeWeight: 600;
+  --st-component-tabs-inactiveText: #475569;
+  --st-component-tabs-border: #e2e8f0;
+  --st-component-tabs-indicator: oklch(50% 0.134 242.749);
+  --st-component-tabs-panelBackground: #ffffff;
+  --st-component-tabs-tabPaddingBlock: 0.75rem;
+  --st-component-tabs-tabPaddingInline: 0.25rem;
+  --st-component-tabs-tabFontSize: inherit;
+  --st-component-tabs-tabLineHeight: 1.2;
+  --st-component-tabs-activeBorderTopWidth: 0;
+  --st-component-tabs-activeBorderBottomWidth: 1px;
+  --st-component-tabs-activeShadow: none;
+  --st-component-tabs-anatomy-shape-radius: 0;
+  --st-component-tabs-anatomy-shape-borderWidth: 1px;
+  --st-component-tabs-anatomy-shape-borderStyle: solid;
+  --st-component-tabs-anatomy-density-md-controlHeight: 2.5rem;
+  --st-component-tabs-anatomy-density-md-paddingBlock: 0;
+  --st-component-tabs-anatomy-density-md-paddingInline: 1rem;
+  --st-component-tabs-anatomy-density-md-gap: 0.5rem;
+  --st-component-tabs-anatomy-density-md-minWidth: 2.5rem;
+  --st-component-tabs-anatomy-density-md-fontSize: 0.9375rem;
+  --st-component-tabs-anatomy-typography-family: var(--st-font-sans);
+  --st-component-tabs-anatomy-typography-size: 0.9375rem;
+  --st-component-tabs-anatomy-typography-weight: 600;
+  --st-component-tabs-anatomy-typography-lineHeight: 1.2;
+  --st-component-tabs-anatomy-typography-letterSpacing: 0;
+  --st-component-tabs-anatomy-typography-textTransform: none;
+  --st-component-tabs-anatomy-typography-textDecoration: none;
+  --st-component-tabs-anatomy-typography-decorationThickness: auto;
+  --st-component-tabs-anatomy-typography-decorationOffset: auto;
+  --st-component-tabs-anatomy-focus-strategy: outline;
+  --st-component-tabs-anatomy-focus-width: 2px;
+  --st-component-tabs-anatomy-focus-offset: 2px;
+  --st-component-tabs-anatomy-focus-color: var(--st-semantic-border-interactive);
+  --st-component-tabs-anatomy-focus-inset: 0;
+  --st-component-tabs-anatomy-focus-outline: 2px solid var(--st-semantic-border-interactive);
+  --st-component-tabs-anatomy-focus-boxShadow: none;
+  --st-component-tabs-anatomy-states-hover-text: #0f172a;
+  --st-component-tabs-anatomy-states-disabled-opacity: 0.55;
+  --st-component-pagination-background: #ffffff;
+  --st-component-pagination-border: #e2e8f0;
+  --st-component-pagination-text: #0f172a;
+  --st-component-pagination-activeBackground: oklch(50% 0.134 242.749);
+  --st-component-pagination-activeText: #ffffff;
+  --st-component-pagination-disabledText: #64748b;
+  --st-component-pagination-radius: 0.375rem;
+  --st-component-pagination-borderWidth: 1px;
+  --st-component-pagination-activeBorder: #e2e8f0;
+  --st-component-pagination-activeBorderWidth: 1px;
+  --st-component-pagination-activeWeight: inherit;
+  --st-component-pagination-paddingBlock: 0;
+  --st-component-pagination-paddingInline: 0.75rem;
+  --st-component-pagination-minSize: 2.25rem;
+  --st-component-pagination-fontSize: inherit;
+  --st-component-pagination-lineHeight: normal;
+  --st-component-pagination-letterSpacing: normal;
+  --st-component-breadcrumb-text: #475569;
+  --st-component-breadcrumb-currentText: #0f172a;
+  --st-component-breadcrumb-separator: #64748b;
+  --st-component-breadcrumb-linkText: oklch(50% 0.134 242.749);
+  --st-component-breadcrumb-fontSize: inherit;
+  --st-component-breadcrumb-lineHeight: normal;
+  --st-component-breadcrumb-letterSpacing: normal;
+  --st-component-breadcrumb-currentWeight: 600;
+  --st-component-sideNav-background: #ffffff;
+  --st-component-sideNav-border: #e2e8f0;
+  --st-component-sideNav-itemText: #475569;
+  --st-component-sideNav-activeBackground: #f8fafc;
+  --st-component-sideNav-activeText: #0f172a;
+  --st-component-sideNav-width: 16rem;
+  --st-component-chat-userBubbleBackground: oklch(50% 0.134 242.749);
+  --st-component-chat-userBubbleText: #ffffff;
+  --st-component-chat-assistantBubbleBackground: #f8fafc;
+  --st-component-chat-assistantBubbleText: #0f172a;
+  --st-component-chat-composerSurface: #ffffff;
+  --st-component-chat-toolCallSurface: #f8fafc;
+  --st-component-graph-panelBackground: #0f172a;
+  --st-component-graph-panelText: #ffffff;
+  --st-component-graph-edgeDefault: rgb(226 232 240 / 0.56);
+  --st-component-graph-community1: #4E79A7;
+  --st-component-graph-community2: #F28E2B;
+  --st-component-graph-community3: #E15759;
+  --st-component-graph-community4: #76B7B2;
+}
+
+  :root {
+    --ws-surface: var(--st-semantic-surface-default);
+    --ws-surface-2: var(--st-semantic-surface-subtle);
+    --ws-border: var(--st-semantic-border-subtle);
+    --ws-text: var(--st-semantic-text-primary);
+    --ws-text-muted: var(--st-semantic-text-secondary);
+    --ws-accent: var(--st-semantic-action-primary);
+    --ws-danger: var(--st-semantic-feedback-error);
+    --ws-success: var(--st-semantic-feedback-success);
+    --ws-warning: var(--st-semantic-feedback-warning);
+    --ws-font-family-display: var(--st-font-display);
+    --ws-font-family-sans: var(--st-font-sans);
+    --ws-font-family-mono: var(--st-font-mono);
+    --ws-font-size-sm: 12px;
+    --ws-font-size-md: 14px;
+    --ws-font-size-lg: 16px;
+    --ws-line-height-tight: 1.25;
+    --ws-line-height-normal: 1.5;
+    --ws-space-0: var(--st-spacing-0);
+    --ws-space-1: var(--st-spacing-1);
+    --ws-space-2: var(--st-spacing-2);
+    --ws-space-3: var(--st-spacing-3);
+    --ws-space-4: var(--st-spacing-4);
+    --ws-space-5: var(--st-spacing-6);
+    --ws-space-6: var(--st-spacing-8);
+    --ws-space-7: var(--st-spacing-12);
+    --ws-radius-sm: var(--st-radius-sm);
+    --ws-radius-md: var(--st-radius-md);
+    --ws-radius-lg: var(--st-radius-lg);
+    --ws-shadow-card: var(--st-shadow-subtle);
+    --ws-shadow-popover: var(--st-shadow-medium);
+    --ws-outline: 3px solid;
+    --ws-outline-offset: 2px;
+    --ws-outline-color: var(--st-semantic-border-interactive);
+    --ws-font-family-display: var(--st-font-display);
+    --ws-accent-text: var(--st-semantic-action-primaryText);
+    --ws-border-strong: var(--st-semantic-border-strong);
+    --ws-surface-inverse: var(--st-semantic-surface-inverse);
+    --ws-text-inverse: var(--st-semantic-text-inverse);
+    --ws-community-1: var(--st-semantic-data-category1);
+    --ws-community-2: var(--st-semantic-data-category2);
+    --ws-community-3: var(--st-semantic-data-category3);
+    --ws-community-4: var(--st-semantic-data-category4);
+    --ws-community-5: var(--st-semantic-data-category5);
+    --ws-community-6: var(--st-semantic-data-category6);
+    --ws-community-7: var(--st-semantic-data-category7);
+    --ws-community-8: var(--st-semantic-data-category8);
+    --graph-overlay: rgba(15, 23, 42, 0.45);
+    --graph-focus-shadow: rgba(78, 121, 167, 0.55);
+    --graph-weak-text: var(--ws-text-muted);
+    --graph-muted-strong: var(--ws-text-muted);
+    --graph-node-label: var(--ws-text);
+    --graph-neighbor-border: var(--ws-border);
+    /* G-studio-lot1 #1: the graph canvas keeps a LIGHT background regardless
+       of the app/dark theme — the dark theme is design-system-incompatible
+       for the graph surface. This is a literal light colour, NOT
+       var(--ws-surface), so a host theme that flips --ws-surface dark cannot
+       darken the canvas (which would hide crossing edges + node labels). */
+    --graph-canvas-bg: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--ws-surface); color: var(--ws-text); font-family: var(--ws-font-family-sans); display: flex; height: 100vh; overflow: hidden; }
+  /* Skip link visible only on focus, lets keyboard users jump past the canvas. */
+  .skip-link { position: absolute; top: -40px; left: var(--ws-space-2); background: var(--ws-accent); color: var(--ws-accent-text); padding: var(--ws-space-1) var(--ws-space-3); border-radius: 0 0 var(--ws-radius-sm) var(--ws-radius-sm); z-index: 1000; text-decoration: none; }
+  .skip-link:focus { top: 0; }
+  /* Visually hidden but exposed to screen readers. */
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  /* Focus visible everywhere, WCAG-compliant outline. */
+  :focus-visible { outline: var(--ws-outline); outline-offset: var(--ws-outline-offset); outline-color: var(--ws-outline-color); box-shadow: 0 0 0 4px var(--graph-focus-shadow); }
+  #graph { flex: 1; outline: none; background: var(--graph-canvas-bg); }
+  #graph:focus-visible { box-shadow: inset 0 0 0 3px var(--ws-outline-color); }
+  #sidebar { width: 280px; background: var(--ws-surface-2); border-left: 1px solid var(--ws-border); display: flex; flex-direction: column; overflow: hidden; }
+  #search-wrap { padding: var(--ws-space-3); border-bottom: 1px solid var(--ws-border); }
+  #search { width: 100%; background: var(--ws-surface); border: 1px solid var(--ws-border); color: var(--ws-text); padding: 7px 10px; border-radius: var(--ws-radius-md); font-size: 13px; outline: none; }
+  #search:focus { border-color: var(--ws-accent); }
+  #search-results { max-height: 140px; overflow-y: auto; padding: 4px 12px; border-bottom: 1px solid var(--ws-border); display: none; }
+  .search-item { padding: 4px 6px; cursor: pointer; border-radius: var(--ws-radius-sm); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .search-item:hover, .search-item:focus { background: var(--ws-border); }
+  #info-panel { padding: 14px; border-bottom: 1px solid var(--ws-border); min-height: 140px; }
+  #info-panel h3 { font-size: 13px; color: var(--ws-text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+  #info-content { font-size: 13px; color: var(--ws-text); line-height: 1.6; }
+  #info-content .field { margin-bottom: 5px; }
+  #info-content .field b { color: var(--ws-text); }
+  #info-content .empty { color: var(--graph-weak-text); font-style: italic; }
+  .neighbor-link { display: block; padding: 2px 6px; margin: 2px 0; border-radius: 3px; cursor: pointer; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-left: 3px solid var(--graph-neighbor-border); }
+  .neighbor-link:hover, .neighbor-link:focus { background: var(--ws-border); }
+  #neighbors-list { max-height: 160px; overflow-y: auto; margin-top: 4px; }
+  #legend-wrap { flex: 1; overflow-y: auto; padding: var(--ws-space-3); }
+  #legend-wrap h3 { font-size: 13px; color: var(--ws-text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .legend-item { display: flex; align-items: center; gap: 8px; padding: 4px 0; cursor: pointer; border-radius: var(--ws-radius-sm); font-size: 12px; }
+  .legend-item:hover, .legend-item:focus-within { background: var(--ws-border); padding-left: 4px; }
+  .legend-item.dimmed { opacity: 0.45; } /* WCAG: bumped from 0.35 for better contrast in dimmed state */
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .legend-cb { accent-color: var(--ws-accent); cursor: pointer; flex-shrink: 0; }
+  .legend-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .legend-count { color: var(--graph-muted-strong); font-size: 11px; }
+  #legend-controls { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 11px; color: var(--ws-text-muted); }
+  #legend-controls label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  #stats { padding: 10px 14px; border-top: 1px solid var(--ws-border); font-size: 11px; color: var(--graph-muted-strong); }
+  /* Help overlay modal. */
+  #help-button { position: fixed; bottom: 12px; right: 296px; width: 36px; height: 36px; border-radius: 50%; background: var(--ws-border); color: var(--ws-text); border: 1px solid var(--ws-border); font-size: 16px; font-weight: bold; cursor: pointer; z-index: 100; }
+  #help-button:hover, #help-button:focus { background: var(--ws-surface-2); }
+  #help-overlay { display: none; position: fixed; inset: 0; background: var(--graph-overlay); z-index: 200; align-items: center; justify-content: center; }
+  #help-overlay.open { display: flex; }
+  #help-modal { background: var(--ws-surface-2); color: var(--ws-text); padding: 24px 28px; border-radius: var(--ws-radius-lg); max-width: 480px; max-height: 80vh; overflow-y: auto; border: 1px solid var(--ws-border); }
+  #help-modal h2 { font-size: 16px; margin-bottom: 12px; }
+  #help-modal kbd { background: var(--ws-surface); border: 1px solid var(--ws-border); border-radius: 3px; padding: 1px 6px; font-family: var(--ws-font-family-mono); font-size: 12px; }
+  #help-modal dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 12px 0; font-size: 13px; }
+  #help-modal dt { color: var(--ws-outline-color); }
+  #help-close { float: right; background: none; border: none; color: var(--ws-text-muted); font-size: 18px; cursor: pointer; }
+  #help-close:hover, #help-close:focus { color: var(--ws-text); }
+  /* High-contrast mode (system preference + manual toggle). */
+  @media (prefers-contrast: more) {
+    body, #sidebar, #search { background: #000; color: #fff; }
+    #search { border-color: #fff; }
+    #info-content .empty, .legend-count, #stats { color: #ddd; }
+  }
+  body.high-contrast { background: #000; color: #fff; }
+  body.high-contrast #sidebar, body.high-contrast #search, body.high-contrast #help-modal { background: #000; color: #fff; }
+  body.high-contrast #search { border-color: #fff; }
+  body.high-contrast #info-content .empty, body.high-contrast .legend-count, body.high-contrast #stats { color: #ddd; }
+  /* G-studio-lot2 (#3, #4) — studio mode: the graph claims the full center;
+     the community list, node-info panel, search box and bottom stats line are
+     removed from inside the canvas area, and only the shapes + edges legend
+     stays, floated bottom-right over the canvas. */
+  body.studio-mode #sidebar { width: 0; border-left: none; overflow: visible; background: transparent; }
+  body.studio-mode #search-wrap { display: none; }
+  body.studio-mode #info-panel { display: none; }
+  body.studio-mode #legend-wrap { display: none; }
+  body.studio-mode #stats { display: none; }
+  body.studio-mode #help-button { display: none; }
+  body.studio-mode #shapes-legend-card {
+    position: absolute;
+    right: var(--ws-space-3);
+    bottom: var(--ws-space-3);
+    z-index: 50;
+    max-width: 260px;
+    padding: var(--ws-space-3);
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--ws-text);
+    border: 1px solid var(--ws-border);
+    border-radius: var(--ws-radius-md);
+    box-shadow: var(--ws-shadow-card);
+  }
+  body.studio-mode #shapes-legend-card h3 { font-size: 12px; color: var(--ws-text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#sidebar">Skip to controls</a>
+<div id="live-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+<div id="graph" aria-label="Graphify knowledge graph"></div>
+<aside id="sidebar" aria-label="Graph controls">
+  <div id="search-wrap">
+    <label for="search" class="sr-only">Search nodes</label>
+    <input id="search" type="text" placeholder="Search nodes..." autocomplete="off"
+           role="combobox" aria-controls="search-results" aria-expanded="false" aria-autocomplete="list">
+    <div id="search-results" role="listbox" aria-label="Search results"></div>
+  </div>
+  <section id="info-panel" aria-labelledby="info-heading">
+    <h3 id="info-heading">Node Info</h3>
+    <div id="info-content" aria-live="polite"><span class="empty">Click a node to inspect it</span></div>
+  </section>
+  <section id="legend-wrap" aria-labelledby="legend-heading">
+    <h3 id="legend-heading">Communities</h3>
+    <div id="legend-controls">
+      <label><input id="select-all-cb" type="checkbox" checked> <span>Select all</span></label>
+      <button id="contrast-toggle" type="button" aria-pressed="false" aria-label="Toggle high contrast">HC</button>
+    </div>
+    <div id="legend" role="group" aria-label="Community filters"></div>
+  </section>
+  <section id="shapes-legend-card" aria-labelledby="shapes-heading">
+    <h3 id="shapes-heading">Shapes</h3>
+    <ul id="shape-legend" aria-labelledby="shapes-heading" style="list-style:none;padding:0;margin:0;font-size:12px;color:var(--ws-text-muted)">
+      <li>● dot &mdash; code</li>
+      <li><span style="display:inline-block;width:10px;height:10px;background:var(--ws-text-muted);vertical-align:middle"></span> square (filled) &mdash; test</li>
+      <li>▲ triangle &mdash; config (yaml/toml/...)</li>
+      <li>◆ diamond &mdash; type definition (.d.ts)</li>
+      <li><span style="display:inline-block;width:10px;height:10px;border:1px solid var(--ws-text-muted);background:rgba(255,255,255,0.5);vertical-align:middle"></span> box (hollow) &mdash; document / paper / concept</li>
+      <li>★ star &mdash; image</li>
+      <li>⬢ hexagon &mdash; video</li>
+    </ul>
+    <h3 id="relations-heading" style="margin-top:14px">Edges</h3>
+    <ul id="relation-legend" aria-labelledby="relations-heading" style="list-style:none;padding:0;margin:0;font-size:12px;color:var(--ws-text-muted)">
+      <li>━━━━ solid &mdash; calls / strong (EXTRACTED)</li>
+      <li>┄┄┄┄ dashed &mdash; imports_from / imports / re_exports</li>
+      <li>┈┈┈┈ dotted &mdash; tested_by / validated_by</li>
+      <li>━ ━ ━ long-dash &mdash; inherits / implements</li>
+      <li style="opacity:0.6">··· faded &mdash; INFERRED / AMBIGUOUS</li>
+    </ul>
+  </section>
+  <div id="stats" role="status">54 nodes &middot; 57 edges &middot; 10 communities</div>
+</aside>
+<button id="help-button" type="button" aria-label="Open keyboard help (F1)" aria-haspopup="dialog" aria-controls="help-overlay">?</button>
+<div id="help-overlay" role="dialog" aria-modal="true" aria-labelledby="help-title" aria-hidden="true">
+  <div id="help-modal">
+    <button id="help-close" type="button" aria-label="Close help">&times;</button>
+    <h2 id="help-title">Keyboard shortcuts</h2>
+    <dl>
+      <dt><kbd>Tab</kbd></dt><dd>Cycle focus between controls</dd>
+      <dt><kbd>&uarr;</kbd> <kbd>&darr;</kbd> <kbd>&larr;</kbd> <kbd>&rarr;</kbd></dt><dd>Pan the graph (graph focused)</dd>
+      <dt><kbd>+</kbd> / <kbd>-</kbd></dt><dd>Zoom in / out (graph focused)</dd>
+      <dt><kbd>Enter</kbd></dt><dd>Select hovered or focused node</dd>
+      <dt><kbd>Esc</kbd></dt><dd>Deselect / close help</dd>
+      <dt><kbd>F1</kbd> / <kbd>?</kbd></dt><dd>Toggle this help</dd>
+      <dt><kbd>HC</kbd> button</dt><dd>Toggle high-contrast theme</dd>
+    </dl>
+    <p style="font-size:12px;color:var(--ws-text-muted);margin-top:8px">Search input announces match counts; selecting a node announces its community and degree.</p>
+  </div>
+</div>
+<script>
+const RAW_NODES = [{"id":"scene","label":"scene.js","color":{"background":"#EDC948","border":"#EDC948","highlight":{"background":"oklch(1 0 0)","border":"#EDC948"}},"size":21.3,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"scene.js","community":5,"community_name":"3D Scene Rendering","source_file":"scene.js","file_type":"code","shape":"dot","degree":3},{"id":"scene_buildcluster","label":"buildCluster()","color":{"background":"#EDC948","border":"#EDC948","highlight":{"background":"oklch(1 0 0)","border":"#EDC948"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"buildCluster()","community":5,"community_name":"3D Scene Rendering","source_file":"scene.js","file_type":"code","shape":"dot","degree":1},{"id":"scene_applycolor","label":"applyColor()","color":{"background":"#EDC948","border":"#EDC948","highlight":{"background":"oklch(1 0 0)","border":"#EDC948"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"applyColor()","community":5,"community_name":"3D Scene Rendering","source_file":"scene.js","file_type":"code","shape":"dot","degree":1},{"id":"scene_frame","label":"frame()","color":{"background":"#EDC948","border":"#EDC948","highlight":{"background":"oklch(1 0 0)","border":"#EDC948"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"frame()","community":5,"community_name":"3D Scene Rendering","source_file":"scene.js","file_type":"code","shape":"dot","degree":1},{"id":"script","label":"script.js","color":{"background":"#59A14F","border":"#59A14F","highlight":{"background":"oklch(1 0 0)","border":"#59A14F"}},"size":28.8,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"script.js","community":4,"community_name":"Graphify Tooling","source_file":"script.js","file_type":"code","shape":"dot","degree":5},{"id":"script_enter","label":"enter()","color":{"background":"#59A14F","border":"#59A14F","highlight":{"background":"oklch(1 0 0)","border":"#59A14F"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"enter()","community":4,"community_name":"Graphify Tooling","source_file":"script.js","file_type":"code","shape":"dot","degree":1},{"id":"script_activate","label":"activate()","color":{"background":"#59A14F","border":"#59A14F","highlight":{"background":"oklch(1 0 0)","border":"#59A14F"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"activate()","community":4,"community_name":"Graphify Tooling","source_file":"script.js","file_type":"code","shape":"dot","degree":2},{"id":"script_outcomehint","label":"outcomeHint","color":{"background":"#59A14F","border":"#59A14F","highlight":{"background":"oklch(1 0 0)","border":"#59A14F"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"outcomeHint","community":4,"community_name":"Graphify Tooling","source_file":"script.js","file_type":"code","shape":"dot","degree":1},{"id":"script_drivescene","label":"driveScene()","color":{"background":"#59A14F","border":"#59A14F","highlight":{"background":"oklch(1 0 0)","border":"#59A14F"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"driveScene()","community":4,"community_name":"Graphify Tooling","source_file":"script.js","file_type":"code","shape":"dot","degree":2},{"id":"script_render","label":"render()","color":{"background":"#59A14F","border":"#59A14F","highlight":{"background":"oklch(1 0 0)","border":"#59A14F"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"render()","community":4,"community_name":"Graphify Tooling","source_file":"script.js","file_type":"code","shape":"dot","degree":1},{"id":"claude_CLAUDE_md","label":"CLAUDE.md Configuration","color":{"background":"rgba(255,255,255,0.5)","border":"#4E79A7","highlight":{"background":"oklch(1 0 0)","border":"#4E79A7"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"CLAUDE.md Configuration","community":0,"community_name":"Site Structure &amp; Sections","source_file":".claude/CLAUDE.md","file_type":"document","shape":"box","degree":1},{"id":"graphify_skill","label":"Graphify Skill","color":{"background":"rgba(255,255,255,0.5)","border":"#4E79A7","highlight":{"background":"oklch(1 0 0)","border":"#4E79A7"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Graphify Skill","community":0,"community_name":"Site Structure &amp; Sections","source_file":".claude/skills/graphify/SKILL.md","file_type":"concept","shape":"box","degree":2},{"id":"graphify_concept","label":"Graphify Tool","color":{"background":"rgba(255,255,255,0.5)","border":"#4E79A7","highlight":{"background":"oklch(1 0 0)","border":"#4E79A7"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Graphify Tool","community":0,"community_name":"Site Structure &amp; Sections","source_file":".claude/skills/graphify/SKILL.md","file_type":"concept","shape":"box","degree":2},{"id":"roll_dice_skill","label":"Roll Dice Skill","color":{"background":"rgba(255,255,255,0.5)","border":"#BAB0AC","highlight":{"background":"oklch(1 0 0)","border":"#BAB0AC"}},"size":10,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Roll Dice Skill","community":9,"community_name":"Roll Dice Utility","source_file":".opencode/skills/roll-dice/SKILL.md","file_type":"concept","shape":"box","degree":0},{"id":"graphify_pipeline","label":"Graphify Pipeline","color":{"background":"rgba(255,255,255,0.5)","border":"#4E79A7","highlight":{"background":"oklch(1 0 0)","border":"#4E79A7"}},"size":40,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Graphify Pipeline","community":0,"community_name":"Site Structure &amp; Sections","source_file":".claude/skills/graphify/SKILL.md","file_type":"concept","shape":"box","degree":8},{"id":"graph_community_detection","label":"Community Detection","color":{"background":"rgba(255,255,255,0.5)","border":"#B07AA1","highlight":{"background":"oklch(1 0 0)","border":"#B07AA1"}},"size":21.3,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Community Detection","community":6,"community_name":"Graph Value Propositions","source_file":".claude/skills/graphify/SKILL.md","file_type":"concept","shape":"box","degree":3},{"id":"graph_persistent_graph","label":"Persistent Graph","color":{"background":"rgba(255,255,255,0.5)","border":"#B07AA1","highlight":{"background":"oklch(1 0 0)","border":"#B07AA1"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Persistent Graph","community":6,"community_name":"Graph Value Propositions","source_file":".claude/skills/graphify/SKILL.md","file_type":"concept","shape":"box","degree":2},{"id":"graph_audit_trail","label":"Honest Audit Trail","color":{"background":"rgba(255,255,255,0.5)","border":"#B07AA1","highlight":{"background":"oklch(1 0 0)","border":"#B07AA1"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Honest Audit Trail","community":6,"community_name":"Graph Value Propositions","source_file":".claude/skills/graphify/SKILL.md","file_type":"concept","shape":"box","degree":2},{"id":"graph_mcp_server","label":"Graphify MCP Server","color":{"background":"rgba(255,255,255,0.5)","border":"#FF9DA7","highlight":{"background":"oklch(1 0 0)","border":"#FF9DA7"}},"size":10,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Graphify MCP Server","community":7,"community_name":"Interactivity Logic","source_file":".claude/skills/graphify/SKILL.md","file_type":"concept","shape":"box","degree":0},{"id":"graph_neo4j_export","label":"Neo4j Export","color":{"background":"rgba(255,255,255,0.5)","border":"#4E79A7","highlight":{"background":"oklch(1 0 0)","border":"#4E79A7"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Neo4j Export","community":0,"community_name":"Site Structure &amp; Sections","source_file":".claude/skills/graphify/SKILL.md","file_type":"concept","shape":"box","degree":1},{"id":"graph_obsidian_vault","label":"Obsidian Vault Output","color":{"background":"rgba(255,255,255,0.5)","border":"#4E79A7","highlight":{"background":"oklch(1 0 0)","border":"#4E79A7"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Obsidian Vault Output","community":0,"community_name":"Site Structure &amp; Sections","source_file":".claude/skills/graphify/SKILL.md","file_type":"concept","shape":"box","degree":1},{"id":"graph_html_output","label":"HTML Interactive Graph","color":{"background":"rgba(255,255,255,0.5)","border":"#4E79A7","highlight":{"background":"oklch(1 0 0)","border":"#4E79A7"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"HTML Interactive Graph","community":0,"community_name":"Site Structure &amp; Sections","source_file":".claude/skills/graphify/SKILL.md","file_type":"concept","shape":"box","degree":1},{"id":"graph_csv_ocr","label":"PDF OCR Preflight","color":{"background":"rgba(255,255,255,0.5)","border":"#4E79A7","highlight":{"background":"oklch(1 0 0)","border":"#4E79A7"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"PDF OCR Preflight","community":0,"community_name":"Site Structure &amp; Sections","source_file":".claude/skills/graphify/SKILL.md","file_type":"concept","shape":"box","degree":1},{"id":"graph_semantic_extraction","label":"Semantic Extraction","color":{"background":"rgba(255,255,255,0.5)","border":"#4E79A7","highlight":{"background":"oklch(1 0 0)","border":"#4E79A7"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Semantic Extraction","community":0,"community_name":"Site Structure &amp; Sections","source_file":".claude/skills/graphify/SKILL.md","file_type":"concept","shape":"box","degree":2},{"id":"graph_ast_extraction","label":"AST Structural Extraction","color":{"background":"rgba(255,255,255,0.5)","border":"#4E79A7","highlight":{"background":"oklch(1 0 0)","border":"#4E79A7"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"AST Structural Extraction","community":0,"community_name":"Site Structure &amp; Sections","source_file":".claude/skills/graphify/SKILL.md","file_type":"concept","shape":"box","degree":2},{"id":"CLAUDE_md","label":"CLAUDE.md","color":{"background":"rgba(255,255,255,0.5)","border":"#F28E2B","highlight":{"background":"oklch(1 0 0)","border":"#F28E2B"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"CLAUDE.md","community":1,"community_name":"Results Charts &amp; Direction","source_file":"CLAUDE.md","file_type":"document","shape":"box","degree":1},{"id":"graphify_knowledge_graph","label":"Graphify Knowledge Graph","color":{"background":"rgba(255,255,255,0.5)","border":"#F28E2B","highlight":{"background":"oklch(1 0 0)","border":"#F28E2B"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Graphify Knowledge Graph","community":1,"community_name":"Results Charts &amp; Direction","source_file":"CLAUDE.md","file_type":"concept","shape":"box","degree":2},{"id":"README_md","label":"README.md","color":{"background":"rgba(255,255,255,0.5)","border":"#F28E2B","highlight":{"background":"oklch(1 0 0)","border":"#F28E2B"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"README.md","community":1,"community_name":"Results Charts &amp; Direction","source_file":"README.md","file_type":"document","shape":"box","degree":2},{"id":"index_html","label":"index.html","color":{"background":"rgba(255,255,255,0.5)","border":"#F28E2B","highlight":{"background":"oklch(1 0 0)","border":"#F28E2B"}},"size":40,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"index.html","community":1,"community_name":"Results Charts &amp; Direction","source_file":"index.html","file_type":"document","shape":"box","degree":8},{"id":"index_hero","label":"Hero Section","color":{"background":"rgba(255,255,255,0.5)","border":"#76B7B2","highlight":{"background":"oklch(1 0 0)","border":"#76B7B2"}},"size":25,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Hero Section","community":3,"community_name":"Graphify Extraction Pipeline","source_file":"index.html","file_type":"concept","shape":"box","degree":4},{"id":"index_direction_toggle","label":"Direction Toggle","color":{"background":"rgba(255,255,255,0.5)","border":"#E15759","highlight":{"background":"oklch(1 0 0)","border":"#E15759"}},"size":28.8,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Direction Toggle","community":2,"community_name":"Team &amp; Authors","source_file":"index.html","file_type":"concept","shape":"box","degree":5},{"id":"index_background","label":"Background Section","color":{"background":"rgba(255,255,255,0.5)","border":"#F28E2B","highlight":{"background":"oklch(1 0 0)","border":"#F28E2B"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Background Section","community":1,"community_name":"Results Charts &amp; Direction","source_file":"index.html","file_type":"concept","shape":"box","degree":1},{"id":"index_method","label":"Method Pipeline Section","color":{"background":"rgba(255,255,255,0.5)","border":"#F28E2B","highlight":{"background":"oklch(1 0 0)","border":"#F28E2B"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Method Pipeline Section","community":1,"community_name":"Results Charts &amp; Direction","source_file":"index.html","file_type":"concept","shape":"box","degree":2},{"id":"index_results","label":"Results Charts Section","color":{"background":"rgba(255,255,255,0.5)","border":"#E15759","highlight":{"background":"oklch(1 0 0)","border":"#E15759"}},"size":32.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Results Charts Section","community":2,"community_name":"Team &amp; Authors","source_file":"index.html","file_type":"concept","shape":"box","degree":6},{"id":"index_demo","label":"Demo Stepper Section","color":{"background":"rgba(255,255,255,0.5)","border":"#F28E2B","highlight":{"background":"oklch(1 0 0)","border":"#F28E2B"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Demo Stepper Section","community":1,"community_name":"Results Charts &amp; Direction","source_file":"index.html","file_type":"concept","shape":"box","degree":1},{"id":"index_decision_policy","label":"Decision Policy Section","color":{"background":"rgba(255,255,255,0.5)","border":"#F28E2B","highlight":{"background":"oklch(1 0 0)","border":"#F28E2B"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Decision Policy Section","community":1,"community_name":"Results Charts &amp; Direction","source_file":"index.html","file_type":"concept","shape":"box","degree":1},{"id":"index_team","label":"Team Section","color":{"background":"rgba(255,255,255,0.5)","border":"#76B7B2","highlight":{"background":"oklch(1 0 0)","border":"#76B7B2"}},"size":36.3,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Team Section","community":3,"community_name":"Graphify Extraction Pipeline","source_file":"index.html","file_type":"concept","shape":"box","degree":7},{"id":"index_direction_lq","label":"Llama-solver Qwen-critic Direction","color":{"background":"rgba(255,255,255,0.5)","border":"#E15759","highlight":{"background":"oklch(1 0 0)","border":"#E15759"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Llama-solver Qwen-critic Direction","community":2,"community_name":"Team &amp; Authors","source_file":"index.html","file_type":"concept","shape":"box","degree":2},{"id":"index_direction_ql","label":"Qwen-solver Llama-critic Direction","color":{"background":"rgba(255,255,255,0.5)","border":"#E15759","highlight":{"background":"oklch(1 0 0)","border":"#E15759"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Qwen-solver Llama-critic Direction","community":2,"community_name":"Team &amp; Authors","source_file":"index.html","file_type":"concept","shape":"box","degree":2},{"id":"index_pipeline_svg","label":"Pipeline SVG Diagram","color":{"background":"rgba(255,255,255,0.5)","border":"#F28E2B","highlight":{"background":"oklch(1 0 0)","border":"#F28E2B"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Pipeline SVG Diagram","community":1,"community_name":"Results Charts &amp; Direction","source_file":"index.html","file_type":"concept","shape":"box","degree":1},{"id":"index_chart_benefit_per_revision","label":"Benefit per Revision Chart","color":{"background":"rgba(255,255,255,0.5)","border":"#E15759","highlight":{"background":"oklch(1 0 0)","border":"#E15759"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Benefit per Revision Chart","community":2,"community_name":"Team &amp; Authors","source_file":"index.html","file_type":"concept","shape":"box","degree":2},{"id":"index_chart_correction_effectiveness","label":"Correction Effectiveness Chart","color":{"background":"rgba(255,255,255,0.5)","border":"#E15759","highlight":{"background":"oklch(1 0 0)","border":"#E15759"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Correction Effectiveness Chart","community":2,"community_name":"Team &amp; Authors","source_file":"index.html","file_type":"concept","shape":"box","degree":2},{"id":"index_chart_false_alarm","label":"False Alarm Rate Chart","color":{"background":"rgba(255,255,255,0.5)","border":"#E15759","highlight":{"background":"oklch(1 0 0)","border":"#E15759"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"False Alarm Rate Chart","community":2,"community_name":"Team &amp; Authors","source_file":"index.html","file_type":"concept","shape":"box","degree":1},{"id":"index_chart_ablation","label":"3-Way Feature Ablation Chart","color":{"background":"rgba(255,255,255,0.5)","border":"#E15759","highlight":{"background":"oklch(1 0 0)","border":"#E15759"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"3-Way Feature Ablation Chart","community":2,"community_name":"Team &amp; Authors","source_file":"index.html","file_type":"concept","shape":"box","degree":2},{"id":"index_hero_scene","label":"Hero WebGL Scene","color":{"background":"rgba(255,255,255,0.5)","border":"#E15759","highlight":{"background":"oklch(1 0 0)","border":"#E15759"}},"size":21.3,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Hero WebGL Scene","community":2,"community_name":"Team &amp; Authors","source_file":"index.html","file_type":"concept","shape":"box","degree":3},{"id":"index_outcome_toggle","label":"Outcome Toggle","color":{"background":"rgba(255,255,255,0.5)","border":"#E15759","highlight":{"background":"oklch(1 0 0)","border":"#E15759"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Outcome Toggle","community":2,"community_name":"Team &amp; Authors","source_file":"index.html","file_type":"concept","shape":"box","degree":2},{"id":"project_peerGPT","label":"PeerGPT Project","color":{"background":"rgba(255,255,255,0.5)","border":"#F28E2B","highlight":{"background":"oklch(1 0 0)","border":"#F28E2B"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"PeerGPT Project","community":1,"community_name":"Results Charts &amp; Direction","source_file":"README.md","file_type":"concept","shape":"box","degree":2},{"id":"project_paper","label":"When Should an LLM Listen to Another LLM?","color":{"background":"rgba(255,255,255,0.5)","border":"#9C755F","highlight":{"background":"oklch(1 0 0)","border":"#9C755F"}},"size":10,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"When Should an LLM Listen to Another LLM?","community":8,"community_name":"Search Question Paper","source_file":"README.md","file_type":"document","shape":"box","degree":0},{"id":"ghassan_alqahtani","label":"Ghassan Alqahtani","color":{"background":"rgba(255,255,255,0.5)","border":"#76B7B2","highlight":{"background":"oklch(1 0 0)","border":"#76B7B2"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Ghassan Alqahtani","community":3,"community_name":"Graphify Extraction Pipeline","source_file":"index.html","file_type":"concept","shape":"box","degree":1},{"id":"abdullah_asiri","label":"Abdullah Asiri","color":{"background":"rgba(255,255,255,0.5)","border":"#76B7B2","highlight":{"background":"oklch(1 0 0)","border":"#76B7B2"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Abdullah Asiri","community":3,"community_name":"Graphify Extraction Pipeline","source_file":"index.html","file_type":"concept","shape":"box","degree":1},{"id":"farah_alshammari","label":"Farah Alshammari","color":{"background":"rgba(255,255,255,0.5)","border":"#76B7B2","highlight":{"background":"oklch(1 0 0)","border":"#76B7B2"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Farah Alshammari","community":3,"community_name":"Graphify Extraction Pipeline","source_file":"index.html","file_type":"concept","shape":"box","degree":1},{"id":"lama_alshammari","label":"Lama Alshammari","color":{"background":"rgba(255,255,255,0.5)","border":"#76B7B2","highlight":{"background":"oklch(1 0 0)","border":"#76B7B2"}},"size":13.8,"font":{"size":0,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Lama Alshammari","community":3,"community_name":"Graphify Extraction Pipeline","source_file":"index.html","file_type":"concept","shape":"box","degree":1},{"id":"eman_alnabati","label":"Dr. Eman Alnabati","color":{"background":"rgba(255,255,255,0.5)","border":"#76B7B2","highlight":{"background":"oklch(1 0 0)","border":"#76B7B2"}},"size":17.5,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"Dr. Eman Alnabati","community":3,"community_name":"Graphify Extraction Pipeline","source_file":"index.html","file_type":"concept","shape":"box","degree":2},{"id":"kaust_academy","label":"KAUST Academy","color":{"background":"rgba(255,255,255,0.5)","border":"#76B7B2","highlight":{"background":"oklch(1 0 0)","border":"#76B7B2"}},"size":21.3,"font":{"size":12,"color":"oklch(0.2339 0.0255 274.22)"},"title":"KAUST Academy","community":3,"community_name":"Graphify Extraction Pipeline","source_file":"index.html","file_type":"concept","shape":"box","degree":3}];
+const RAW_EDGES = [{"from":"scene","to":"scene_applycolor","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"scene","to":"scene_buildcluster","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"scene","to":"scene_frame","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"script","to":"script_activate","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"script","to":"script_drivescene","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"script","to":"script_enter","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"script","to":"script_outcomehint","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"script","to":"script_render","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"script_activate","to":"script_drivescene","label":"calls","title":"calls [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"calls"},{"from":"CLAUDE_md","to":"graphify_knowledge_graph","label":"references","title":"references [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"references"},{"from":"README_md","to":"index_html","label":"references","title":"references [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"references"},{"from":"README_md","to":"project_peerGPT","label":"references","title":"references [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"references"},{"from":"claude_CLAUDE_md","to":"graphify_skill","label":"references","title":"references [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"references"},{"from":"eman_alnabati","to":"kaust_academy","label":"affiliated_with","title":"affiliated_with [INFERRED]","dashes":true,"width":1,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.35},"confidence":"INFERRED","relation":"affiliated_with"},{"from":"graph_ast_extraction","to":"graph_semantic_extraction","label":"conceptually_related_to","title":"conceptually_related_to [INFERRED]","dashes":true,"width":1,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.35},"confidence":"INFERRED","relation":"conceptually_related_to"},{"from":"graph_ast_extraction","to":"graphify_pipeline","label":"references","title":"references [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"references"},{"from":"graph_community_detection","to":"graph_audit_trail","label":"conceptually_related_to","title":"conceptually_related_to [INFERRED]","dashes":true,"width":1,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.35},"confidence":"INFERRED","relation":"conceptually_related_to"},{"from":"graph_community_detection","to":"graph_persistent_graph","label":"conceptually_related_to","title":"conceptually_related_to [INFERRED]","dashes":true,"width":1,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.35},"confidence":"INFERRED","relation":"conceptually_related_to"},{"from":"graph_csv_ocr","to":"graphify_pipeline","label":"references","title":"references [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"references"},{"from":"graph_html_output","to":"graphify_pipeline","label":"references","title":"references [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"references"},{"from":"graph_neo4j_export","to":"graphify_pipeline","label":"references","title":"references [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"references"},{"from":"graph_obsidian_vault","to":"graphify_pipeline","label":"references","title":"references [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"references"},{"from":"graph_persistent_graph","to":"graph_audit_trail","label":"conceptually_related_to","title":"conceptually_related_to [INFERRED]","dashes":true,"width":1,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.35},"confidence":"INFERRED","relation":"conceptually_related_to"},{"from":"graph_semantic_extraction","to":"graphify_pipeline","label":"references","title":"references [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"references"},{"from":"graphify_concept","to":"graphify_pipeline","label":"references","title":"references [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"references"},{"from":"graphify_knowledge_graph","to":"project_peerGPT","label":"conceptually_related_to","title":"conceptually_related_to [INFERRED]","dashes":true,"width":1,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.35},"confidence":"INFERRED","relation":"conceptually_related_to"},{"from":"graphify_pipeline","to":"graph_community_detection","label":"references","title":"references [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"references"},{"from":"graphify_skill","to":"graphify_concept","label":"implements","title":"implements [EXTRACTED]","dashes":[10,4],"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"implements"},{"from":"index_chart_ablation","to":"index_direction_toggle","label":"shares_data_with","title":"shares_data_with [INFERRED]","dashes":true,"width":1,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.35},"confidence":"INFERRED","relation":"shares_data_with"},{"from":"index_chart_benefit_per_revision","to":"index_chart_correction_effectiveness","label":"shares_data_with","title":"shares_data_with [INFERRED]","dashes":true,"width":1,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.35},"confidence":"INFERRED","relation":"shares_data_with"},{"from":"index_direction_lq","to":"index_direction_ql","label":"semantically_similar_to","title":"semantically_similar_to [INFERRED]","dashes":true,"width":1,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.35},"confidence":"INFERRED","relation":"semantically_similar_to"},{"from":"index_direction_toggle","to":"index_direction_lq","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_direction_toggle","to":"index_direction_ql","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_direction_toggle","to":"index_hero_scene","label":"shares_data_with","title":"shares_data_with [INFERRED]","dashes":true,"width":1,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.35},"confidence":"INFERRED","relation":"shares_data_with"},{"from":"index_hero","to":"index_direction_toggle","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_hero","to":"index_hero_scene","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_hero","to":"kaust_academy","label":"references","title":"references [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"references"},{"from":"index_html","to":"index_background","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_html","to":"index_decision_policy","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_html","to":"index_demo","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_html","to":"index_hero","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_html","to":"index_method","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_html","to":"index_results","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_html","to":"index_team","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_method","to":"index_pipeline_svg","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_outcome_toggle","to":"index_hero_scene","label":"shares_data_with","title":"shares_data_with [INFERRED]","dashes":true,"width":1,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.35},"confidence":"INFERRED","relation":"shares_data_with"},{"from":"index_results","to":"index_chart_ablation","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_results","to":"index_chart_benefit_per_revision","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_results","to":"index_chart_correction_effectiveness","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_results","to":"index_chart_false_alarm","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_results","to":"index_outcome_toggle","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_team","to":"abdullah_asiri","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_team","to":"eman_alnabati","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_team","to":"farah_alshammari","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_team","to":"ghassan_alqahtani","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"},{"from":"index_team","to":"kaust_academy","label":"references","title":"references [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"references"},{"from":"index_team","to":"lama_alshammari","label":"contains","title":"contains [EXTRACTED]","dashes":false,"width":2,"color":{"color":"oklch(0.4955 0.0255 265.57)","highlight":"oklch(0.4601 0.0923 252.7)","hover":"oklch(0.4601 0.0923 252.7)","opacity":0.7},"confidence":"EXTRACTED","relation":"contains"}];
+const LEGEND = [{"cid":0,"color":"#4E79A7","label":"Site Structure &amp;amp; Sections","count":10},{"cid":1,"color":"#F28E2B","label":"Results Charts &amp;amp; Direction","count":10},{"cid":2,"color":"#E15759","label":"Team &amp;amp; Authors","count":10},{"cid":3,"color":"#76B7B2","label":"Graphify Extraction Pipeline","count":8},{"cid":4,"color":"#59A14F","label":"Graphify Tooling","count":6},{"cid":5,"color":"#EDC948","label":"3D Scene Rendering","count":4},{"cid":6,"color":"#B07AA1","label":"Graph Value Propositions","count":3},{"cid":7,"color":"#FF9DA7","label":"Interactivity Logic","count":1},{"cid":8,"color":"#9C755F","label":"Search Question Paper","count":1},{"cid":9,"color":"#BAB0AC","label":"Roll Dice Utility","count":1}];
+
+// Build vis datasets
+const nodesDS = new vis.DataSet(RAW_NODES.map(n => ({
+  id: n.id, label: n.label, color: n.color, size: n.size,
+  shape: n.shape || 'dot',
+  font: n.font, title: n.title,
+  _community: n.community, _community_name: n.community_name,
+  _source_file: n.source_file, _file_type: n.file_type, _degree: n.degree,
+  _shape: n.shape || 'dot',
+  _description: n.description || '',
+})));
+
+const edgesDS = new vis.DataSet(RAW_EDGES.map((e, i) => ({
+  id: i, from: e.from, to: e.to,
+  label: '',
+  title: e.title,
+  dashes: e.dashes,
+  width: e.width,
+  color: e.color,
+  arrows: { to: { enabled: true, scaleFactor: 0.5 } },
+})));
+
+const container = document.getElementById('graph');
+container.setAttribute('role', 'application');
+container.setAttribute('tabindex', '0');
+container.setAttribute('aria-label', 'Graphify knowledge graph. Use arrow keys to pan, plus and minus to zoom, F1 for help.');
+const liveRegion = document.getElementById('live-status');
+function announce(message) {
+  if (liveRegion) liveRegion.textContent = message;
+}
+const network = new vis.Network(container, { nodes: nodesDS, edges: edgesDS }, {
+  physics: {
+    enabled: true,
+    solver: 'forceAtlas2Based',
+    forceAtlas2Based: {
+      gravitationalConstant: -60,
+      centralGravity: 0.005,
+      springLength: 120,
+      springConstant: 0.08,
+      damping: 0.4,
+      avoidOverlap: 0.8,
+    },
+    stabilization: { iterations: 200, fit: true },
+  },
+  interaction: {
+    hover: true,
+    tooltipDelay: 100,
+    hideEdgesOnDrag: true,
+    navigationButtons: false,
+    keyboard: { enabled: true, speed: { x: 10, y: 10, zoom: 0.05 }, bindToWindow: false },
+  },
+  nodes: { borderWidth: 1.5 },  /* shape comes from per-node n.shape */
+  edges: { smooth: { type: 'continuous', roundness: 0.2 }, selectionWidth: 3 },
+});
+
+network.once('stabilizationIterationsDone', () => {
+  network.setOptions({ physics: { enabled: false } });
+});
+
+function showInfo(nodeId) {
+  const n = nodesDS.get(nodeId);
+  if (!n) return;
+  const neighborIds = network.getConnectedNodes(nodeId);
+  const neighborItems = neighborIds.map(nid => {
+    const nb = nodesDS.get(nid);
+    const color = nb ? nb.color.background : 'var(--ws-border)';
+    return `<span class="neighbor-link" style="border-left-color:${color}" onclick="focusNode('${nid}')">${nb ? nb.label : nid}</span>`;
+  }).join('');
+  document.getElementById('info-content').innerHTML = `
+    <div class="field"><b>${n.label}</b></div>
+    ${n._description ? `<div class="field" style="margin:6px 0">${n._description}</div>` : ''}
+    <div class="field">Type: ${n._file_type || 'unknown'} <span style="color:var(--ws-text-muted);font-size:11px">(shape: ${n._shape})</span></div>
+    <div class="field">Community: ${n._community_name}</div>
+    <div class="field">Source: ${n._source_file || '-'}</div>
+    <div class="field">Degree: ${n._degree}</div>
+    ${neighborIds.length ? `<div class="field" style="margin-top:8px;color:var(--ws-text-muted);font-size:11px">Neighbors (${neighborIds.length})</div><div id="neighbors-list">${neighborItems}</div>` : ''}
+  `;
+}
+
+function focusNode(nodeId) {
+  network.focus(nodeId, { scale: 1.4, animation: true });
+  network.selectNodes([nodeId]);
+  showInfo(nodeId);
+}
+
+let hoveredNodeId = null;
+network.on('hoverNode', params => {
+  hoveredNodeId = params.node;
+  container.style.cursor = 'pointer';
+});
+network.on('blurNode', () => {
+  hoveredNodeId = null;
+  container.style.cursor = 'default';
+});
+container.addEventListener('click', () => {
+  if (hoveredNodeId !== null) {
+    showInfo(hoveredNodeId);
+    network.selectNodes([hoveredNodeId]);
+  }
+});
+network.on('click', params => {
+  if (params.nodes.length > 0) {
+    showInfo(params.nodes[0]);
+    const n = nodesDS.get(params.nodes[0]);
+    if (n) announce(`Selected ${n.label}, in community ${n._community_name}, ${n._degree} connection(s).`);
+    // Track G D4: when embedded in the studio shell, tell the parent which
+    // node was selected so it can open the right-column entity panel.
+    if (window.parent && window.parent !== window) {
+      try { window.parent.postMessage({ type: 'graphify:selectNode', nodeId: params.nodes[0] }, '*'); } catch (err) {}
+    }
+  } else if (hoveredNodeId === null) {
+    document.getElementById('info-content').innerHTML = '<span class="empty">Click a node to inspect it</span>';
+  }
+});
+network.on('selectNode', params => {
+  if (params.nodes.length > 0) {
+    const n = nodesDS.get(params.nodes[0]);
+    if (n) announce(`Selected ${n.label}, in community ${n._community_name}, ${n._degree} connection(s).`);
+  }
+});
+
+const searchInput = document.getElementById('search');
+const searchResults = document.getElementById('search-results');
+const normalizeSearch = value => value.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+searchInput.addEventListener('input', () => {
+  const q = normalizeSearch(searchInput.value).trim();
+  searchResults.innerHTML = '';
+  if (!q) { searchResults.style.display = 'none'; announce(''); return; }
+  const totalMatches = RAW_NODES.filter(n => normalizeSearch(n.label).includes(q)).length;
+  const matches = RAW_NODES.filter(n => normalizeSearch(n.label).includes(q)).slice(0, 20);
+  if (!matches.length) {
+    searchResults.style.display = 'none';
+    announce('No nodes match the search.');
+    return;
+  }
+  searchResults.style.display = 'block';
+  announce(`Found ${totalMatches} node(s) matching "${q}". Showing first ${matches.length}.`);
+  matches.forEach(n => {
+    const el = document.createElement('button');
+    el.type = 'button';
+    el.className = 'search-item';
+    el.textContent = n.label;
+    el.setAttribute('aria-label', `Focus node ${n.label}`);
+    el.style.borderLeft = `3px solid ${n.color.background}`;
+    el.style.paddingLeft = '8px';
+    el.onclick = () => {
+      network.focus(n.id, { scale: 1.5, animation: true });
+      network.selectNodes([n.id]);
+      showInfo(n.id);
+      searchResults.style.display = 'none';
+      searchInput.value = '';
+      announce(`Focused on ${n.label}.`);
+    };
+    searchResults.appendChild(el);
+  });
+});
+document.addEventListener('click', e => {
+  if (!searchResults.contains(e.target) && e.target !== searchInput)
+    searchResults.style.display = 'none';
+});
+
+const hiddenCommunities = new Set();
+const selectAllCb = document.getElementById('select-all-cb');
+function updateSelectAllState() {
+  const total = LEGEND.length;
+  const hidden = hiddenCommunities.size;
+  selectAllCb.checked = hidden === 0;
+  selectAllCb.indeterminate = hidden > 0 && hidden < total;
+}
+function toggleAllCommunities(hide) {
+  document.querySelectorAll('.legend-item').forEach(item => {
+    hide ? item.classList.add('dimmed') : item.classList.remove('dimmed');
+  });
+  document.querySelectorAll('.legend-cb').forEach(cb => {
+    cb.checked = !hide;
+  });
+  LEGEND.forEach(c => {
+    if (hide) hiddenCommunities.add(c.cid); else hiddenCommunities.delete(c.cid);
+  });
+  const updates = RAW_NODES.map(n => ({ id: n.id, hidden: hide }));
+  nodesDS.update(updates);
+  updateSelectAllState();
+}
+const legendEl = document.getElementById('legend');
+LEGEND.forEach(c => {
+  const item = document.createElement('div');
+  item.className = 'legend-item';
+  const cb = document.createElement('input');
+  cb.type = 'checkbox';
+  cb.className = 'legend-cb';
+  cb.checked = true;
+  cb.addEventListener('change', e => {
+    e.stopPropagation();
+    if (cb.checked) {
+      hiddenCommunities.delete(c.cid);
+      item.classList.remove('dimmed');
+    } else {
+      hiddenCommunities.add(c.cid);
+      item.classList.add('dimmed');
+    }
+    const updates = RAW_NODES
+      .filter(n => n.community === c.cid)
+      .map(n => ({ id: n.id, hidden: !cb.checked }));
+    nodesDS.update(updates);
+    updateSelectAllState();
+  });
+  item.innerHTML = `<div class="legend-dot" style="background:${c.color}"></div>
+    <span class="legend-label">${c.label}</span>
+    <span class="legend-count">${c.count}</span>`;
+  item.prepend(cb);
+  item.onclick = e => {
+    if (e.target === cb) return;
+    cb.checked = !cb.checked;
+    cb.dispatchEvent(new Event('change'));
+  };
+  legendEl.appendChild(item);
+});
+selectAllCb.addEventListener('change', () => {
+  toggleAllCommunities(!selectAllCb.checked);
+});
+updateSelectAllState();
+
+// Help overlay (F1 / ? toggle).
+const helpButton = document.getElementById('help-button');
+const helpOverlay = document.getElementById('help-overlay');
+const helpClose = document.getElementById('help-close');
+function toggleHelp(open) {
+  if (open === undefined) open = !helpOverlay.classList.contains('open');
+  if (open) {
+    helpOverlay.classList.add('open');
+    helpOverlay.setAttribute('aria-hidden', 'false');
+    helpClose.focus();
+  } else {
+    helpOverlay.classList.remove('open');
+    helpOverlay.setAttribute('aria-hidden', 'true');
+    helpButton.focus();
+  }
+}
+helpButton.addEventListener('click', () => toggleHelp(true));
+helpClose.addEventListener('click', () => toggleHelp(false));
+helpOverlay.addEventListener('click', (e) => { if (e.target === helpOverlay) toggleHelp(false); });
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'F1' || (e.key === '?' && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName))) {
+    e.preventDefault();
+    toggleHelp();
+  } else if (e.key === 'Escape' && helpOverlay.classList.contains('open')) {
+    toggleHelp(false);
+  } else if (e.key === 'Escape' && network.getSelectedNodes().length > 0) {
+    network.unselectAll();
+    document.getElementById('info-content').innerHTML = '<span class="empty">Click a node to inspect it</span>';
+    announce('Selection cleared.');
+  }
+});
+
+// High-contrast toggle.
+const contrastBtn = document.getElementById('contrast-toggle');
+if (contrastBtn) {
+  contrastBtn.addEventListener('click', () => {
+    document.body.classList.toggle('high-contrast');
+    const on = document.body.classList.contains('high-contrast');
+    contrastBtn.setAttribute('aria-pressed', String(on));
+    announce(on ? 'High contrast mode enabled.' : 'High contrast mode disabled.');
+  });
+}
+
+// Initial announce so screen readers know what loaded.
+announce(`Graph loaded: ${RAW_NODES.length} node(s), ${RAW_EDGES.length} edge(s) across ${LEGEND.length} community(ies).`);
+</script>
+<script>
+// Render hyperedges as shaded regions
+const hyperedges = [{"id":"graphify_three_pillars","label":"Graphify Core Value Propositions","nodes":["graph_persistent_graph","graph_audit_trail","graph_community_detection"],"relation":"participate_in","confidence":"EXTRACTED","confidence_score":1,"source_file":".claude/skills/graphify/SKILL.md"},{"id":"graphify_extraction_pipeline","label":"Graphify Extraction Pipeline (AST + Semantic)","nodes":["graph_ast_extraction","graph_semantic_extraction","graphify_pipeline"],"relation":"participate_in","confidence":"EXTRACTED","confidence_score":1,"source_file":".claude/skills/graphify/SKILL.md"},{"id":"graphify_output_formats","label":"Graphify Output Formats","nodes":["graph_html_output","graph_obsidian_vault","graph_neo4j_export","graph_mcp_server"],"relation":"form","confidence":"EXTRACTED","confidence_score":1,"source_file":".claude/skills/graphify/SKILL.md"},{"id":"results_chart_suite","label":"Results Chart Suite","nodes":["index_chart_benefit_per_revision","index_chart_correction_effectiveness","index_chart_false_alarm","index_chart_ablation"],"relation":"form","confidence":"EXTRACTED","confidence_score":0.9,"source_file":"index.html"},{"id":"direction_asymmetry_display","label":"Direction Asymmetry Display","nodes":["index_direction_toggle","index_hero_scene","index_outcome_toggle","index_results"],"relation":"participate_in","confidence":"INFERRED","confidence_score":0.8,"source_file":"index.html"},{"id":"pipeline_stages","label":"Pipeline Stages","nodes":["index_pipeline_svg","index_method"],"relation":"participate_in","confidence":"EXTRACTED","confidence_score":0.95,"source_file":"index.html"}];
+function drawHyperedges() {
+    const canvas = network.canvas.frame.canvas;
+    const ctx = canvas.getContext('2d');
+    hyperedges.forEach(h => {
+        const positions = h.nodes
+            .map(nid => network.getPositions([nid])[nid])
+            .filter(p => p !== undefined);
+        if (positions.length < 2) return;
+        // Draw convex hull as filled polygon
+        ctx.save();
+        ctx.globalAlpha = 0.12;
+        ctx.fillStyle = '#6366f1';
+        ctx.strokeStyle = '#6366f1';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const scale = network.getScale();
+        const offset = network.getViewPosition();
+        const canvasWidth = canvas.clientWidth || canvas.width;
+        const canvasHeight = canvas.clientHeight || canvas.height;
+        const toCanvas = (p) => ({
+            x: (p.x - offset.x) * scale + canvasWidth / 2,
+            y: (p.y - offset.y) * scale + canvasHeight / 2
+        });
+        const pts = positions.map(toCanvas);
+        // Expand hull slightly
+        const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length;
+        const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length;
+        const expanded = pts.map(p => ({
+            x: cx + (p.x - cx) * 1.15,
+            y: cy + (p.y - cy) * 1.15
+        }));
+        ctx.moveTo(expanded[0].x, expanded[0].y);
+        expanded.slice(1).forEach(p => ctx.lineTo(p.x, p.y));
+        ctx.closePath();
+        ctx.fill();
+        ctx.globalAlpha = 0.4;
+        ctx.stroke();
+        // Label
+        ctx.globalAlpha = 0.8;
+        ctx.fillStyle = '#4f46e5';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(h.label, cx, cy - 5);
+        ctx.restore();
+    });
+}
+network.on('afterDrawing', drawHyperedges);
+</script>
+</body>
+</html>

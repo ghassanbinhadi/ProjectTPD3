@@ -5,6 +5,19 @@
 .graphify/worktree.json
 .graphify/needs_update
 .graphify/cache/
+.graphify/scope.json
+.graphify/.graphify_detect.json
 
 # node / dev
 node_modules/
+
+# playwright mcp session logs
+.playwright-mcp/
+
+# local analysis artifacts / screenshots
+corvus-hero.png
+corvus-snapshot.md
+live-v2-desktop.png
+local-skinned-desktop.png
+peergpt-live-hero.png
+opencode-prompt.md

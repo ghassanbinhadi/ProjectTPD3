@@ -17,12 +17,7 @@
 </head>
 <body data-direction="lq">
 
-  <!--
-    Fixed WebGL backdrop: two abstract neural node-clusters (Solver left,
-    Critic right) critiquing each other. Rendered by scene.js with Three.js
-    (falls back to a CSS-only version if WebGL/Three.js is unavailable or the
-    device is low-power / prefers-reduced-motion).
-  -->
+  <!-- Fixed WebGL backdrop (Solver left, Critic right). Rendered by scene.js. -->
   <canvas id="hero-scene" aria-hidden="true"></canvas>
   <div id="scene-fallback" class="scene-fallback" aria-hidden="true">
     <div class="fallback-net net-left" data-net="solver"></div>
@@ -32,331 +27,289 @@
     </svg>
   </div>
 
-  <!-- ============ NAV (Corvus-style left vertical mono) ============ -->
-  <header class="topbar">
-    <nav class="toc" id="toc">
-      <a class="toc-item" href="#background"><span>001</span> background</a>
-      <a class="toc-item" href="#method"><span>002</span> method</a>
-      <a class="toc-item" href="#results"><span>003</span> results</a>
-      <a class="toc-item" href="#demo"><span>004</span> demo</a>
-      <a class="toc-item" href="#policy"><span>005</span> policy</a>
-      <a class="toc-item" href="#team"><span>006</span> team</a>
-    </nav>
-    <a class="topbar-cta" href="https://github.com/ghassanbinhadi/ProjectTPD3" target="_blank" rel="noopener">github ↗</a>
+  <!-- ============ CLICK-TO-CONTINUE LOADER ============ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <ul class="loader__particles" aria-hidden="true">
+      <li></li><li></li><li></li><li></li><li></li>
+      <li></li><li></li><li></li><li></li><li></li>
+      <li></li><li></li><li></li><li></li><li></li>
+    </ul>
+    <div class="loader__counter" id="loaderCounter">0%</div>
+    <button class="loader__cta" id="loaderCta">click to continue</button>
+  </div>
+
+  <!-- ============ HEADER ============ -->
+  <header class="siteheader">
+    <a class="header__logo" href="#" data-panel-goto="1">
+      <span class="logo-mark">PEER</span>
+      <span class="logo-mark logo-mark--alt">gpt</span>
+    </a>
+
+    <button class="sound-button" id="soundBtn" aria-label="Toggle sound" aria-pressed="false">
+      <span class="sound-button__volume"></span>
+      <span class="sound-button__volume"></span>
+      <span class="sound-button__volume"></span>
+      <span class="sound-button__volume"></span>
+    </button>
+
+    <a class="studio-button" href="https://third-dimension.agency" target="_blank" rel="noopener">
+      <span class="studio-button__top">Design by</span>
+      <span class="studio-button__bottom">Studio</span>
+    </a>
   </header>
 
-  <main id="top">
+  <!-- ============ PAGINATION DOTS ============ -->
+  <nav class="pagination" id="pagination" aria-label="Sections">
+    <span class="pagination__number" role="button" tabindex="0" data-panel="1">001</span>
+    <span class="pagination__number" role="button" tabindex="0" data-panel="2">002</span>
+    <span class="pagination__number" role="button" tabindex="0" data-panel="3">003</span>
+    <span class="pagination__number" role="button" tabindex="0" data-panel="4">004</span>
+    <span class="pagination__number" role="button" tabindex="0" data-panel="5">005</span>
+    <span class="pagination__number" role="button" tabindex="0" data-panel="6">006</span>
+    <span class="pagination__number" role="button" tabindex="0" data-panel="7">007</span>
+  </nav>
 
-  <!-- ============ HERO ============ -->
-  <section class="hero">
-    <div class="hero-vignette" aria-hidden="true"></div>
-    <div class="hero-inner">
-      <p class="eyebrow">KAUST Academy · Undergraduate Research</p>
-      <h1>When should an LLM<br><span class="hero-flip">listen</span> to another LLM?</h1>
-      <p class="hero-sub">
-        Can lightweight, pre-revision signals reliably predict when a solver LLM should accept another
-        LLM's critique — <em>before any revision is made</em>? We tested it, and the answer depends heavily
-        on <em>who is talking to whom</em>. Toggle the direction below to see how the story changes.
-      </p>
+  <!-- ============ PANELS (fixed-viewport pagination app) ============ -->
+  <main class="stage" id="stage">
 
-      <div class="direction-switch" role="group" aria-label="Choose critique direction">
-        <button class="dir-btn active" data-dir="lq" id="btn-lq">
-          <span class="dir-label">Llama solves → Qwen critiques</span>
-          <span class="dir-stat">29.1% helped</span>
-        </button>
-        <button class="dir-btn" data-dir="ql" id="btn-ql">
-          <span class="dir-label">Qwen solves → Llama critiques</span>
-          <span class="dir-stat">11.2% helped</span>
-        </button>
+    <!-- PANEL 001 — HERO -->
+    <section class="panel" data-panel="1" aria-label="Intro">
+      <div class="panel-inner hero-col">
+        <h1 class="panel-h1">
+          <span class="panel-h1-line">When should an LLM</span>
+          <span class="panel-h1-line"><span class="hero-flip">listen</span> to another LLM?</span>
+          <span class="panel-h1-index">001</span>
+        </h1>
+        <p class="hero-sub">
+          Can lightweight, pre-revision signals reliably predict when a solver LLM should accept another
+          LLM's critique — <em>before any revision is made</em>? We tested it, and it depends heavily on
+          <em>who is talking to whom</em>. Toggle the direction.
+        </p>
+
+        <div class="direction-switch" role="group" aria-label="Choose critique direction">
+          <button class="dir-btn active" data-dir="lq" id="btn-lq">
+            <span class="dir-label">Llama solves → Qwen critiques</span>
+            <span class="dir-stat">29.1% helped</span>
+          </button>
+          <button class="dir-btn" data-dir="ql" id="btn-ql">
+            <span class="dir-label">Qwen solves → Llama critiques</span>
+            <span class="dir-stat">11.2% helped</span>
+          </button>
+        </div>
+
+        <div class="hero-authors">
+          Ghassan Alqahtani · Abdullah Asiri · Farah Alshammari · Lama Alshammari
+          <span class="hero-mentor">Mentor — Dr. Eman Alnabati</span>
+          <span class="hero-affil">KAUST · KAUST Academy · Ministry of Education · Alagil Foundation · RZM Investment</span>
+        </div>
+        <p class="hero-scene-hint">← Solver &nbsp;&nbsp;•&nbsp;&nbsp; Critic →</p>
       </div>
+    </section>
 
-      <div class="hero-authors">
-        Ghassan Alqahtani · Abdullah Asiri · Farah Alshammari · Lama Alshammari
-        <span class="hero-mentor">Mentor — Dr. Eman Alnabati</span>
-        <span class="hero-affil">KAUST · KAUST Academy · Ministry of Education · Alagil Foundation · RZM Investment</span>
+    <!-- PANEL 002 — BACKGROUND / OBJECTIVES -->
+    <section class="panel" data-panel="2" aria-label="Background">
+      <div class="panel-inner narrow">
+        <h1 class="panel-h1">Multi-LLM critique is a double-edged tool.<span class="panel-h1-index">002</span></h1>
+        <div class="prose">
+          <p>External feedback can repair genuine errors. But accepting flawed critique causes models to abandon
+          correct derivations they'd already reached on their own. Self-refinement is unreliable, and assuming
+          critique is uniformly beneficial degrades overall performance without a way to gate it.</p>
+          <p class="prose-lead">Core question — can lightweight, <strong>pre-revision</strong> signals reliably predict
+          when a solver should accept a critic's feedback, before any revision is made?</p>
+        </div>
+        <h2 class="obj-title">Objectives</h2>
+        <ul class="objectives">
+          <li><strong>Directional asymmetry</strong> — does critique benefit depend on which model solves and which one critiques?</li>
+          <li><strong>Failure mechanism</strong> — is asymmetry driven by correction effectiveness, or by harmful critiques of already-correct answers?</li>
+          <li><strong>Predictive signals</strong> — do directional-pairing features out-predict critique-derived features?</li>
+        </ul>
       </div>
-      <p class="hero-scene-hint">← Solver &nbsp;&nbsp;•&nbsp;&nbsp; Critic →</p>
-    </div>
-  </section>
+    </section>
 
-  <!-- ============ BACKGROUND / OBJECTIVES ============ -->
-  <section id="background" class="section">
-    <div class="section-inner narrow">
-      <p class="kicker">001 — The problem</p>
-      <h2>Multi-LLM critique is a double-edged tool.</h2>
-      <div class="prose">
-        <p>External feedback can repair genuine errors. But accepting flawed critique causes models to abandon
-        correct derivations they'd already reached on their own. Self-refinement is unreliable, and assuming
-        critique is uniformly beneficial degrades overall performance without a way to gate it.</p>
-        <p class="prose-lead">Core question — can lightweight, <strong>pre-revision</strong> signals reliably predict
-        when a solver should accept a critic's feedback, before any revision is made?</p>
+    <!-- PANEL 003 — METHOD / PIPELINE -->
+    <section class="panel" data-panel="3" aria-label="Method">
+      <div class="panel-inner">
+        <h1 class="panel-h1">Solve independently. Evaluate. Gate.<span class="panel-h1-index">003</span></h1>
+        <div class="pipeline" aria-label="Pipeline diagram">
+          <svg viewBox="0 0 1180 300" class="pipeline-svg" role="img" aria-labelledby="pipeline-title">
+            <title id="pipeline-title">Pipeline: GSM8K question flows to independent Solver and Critic, then Critic Evaluation, then gated revision, ending in a final answer.</title>
+            <path class="flow-line" d="M120,150 H210" />
+            <path class="flow-line" d="M320,90 H420" />
+            <path class="flow-line" d="M320,210 H420" />
+            <path class="flow-line" d="M540,90 L620,130" />
+            <path class="flow-line" d="M540,210 L620,170" />
+            <path class="flow-line" d="M760,120 L850,80" />
+            <path class="flow-line" d="M760,180 L850,220" />
+            <path class="flow-line" d="M960,80 L960,130 L860,150" />
+            <path class="flow-line" d="M960,220 H1080 V150 H860" />
+
+            <rect class="node node-neutral" x="20" y="120" width="100" height="60" rx="10"/>
+            <text class="node-text" x="70" y="154" text-anchor="middle">GSM8K<tspan x="70" dy="16">question</tspan></text>
+
+            <rect class="node node-a" x="210" y="60" width="110" height="60" rx="10"/>
+            <text class="node-text" x="265" y="85" text-anchor="middle">Solver</text>
+            <text class="node-text small" x="265" y="102" text-anchor="middle">initial solve</text>
+
+            <rect class="node node-b" x="210" y="180" width="110" height="60" rx="10"/>
+            <text class="node-text" x="265" y="205" text-anchor="middle">Critic</text>
+            <text class="node-text small" x="265" y="222" text-anchor="middle">independent solve</text>
+            <text class="node-text tiny" x="265" y="252" text-anchor="middle">(solver's answer hidden)</text>
+
+            <rect class="node node-neutral" x="620" y="120" width="140" height="60" rx="10"/>
+            <text class="node-text" x="690" y="144" text-anchor="middle">Critic evaluation</text>
+            <text class="node-text small" x="690" y="161" text-anchor="middle">correct / incorrect</text>
+
+            <rect class="node node-keep" x="850" y="50" width="140" height="60" rx="10"/>
+            <text class="node-text" x="920" y="74" text-anchor="middle">Keep original</text>
+            <text class="node-text small" x="920" y="91" text-anchor="middle">answer</text>
+
+            <rect class="node node-revise" x="850" y="200" width="140" height="60" rx="10"/>
+            <text class="node-text" x="920" y="224" text-anchor="middle">Solver revision</text>
+            <text class="node-text small" x="920" y="241" text-anchor="middle">keep / change</text>
+
+            <rect class="node node-neutral" x="1060" y="120" width="100" height="60" rx="10"/>
+            <text class="node-text" x="1110" y="154" text-anchor="middle">Final<tspan x="1110" dy="16">answer</tspan></text>
+          </svg>
+        </div>
+        <p class="pipeline-caption">Four stages: <strong>Solve</strong> (independent) → <strong>Evaluate</strong> (critic returns a verdict + proposed answer) → <strong>Gate</strong> (logistic model on pre-revision features) → <strong>Validate</strong> (5-fold StratifiedGroupKFold). Dataset: GSM8K · Qwen2.5-3B-Instruct &amp; Llama-3.2-3B-Instruct.</p>
+        <p class="stream-note" id="streamNote">The glowing stream above is the critique travelling <b>Critic</b> → <b>Solver</b>, colored by the active direction. Switch the direction on 001 to re-color it here.</p>
       </div>
-      <h3 class="obj-title">Objectives</h3>
-      <ul class="objectives">
-        <li><strong>Directional asymmetry</strong> — does critique benefit depend on which model solves and which one critiques?</li>
-        <li><strong>Failure mechanism</strong> — is asymmetry driven by correction effectiveness, or by harmful critiques of already-correct answers?</li>
-        <li><strong>Predictive signals</strong> — do directional-pairing features out-predict critique-derived features?</li>
-      </ul>
-    </div>
-  </section>
+    </section>
 
-  <!-- ============ METHOD ============ -->
-  <section id="method" class="section scene-reveal">
-    <div class="section-inner wide">
-      <p class="kicker">002 — Pipeline</p>
-      <h2>Solve independently. Evaluate. Gate. Revise only if the gate says so.</h2>
-      <div class="pipeline" aria-label="Pipeline diagram">
-        <svg viewBox="0 0 1180 340" class="pipeline-svg" role="img" aria-labelledby="pipeline-title">
-          <title id="pipeline-title">Pipeline: GSM8K question flows to independent Solver and Critic, then Critic Evaluation, then gated revision, ending in a final answer.</title>
+    <!-- PANEL 004 — RESULTS -->
+    <section class="panel" data-panel="4" aria-label="Results">
+      <div class="panel-inner">
+        <h1 class="panel-h1">The direction of critique changes everything.<span class="panel-h1-index">004</span></h1>
 
-          <!-- connectors -->
-          <path class="flow-line" d="M120,170 H210" />
-          <path class="flow-line" d="M320,110 H420" />
-          <path class="flow-line" d="M320,230 H420" />
-          <path class="flow-line" d="M540,110 L620,150" />
-          <path class="flow-line" d="M540,230 L620,190" />
-          <path class="flow-line" d="M760,140 L850,90" />
-          <path class="flow-line" d="M760,200 L850,250" />
-          <path class="flow-line" d="M960,90 L960,150 L860,170" />
-          <path class="flow-line" d="M960,250 H1080 V170 H860" />
+        <div class="legend" role="group" aria-label="Direction color legend">
+          <span class="legend-item li-a"><i></i>Llama solves → Qwen critiques</span>
+          <span class="legend-item li-b"><i></i>Qwen solves → Llama critiques</span>
+        </div>
 
-          <!-- node: question -->
-          <rect class="node node-neutral" x="20" y="140" width="100" height="60" rx="10"/>
-          <text class="node-text" x="70" y="174" text-anchor="middle">GSM8K<tspan x="70" dy="16">question</tspan></text>
-
-          <!-- node: solver -->
-          <rect class="node node-a" x="210" y="80" width="110" height="60" rx="10"/>
-          <text class="node-text" x="265" y="105" text-anchor="middle">Solver</text>
-          <text class="node-text small" x="265" y="122" text-anchor="middle">initial solve</text>
-
-          <!-- node: critic solve -->
-          <rect class="node node-b" x="210" y="200" width="110" height="60" rx="10"/>
-          <text class="node-text" x="265" y="225" text-anchor="middle">Critic</text>
-          <text class="node-text small" x="265" y="242" text-anchor="middle">independent solve</text>
-          <text class="node-text tiny" x="265" y="272" text-anchor="middle">(solver's answer hidden)</text>
-
-          <!-- node: evaluation -->
-          <rect class="node node-neutral" x="620" y="140" width="140" height="60" rx="10"/>
-          <text class="node-text" x="690" y="164" text-anchor="middle">Critic evaluation</text>
-          <text class="node-text small" x="690" y="181" text-anchor="middle">correct / incorrect</text>
-
-          <!-- node: keep -->
-          <rect class="node node-keep" x="850" y="60" width="140" height="60" rx="10"/>
-          <text class="node-text" x="920" y="84" text-anchor="middle">Keep original</text>
-          <text class="node-text small" x="920" y="101" text-anchor="middle">answer</text>
-
-          <!-- node: revise -->
-          <rect class="node node-revise" x="850" y="220" width="140" height="60" rx="10"/>
-          <text class="node-text" x="920" y="244" text-anchor="middle">Solver revision</text>
-          <text class="node-text small" x="920" y="261" text-anchor="middle">keep / change</text>
-
-          <!-- node: final -->
-          <rect class="node node-neutral" x="1060" y="140" width="100" height="60" rx="10"/>
-          <text class="node-text" x="1110" y="174" text-anchor="middle">Final<tspan x="1110" dy="16">answer</tspan></text>
-        </svg>
-      </div>
-      <p class="pipeline-caption">Four stages: <strong>Solve</strong> (independent, no cross-contamination) → <strong>Evaluate</strong> (critic compares answers, returns a verdict + proposed answer) → <strong>Gate</strong> (a logistic model trained on pre-revision features predicts if revision helps) → <strong>Validate</strong> (5-fold StratifiedGroupKFold by question, then one frozen held-out pass). Dataset: GSM8K. Models: Qwen2.5-3B-Instruct and Llama-3.2-3B-Instruct, run in both solver/critic directions.</p>
-      <p class="stream-note" id="streamNote">The glowing stream above is the critique travelling from the <b>Critic</b> to the <b>Solver</b> — colored by the active direction. Switch the direction up top to re-color it here.</p>
-    </div>
-  </section>
-
-  <!-- ============ RESULTS ============ -->
-  <section id="results" class="section scene-reveal">
-    <div class="section-inner wide">
-      <p class="kicker">003 — Results</p>
-      <h2>The direction of critique changes everything.</h2>
-
-      <div class="legend" role="group" aria-label="Direction color legend">
-        <span class="legend-item li-a"><i></i>Llama solves → Qwen critiques</span>
-        <span class="legend-item li-b"><i></i>Qwen solves → Llama critiques</span>
-      </div>
-
-      <div class="chart-grid">
-        <!-- chart 1: directional benefit -->
-        <div class="chart-card">
-          <h3>Benefit per revision</h3>
-          <p class="chart-note">Share of disagreement cases where revision helped · 95% CI · <strong>p = 0.00013</strong></p>
-          <div class="bars">
-            <div class="bar-row row-lq">
-              <div class="bar-label">Llama-solver → Qwen-critic</div>
-              <div class="bar-track"><div class="bar-fill fill-a" style="width:29.1%"></div></div>
-              <div class="bar-val">29.1% <span>(41/141)</span></div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h3>Benefit per revision</h3>
+            <p class="chart-note">Share of disagreement cases where revision helped · 95% CI · <strong>p = 0.00013</strong></p>
+            <div class="bars">
+              <div class="bar-row row-lq"><div class="bar-label">Llama-solver → Qwen-critic</div><div class="bar-track"><div class="bar-fill fill-a" style="width:29.1%"></div></div><div class="bar-val">29.1% <span>(41/141)</span></div></div>
+              <div class="bar-row row-ql"><div class="bar-label">Qwen-solver → Llama-critic</div><div class="bar-track"><div class="bar-fill fill-b" style="width:11.2%"></div></div><div class="bar-val">11.2% <span>(17/152)</span></div></div>
             </div>
-            <div class="bar-row row-ql">
-              <div class="bar-label">Qwen-solver → Llama-critic</div>
-              <div class="bar-track"><div class="bar-fill fill-b" style="width:11.2%"></div></div>
-              <div class="bar-val">11.2% <span>(17/152)</span></div>
+          </div>
+          <div class="chart-card">
+            <h3>Correction effectiveness</h3>
+            <p class="chart-note">Share of originally-incorrect answers fixed by revision · <strong>p = 0.0006</strong></p>
+            <div class="bars">
+              <div class="bar-row row-lq"><div class="bar-label">Llama-solver → Qwen-critic</div><div class="bar-track"><div class="bar-fill fill-a" style="width:47.7%"></div></div><div class="bar-val">47.7% <span>(41/86)</span></div></div>
+              <div class="bar-row row-ql"><div class="bar-label">Qwen-solver → Llama-critic</div><div class="bar-track"><div class="bar-fill fill-b" style="width:21.8%"></div></div><div class="bar-val">21.8% <span>(17/78)</span></div></div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <h3>False alarm rate</h3>
+            <p class="chart-note">Correct answers wrongly flagged as incorrect · not significant · p = 0.12</p>
+            <div class="bars">
+              <div class="bar-row row-lq"><div class="bar-label">Llama-solver → Qwen-critic</div><div class="bar-track"><div class="bar-fill fill-a" style="width:6.19%"></div></div><div class="bar-val">6.19%</div></div>
+              <div class="bar-row row-ql"><div class="bar-label">Qwen-solver → Llama-critic</div><div class="bar-track"><div class="bar-fill fill-b" style="width:8.15%"></div></div><div class="bar-val">8.15%</div></div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <h3>3-way feature ablation</h3>
+            <p class="chart-note">Predicting beneficial revision — F1 vs PR-AUC</p>
+            <div class="bars ablation">
+              <div class="bar-row"><div class="bar-label">Direction only · F1</div><div class="bar-track"><div class="bar-fill fill-neutral" style="width:41.1%"></div></div><div class="bar-val">0.411</div></div>
+              <div class="bar-row"><div class="bar-label">Direction only · PR-AUC</div><div class="bar-track"><div class="bar-fill fill-accent2" style="width:26.4%"></div></div><div class="bar-val">0.264</div></div>
+              <div class="bar-row"><div class="bar-label">Critique features · F1</div><div class="bar-track"><div class="bar-fill fill-neutral" style="width:29.0%"></div></div><div class="bar-val">0.290</div></div>
+              <div class="bar-row"><div class="bar-label">Critique features · PR-AUC</div><div class="bar-track"><div class="bar-fill fill-accent2" style="width:33.0%"></div></div><div class="bar-val">0.330</div></div>
+              <div class="bar-row"><div class="bar-label">All combined · F1</div><div class="bar-track"><div class="bar-fill fill-neutral" style="width:40.7%"></div></div><div class="bar-val">0.407</div></div>
+              <div class="bar-row"><div class="bar-label">All combined · PR-AUC</div><div class="bar-track"><div class="bar-fill fill-accent2" style="width:37.8%"></div></div><div class="bar-val">0.378</div></div>
             </div>
           </div>
         </div>
 
-        <!-- chart 2: correction effectiveness -->
-        <div class="chart-card">
-          <h3>Correction effectiveness</h3>
-          <p class="chart-note">Share of originally-incorrect answers fixed by revision · <strong>p = 0.0006</strong></p>
-          <div class="bars">
-            <div class="bar-row row-lq">
-              <div class="bar-label">Llama-solver → Qwen-critic</div>
-              <div class="bar-track"><div class="bar-fill fill-a" style="width:47.7%"></div></div>
-              <div class="bar-val">47.7% <span>(41/86)</span></div>
-            </div>
-            <div class="bar-row row-ql">
-              <div class="bar-label">Qwen-solver → Llama-critic</div>
-              <div class="bar-track"><div class="bar-fill fill-b" style="width:21.8%"></div></div>
-              <div class="bar-val">21.8% <span>(17/78)</span></div>
-            </div>
+        <div class="outcome-toolbar">
+          <span class="outcome-label">3D scene outcome →</span>
+          <div class="outcome-switch" role="group" aria-label="Choose 3D scene outcome">
+            <button class="out-btn active" data-outcome="helped" id="out-helped">HELPED <small>(accepted)</small></button>
+            <button class="out-btn" data-outcome="hurt" id="out-hurt">HURT <small>(rejected)</small></button>
           </div>
+          <span class="outcome-hint" id="outcomeHint">The critique lands and the Solver cluster brightens — it accepted the critique.</span>
         </div>
 
-        <!-- chart 3: false alarms -->
-        <div class="chart-card">
-          <h3>False alarm rate</h3>
-          <p class="chart-note">Correct answers wrongly flagged as incorrect · not significant · p = 0.12</p>
-          <div class="bars">
-            <div class="bar-row row-lq">
-              <div class="bar-label">Llama-solver → Qwen-critic</div>
-              <div class="bar-track"><div class="bar-fill fill-a" style="width:6.19%"></div></div>
-              <div class="bar-val">6.19%</div>
-            </div>
-            <div class="bar-row row-ql">
-              <div class="bar-label">Qwen-solver → Llama-critic</div>
-              <div class="bar-track"><div class="bar-fill fill-b" style="width:8.15%"></div></div>
-              <div class="bar-val">8.15%</div>
-            </div>
-          </div>
-        </div>
+        <p class="results-read">Reading it together: Llama-as-solver benefits almost <strong>3× more</strong> from Qwen's critique than the reverse pairing — driven by correction quality rather than differing false-alarm rates.</p>
+      </div>
+    </section>
 
-        <!-- chart 4: ablation -->
-        <div class="chart-card">
-          <h3>3-way feature ablation</h3>
-          <p class="chart-note">Predicting beneficial revision — F1 vs PR-AUC</p>
-          <div class="bars ablation">
-            <div class="bar-row"><div class="bar-label">Direction only · F1</div>
-              <div class="bar-track"><div class="bar-fill fill-neutral" style="width:41.1%"></div></div><div class="bar-val">0.411</div></div>
-            <div class="bar-row"><div class="bar-label">Direction only · PR-AUC</div>
-              <div class="bar-track"><div class="bar-fill fill-accent2" style="width:26.4%"></div></div><div class="bar-val">0.264</div></div>
-            <div class="bar-row"><div class="bar-label">Critique features · F1</div>
-              <div class="bar-track"><div class="bar-fill fill-neutral" style="width:29.0%"></div></div><div class="bar-val">0.290</div></div>
-            <div class="bar-row"><div class="bar-label">Critique features · PR-AUC</div>
-              <div class="bar-track"><div class="bar-fill fill-accent2" style="width:33.0%"></div></div><div class="bar-val">0.330</div></div>
-            <div class="bar-row"><div class="bar-label">All combined · F1</div>
-              <div class="bar-track"><div class="bar-fill fill-neutral" style="width:40.7%"></div></div><div class="bar-val">0.407</div></div>
-            <div class="bar-row"><div class="bar-label">All combined · PR-AUC</div>
-              <div class="bar-track"><div class="bar-fill fill-accent2" style="width:37.8%"></div></div><div class="bar-val">0.378</div></div>
+    <!-- PANEL 005 — DEMO CASE -->
+    <section class="panel" data-panel="5" aria-label="Demo case">
+      <div class="panel-inner narrow">
+        <h1 class="panel-h1">Walk through one HELPED case.<span class="panel-h1-index">005</span></h1>
+        <p class="prose-lead">Martha has been collecting shells since she turned 5 years old, every month she collects
+        one shell. By her 10th birthday, how many shells will Martha have collected?</p>
+
+        <div class="demo-stepper" id="demoStepper">
+          <div class="demo-track" id="demoTrack"></div>
+          <div class="demo-controls">
+            <button id="demoPrev" aria-label="Previous step">←</button>
+            <div class="demo-progress" id="demoProgress"></div>
+            <button id="demoNext" aria-label="Next step">→</button>
           </div>
         </div>
       </div>
+    </section>
 
-      <div class="outcome-toolbar">
-        <span class="outcome-label">3D scene outcome →</span>
-        <div class="outcome-switch" role="group" aria-label="Choose 3D scene outcome">
-          <button class="out-btn active" data-outcome="helped" id="out-helped">HELPED <small>(accepted)</small></button>
-          <button class="out-btn" data-outcome="hurt" id="out-hurt">HURT <small>(rejected)</small></button>
+    <!-- PANEL 006 — POLICY + FUTURE -->
+    <section class="panel" data-panel="6" aria-label="Decision policy and future work">
+      <div class="panel-inner">
+        <h1 class="panel-h1">Does the learned gate beat the baselines?<span class="panel-h1-index">006</span></h1>
+        <p class="chart-note">Frozen test set, n = 298 · accuracy</p>
+        <div class="policy-grid">
+          <div class="policy-card"><div class="policy-val">90.60%</div><div class="policy-label">Never-Accept</div></div>
+          <div class="policy-card"><div class="policy-val">90.27%</div><div class="policy-label">Adopt-Critic</div></div>
+          <div class="policy-card"><div class="policy-val">90.60%</div><div class="policy-label">Always-Accept</div></div>
+          <div class="policy-card highlight"><div class="policy-val">90.94%</div><div class="policy-label">Learned Policy</div></div>
+          <div class="policy-card ceiling"><div class="policy-val">92.28%</div><div class="policy-label">Oracle (ceiling)</div></div>
         </div>
-        <span class="outcome-hint" id="outcomeHint">The critique lands and the Solver cluster brightens — it accepted the critique.</span>
+        <p class="results-read">The learned policy edges out every static baseline. The gap to the oracle (92.28%) is the headroom left for richer pre-revision signals.</p>
+        <h2 class="obj-title">Future directions</h2>
+        <ul class="future-list">
+          <li><strong>Scale evaluation datasets</strong> — expand held-out benchmarks to overcome statistical underpowering and validate directional reproducibility.</li>
+          <li><strong>Integrate LLM-as-judge</strong> — replace shallow text-length proxies with automated critique-quality scoring.</li>
+          <li><strong>Expand model heterogeneity</strong> — benchmark diverse model families to test cross-architecture generalization.</li>
+          <li><strong>Broaden beyond disagreement</strong> — extend the selective gating framework to consensus and agreement scenarios.</li>
+          <li><strong>Inference-time deployment</strong> — package the learned gate into a plug-and-play wrapper requiring zero model retraining.</li>
+        </ul>
       </div>
+    </section>
 
-      <p class="results-read">
-        Reading it together: Llama-as-solver benefits almost <strong>3× more</strong> from Qwen's critique than the reverse pairing —
-        driven by correction quality rather than differing false-alarm rates. Both because Qwen's corrections land more often
-        <em>and</em> because the false-alarm rate isn't meaningfully different between directions — the asymmetry is about
-        correction quality, not one critic being noisier.
-      </p>
-    </div>
-  </section>
-
-  <!-- ============ DEMO CASE ============ -->
-  <section id="demo" class="section alt">
-    <div class="section-inner narrow">
-      <p class="kicker">004 — Demo case</p>
-      <h2>Walk through one HELPED case.</h2>
-      <p class="prose-lead">Martha has been collecting shells since she turned 5 years old, every month she collects
-      one shell. By her 10th birthday, how many shells will Martha have collected?</p>
-
-      <div class="demo-stepper" id="demoStepper">
-        <div class="demo-track" id="demoTrack"></div>
-        <div class="demo-controls">
-          <button id="demoPrev" aria-label="Previous step">←</button>
-          <div class="demo-progress" id="demoProgress"></div>
-          <button id="demoNext" aria-label="Next step">→</button>
+    <!-- PANEL 007 — TEAM -->
+    <section class="panel" data-panel="7" aria-label="Team">
+      <div class="panel-inner narrow">
+        <h1 class="panel-h1">Team<span class="panel-h1-index">007</span></h1>
+        <div class="team-grid">
+          <a class="team-card" href="#" rel="noopener"><span class="team-name">Ghassan Alqahtani</span><span class="team-role">Researcher</span><span class="team-social">LinkedIn — [LINKEDIN URL]</span></a>
+          <a class="team-card" href="#" rel="noopener"><span class="team-name">Abdullah Asiri</span><span class="team-role">Researcher</span><span class="team-social">LinkedIn — [LINKEDIN URL]</span></a>
+          <a class="team-card" href="#" rel="noopener"><span class="team-name">Farah Alshammari</span><span class="team-role">Researcher</span><span class="team-social">LinkedIn — [LINKEDIN URL]</span></a>
+          <a class="team-card" href="#" rel="noopener"><span class="team-name">Lama Alshammari</span><span class="team-role">Researcher</span><span class="team-social">LinkedIn — [LINKEDIN URL]</span></a>
+        </div>
+        <p class="mentor-line">Mentor — Dr. Eman Alnabati</p>
+        <p class="ack">With thanks to King Abdullah University of Science and Technology (KAUST) and KAUST Academy
+        for institutional support, mentorship and computing access, and to the Ministry of Education, Alagil
+        Foundation, and RZM Investment for their support. Supervision by Dr. Eman Alnabati.</p>
+        <div class="footer-links">
+          <a href="https://github.com/ghassanbinhadi/ProjectTPD3" target="_blank" rel="noopener">GitHub repository ↗</a>
+          <a href="#" class="placeholder" rel="noopener" id="posterLink">Project poster (PDF) — pending ↗</a>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- ============ DECISION POLICY ============ -->
-  <section id="policy" class="section">
-    <div class="section-inner wide">
-      <p class="kicker">005 — Decision policy</p>
-      <h2>Does the learned gate actually beat the obvious baselines?</h2>
-      <p class="chart-note">Frozen test set, n = 298 · accuracy</p>
-      <div class="policy-grid">
-        <div class="policy-card"><div class="policy-val">90.60%</div><div class="policy-label">Never-Accept</div></div>
-        <div class="policy-card"><div class="policy-val">90.27%</div><div class="policy-label">Adopt-Critic</div></div>
-        <div class="policy-card"><div class="policy-val">90.60%</div><div class="policy-label">Always-Accept</div></div>
-        <div class="policy-card highlight"><div class="policy-val">90.94%</div><div class="policy-label">Learned Policy</div></div>
-        <div class="policy-card ceiling"><div class="policy-val">92.28%</div><div class="policy-label">Oracle (ceiling)</div></div>
-      </div>
-      <p class="results-read">The learned policy edges out every static baseline — a real, if modest, gain on only
-      5 net-new HELPED cases in this preliminary pass. The gap to the oracle (92.28%) is the headroom left for
-      richer pre-revision signals.</p>
-    </div>
-  </section>
-
-  <!-- ============ FUTURE WORK ============ -->
-  <section class="section alt">
-    <div class="section-inner narrow">
-      <p class="kicker">006 — Future directions</p>
-      <ul class="future-list">
-        <li><strong>Scale evaluation datasets</strong> — expand held-out benchmarks to overcome statistical underpowering and validate directional reproducibility.</li>
-        <li><strong>Integrate LLM-as-judge</strong> — replace shallow text-length proxies with automated critique-quality scoring to capture nuanced reasoning errors.</li>
-        <li><strong>Expand model heterogeneity</strong> — benchmark diverse model families to test cross-architecture generalization.</li>
-        <li><strong>Broaden beyond disagreement</strong> — extend the selective gating framework to consensus and agreement scenarios.</li>
-        <li><strong>Inference-time deployment</strong> — package the learned gate into a plug-and-play wrapper requiring zero model retraining.</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- ============ TEAM / ACK / LINKS ============ -->
-  <section id="team" class="section team-section">
-    <div class="section-inner narrow">
-      <p class="kicker">007 — Team</p>
-      <div class="team-grid">
-        <a class="team-card" href="#" rel="noopener">
-          <span class="team-name">Ghassan Alqahtani</span>
-          <span class="team-role">Researcher</span>
-          <span class="team-social">LinkedIn — [LINKEDIN URL]</span>
-        </a>
-        <a class="team-card" href="#" rel="noopener">
-          <span class="team-name">Abdullah Asiri</span>
-          <span class="team-role">Researcher</span>
-          <span class="team-social">LinkedIn — [LINKEDIN URL]</span>
-        </a>
-        <a class="team-card" href="#" rel="noopener">
-          <span class="team-name">Farah Alshammari</span>
-          <span class="team-role">Researcher</span>
-          <span class="team-social">LinkedIn — [LINKEDIN URL]</span>
-        </a>
-        <a class="team-card" href="#" rel="noopener">
-          <span class="team-name">Lama Alshammari</span>
-          <span class="team-role">Researcher</span>
-          <span class="team-social">LinkedIn — [LINKEDIN URL]</span>
-        </a>
-      </div>
-      <p class="mentor-line">Mentor — Dr. Eman Alnabati</p>
-      <p class="ack">With thanks to King Abdullah University of Science and Technology (KAUST) and KAUST Academy
-      for institutional support, mentorship and computing access, and to the Ministry of Education, Alagil
-      Foundation, and RZM Investment for their support. Supervision by Dr. Eman Alnabati.</p>
-      <div class="footer-links">
-        <a href="https://github.com/ghassanbinhadi/ProjectTPD3" target="_blank" rel="noopener">GitHub repository ↗</a>
-        <a href="#" class="placeholder" rel="noopener" id="posterLink">Project poster (PDF) — pending ↗</a>
-      </div>
-    </div>
-  </section>
+    </section>
 
   </main>
 
   <footer class="sitefoot">
+    <nav class="footnav">
+      <a href="#" data-panel-goto="1">Main</a>
+      <a href="#" data-panel-goto="3">Tech</a>
+      <a href="#" data-panel-goto="7">Meet us</a>
+      <a href="#" data-panel-goto="7">Contact</a>
+    </nav>
     <span>PeerGPT — When Should an LLM Listen to Another LLM? · KAUST Academy</span>
   </footer>
 

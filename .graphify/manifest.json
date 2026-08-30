@@ -1,0 +1,38 @@
+{
+  "scene.js": {
+    "mtime": 1788096986740.3887,
+    "hash": "a2b84c8a1e9a189c1b6c1595f8371da1"
+  },
+  "script.js": {
+    "mtime": 1788096977944.9897,
+    "hash": "8db9a41e9e930e82920605ad7f5378ff"
+  },
+  ".claude/CLAUDE.md": {
+    "mtime": 1788092810356.2107,
+    "hash": "db73b0edd7ffbc61ceac177130730865"
+  },
+  ".claude/skills/graphify/SKILL.md": {
+    "mtime": 1788092810354.4482,
+    "hash": "49e9007021efea87c738b789f6e3fa65"
+  },
+  ".opencode/skills/roll-dice/SKILL.md": {
+    "mtime": 1788092817085.354,
+    "hash": "777d3308f83a31186cba15d362837449"
+  },
+  "CLAUDE.md": {
+    "mtime": 1788092810357.0825,
+    "hash": "43933251c7da7a98da7b57cd858902b1"
+  },
+  "README.md": {
+    "mtime": 1788094262994.69,
+    "hash": "7953842caac430595da8ca85cb382689"
+  },
+  "index.html": {
+    "mtime": 1788096927629.434,
+    "hash": "ff8a8c00fc6ca8d29c33546696d1daad"
+  },
+  "favicon.svg": {
+    "mtime": 1788094510131.0122,
+    "hash": "a4f0e992d82a19bf15b9ab4d4d811b82"
+  }
+}

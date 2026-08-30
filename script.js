@@ -1,6 +1,110 @@
-// ============ Direction toggle ============
-// The whole page's accent color is a CSS custom property swapped on <body>.
-// It also re-colors the 3D scene's critique stream through PeerGPTScene.
+// ============================================================
+// PeerGPT — Corvus pagination-app behavior
+// 1. Click-to-continue loader (% -> 100% -> CLICK TO CONTINUE)
+// 2. Sound button toggle (global)
+// 3. Numbered pagination switcher (001-007, swap panels in place)
+// 4. Direction toggle drives CSS accent + 3D scene
+// 5. Outcome toggle drives 3D scene
+// 6. Demo case stepper
+// ============================================================
+
+// ============ 1. Click-to-continue loader ============
+(function(){
+  const loader  = document.getElementById('loader');
+  const counter = document.getElementById('loaderCounter');
+  const cta     = document.getElementById('loaderCta');
+  if (!loader || !counter || !cta) return;
+
+  let pct = 0;
+  let started = false;
+  const tick = setInterval(function(){
+    pct += 1 + Math.floor(Math.random() * 3);
+    if (pct >= 100) { pct = 100; clearInterval(tick); }
+    counter.textContent = pct + '%';
+    if (pct === 100 && !started) {
+      started = true;
+      cta.classList.add('show');
+      cta.classList.remove('hidden');
+    }
+  }, 28);
+
+  function enter(){
+    loader.classList.add('done');
+    document.querySelectorAll('.panel').forEach(function(p){
+      if (p.dataset.panel === '1') p.classList.add('active');
+    });
+  }
+  cta.addEventListener('click', enter);
+  cta.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); enter(); } });
+})();
+
+// ============ 2. Sound button toggle ============
+(function(){
+  const btn = document.getElementById('soundBtn');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    const active = btn.classList.toggle('sound-button--active');
+    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    // Corvus mutes/unmutes a global ambient track. No audio asset ships with
+    // PeerGPT, so this toggles the visual active state (faithful interaction).
+  });
+})();
+
+// ============ 3. Numbered pagination switcher ============
+(function(){
+  const dots = Array.prototype.slice.call(document.querySelectorAll('.pagination__number'));
+  const panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  const footLinks = Array.prototype.slice.call(document.querySelectorAll('[data-panel-goto]'));
+  const logo = document.querySelector('.header__logo');
+  let current = 1;
+
+  function activate(n){
+    current = n;
+    dots.forEach(d => {
+      const seq = parseInt(d.dataset.panel, 10);
+      d.classList.toggle('active', seq === n);
+      d.classList.toggle('prev', seq < n);
+    });
+    panels.forEach(p => {
+      p.classList.toggle('active', parseInt(p.dataset.panel, 10) === n);
+    });
+    if (window.PeerGPTScene) driveScene(n);
+  }
+
+  dots.forEach(d => {
+    const click = () => activate(parseInt(d.dataset.panel, 10));
+    d.addEventListener('click', click);
+    d.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); click(); }
+    });
+  });
+
+  (footLinks.concat(logo ? [logo] : [])).forEach(a => {
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      activate(parseInt(a.dataset.panelGoto, 10) || 1);
+    });
+  });
+
+  activate(1);
+})();
+
+// ============ Drive the 3D scene from the active panel ============
+// Corvus is a fixed-viewport app (no page scroll), so the scene is driven
+// by which panel is open instead of by scroll position.
+let activeOutcome = 'helped';
+const outcomeHint = document.getElementById('outcomeHint');
+
+function driveScene(n){
+  if (!window.PeerGPTScene) return;
+  // Method panel (3) shows the critique stream.
+  window.PeerGPTScene.setStream(n === 3);
+  // Results panel (4) reflects the outcome; elsewhere it idles.
+  if (n === 4) window.PeerGPTScene.setOutcome(activeOutcome);
+  else window.PeerGPTScene.setOutcome('idle');
+}
+
+// ============ 4. Direction toggle ============
 (function(){
   const body = document.body;
   const btns = document.querySelectorAll('.dir-btn');
@@ -14,69 +118,24 @@
   });
 })();
 
-// ============ Sticky nav active state ============
+// ============ 5. Outcome toggle ============
 (function(){
-  const toc = document.getElementById('toc');
-  if (!toc) return;
-  const links = Array.prototype.slice.call(toc.querySelectorAll('a'));
-  if ('IntersectionObserver' in window) {
-    const targets = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
-    const spy = new IntersectionObserver((entries) => {
-      entries.forEach(en => {
-        if (en.isIntersecting) {
-          links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#' + en.target.id));
-        }
-      });
-    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
-    targets.forEach(t => spy.observe(t));
-  }
-})();
-
-// ============ Drive the 3D scene from scroll position ============
-(function(){
-  if (!window.PeerGPTScene) return;
-  const method = document.getElementById('method');
-  const results = document.getElementById('results');
-  if (!('IntersectionObserver' in window)) return;
-
-  // Show the critique stream while the Method section is in view.
-  new IntersectionObserver((entries) => {
-    entries.forEach(en => {
-      if (en.isIntersecting) window.PeerGPTScene.setStream(true);
-      else window.PeerGPTScene.setStream(false);
-    });
-  }, { rootMargin: '-20% 0px -35% 0px' }).observe(method);
-
-  // When the Results section is in view, reflect the selected outcome
-  // (HELPED => stream lands + solver brightens; HURT => stream deflects).
   const outBtns = document.querySelectorAll('.out-btn');
-  let activeOutcome = 'helped';
-  const hint = document.getElementById('outcomeHint');
-
   outBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       activeOutcome = btn.getAttribute('data-outcome');
       outBtns.forEach(b => b.classList.toggle('active', b === btn));
-      window.PeerGPTScene.setOutcome(activeOutcome);
-      if (hint) {
-        hint.textContent = activeOutcome === 'helped'
+      if (window.PeerGPTScene) window.PeerGPTScene.setOutcome(activeOutcome);
+      if (outcomeHint) {
+        outcomeHint.textContent = activeOutcome === 'helped'
           ? 'The critique lands and the Solver cluster brightens — it accepted the critique.'
           : 'The critique stream deflects and fades before reaching the Solver — it rejected the critique.';
       }
     });
   });
-
-  new IntersectionObserver((entries) => {
-    entries.forEach(en => {
-      if (en.isIntersecting) window.PeerGPTScene.setOutcome(activeOutcome);
-      else if (!results.contains(document.activeElement) && en.boundingClientRect.top > 0) {
-        window.PeerGPTScene.setOutcome('idle');
-      }
-    });
-  }, { rootMargin: '0px 0px -40% 0px' }).observe(results);
 })();
 
-// ============ Demo case stepper ============
+// ============ 6. Demo case stepper ============
 (function(){
   const steps = [
     {

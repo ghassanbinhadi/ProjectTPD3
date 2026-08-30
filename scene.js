@@ -182,16 +182,15 @@
   window.PeerGPTScene = api;
   applyColor();
 
-  // ---- Scroll / mouse reactivity ------------------------------------
-  document.addEventListener('scroll', function(){
-    var m = document.documentElement.scrollTop || document.body.scrollTop || 0;
-    GROUP.rotation.z = m * 0.0004;
-  }, { passive: true });
-
+  // ---- Pointer reactivity ------------------------------------
+  // Corvus app is a fixed viewport (no page scroll), so the group tilts
+  // gently toward the pointer instead of with scroll.
   const targetY = camera.position.y;
   let mouseX = 0;
+  let mouseY = 0;
   window.addEventListener('pointermove', function(e){
     mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
   }, { passive: true });
 
   window.addEventListener('resize', function(){
@@ -258,7 +257,7 @@
 
     // gentle camera parallax with pointer
     camera.position.x += (mouseX * 0.7 - camera.position.x) * 0.04;
-    camera.position.y += (targetY - camera.position.y) * 0.04;
+    camera.position.y += (targetY + mouseY * 0.4 - camera.position.y) * 0.04;
     camera.lookAt(0, 0, 0);
 
     renderer.render(scene, camera);
