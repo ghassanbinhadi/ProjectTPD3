@@ -1,7 +1,6 @@
 // ============ Direction toggle ============
 // The whole page's accent color is a CSS custom property swapped on <body>.
-// This is the site's signature interaction: pick a direction once, and every
-// downstream chart/diagram/hero reads it back through the same color.
+// It also re-colors the 3D scene's critique stream through PeerGPTScene.
 (function(){
   const body = document.body;
   const btns = document.querySelectorAll('.dir-btn');
@@ -10,8 +9,71 @@
       const dir = btn.getAttribute('data-dir');
       body.setAttribute('data-direction', dir);
       btns.forEach(b => b.classList.toggle('active', b === btn));
+      if (window.PeerGPTScene) window.PeerGPTScene.setDirection(dir);
     });
   });
+})();
+
+// ============ Sticky nav active state ============
+(function(){
+  const toc = document.getElementById('toc');
+  if (!toc) return;
+  const links = Array.prototype.slice.call(toc.querySelectorAll('a'));
+  if ('IntersectionObserver' in window) {
+    const targets = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#' + en.target.id));
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+    targets.forEach(t => spy.observe(t));
+  }
+})();
+
+// ============ Drive the 3D scene from scroll position ============
+(function(){
+  if (!window.PeerGPTScene) return;
+  const method = document.getElementById('method');
+  const results = document.getElementById('results');
+  if (!('IntersectionObserver' in window)) return;
+
+  // Show the critique stream while the Method section is in view.
+  new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting) window.PeerGPTScene.setStream(true);
+      else window.PeerGPTScene.setStream(false);
+    });
+  }, { rootMargin: '-20% 0px -35% 0px' }).observe(method);
+
+  // When the Results section is in view, reflect the selected outcome
+  // (HELPED => stream lands + solver brightens; HURT => stream deflects).
+  const outBtns = document.querySelectorAll('.out-btn');
+  let activeOutcome = 'helped';
+  const hint = document.getElementById('outcomeHint');
+
+  outBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeOutcome = btn.getAttribute('data-outcome');
+      outBtns.forEach(b => b.classList.toggle('active', b === btn));
+      window.PeerGPTScene.setOutcome(activeOutcome);
+      if (hint) {
+        hint.textContent = activeOutcome === 'helped'
+          ? 'The critique lands and the Solver cluster brightens — it accepted the critique.'
+          : 'The critique stream deflects and fades before reaching the Solver — it rejected the critique.';
+      }
+    });
+  });
+
+  new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting) window.PeerGPTScene.setOutcome(activeOutcome);
+      else if (!results.contains(document.activeElement) && en.boundingClientRect.top > 0) {
+        window.PeerGPTScene.setOutcome('idle');
+      }
+    });
+  }, { rootMargin: '0px 0px -40% 0px' }).observe(results);
 })();
 
 // ============ Demo case stepper ============
