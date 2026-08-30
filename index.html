@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>When to Listen — When Should an LLM Listen to Another LLM?</title>
-<meta name="description" content="Predicting beneficial critique acceptance in multi-LLM collaboration. A KAUST Academy study testing Qwen2.5-3B and Llama-3.2-3B as solver and critic on GSM8K.">
+<meta name="description" content="Predicting beneficial critique acceptance in multi-LLM collaboration. A KAUST Academy study testing Qwen2.5-3B and Llama-3.2-3B as solver and critic on GSM8K. Interactive 3D 'two brains in a box' scene.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,8 +17,9 @@
 </head>
 <body data-direction="lq">
 
-  <!-- Fixed WebGL backdrop (Solver left, Critic right). Rendered by scene.js. -->
-  <canvas id="hero-scene" aria-hidden="true"></canvas>
+  <!-- Fixed full-page WebGL scene (starfield + topology + two-brains-in-a-box).
+       Rendered by scene.js behind the fixed hero and as a faint backdrop. -->
+  <canvas id="scene-canvas" aria-hidden="true"></canvas>
   <div id="scene-fallback" class="scene-fallback" aria-hidden="true">
     <div class="fallback-net net-left" data-net="solver"></div>
     <div class="fallback-net net-right" data-net="critic"></div>
@@ -27,54 +28,53 @@
     </svg>
   </div>
 
-  <!-- ============ HEADER ============ -->
-  <header class="siteheader">
-    <a class="header__logo" href="#" data-panel-goto="1">
-      <span class="logo-mark">When to</span>
-      <span class="logo-mark logo-mark--alt">Listen</span>
-    </a>
+  <!-- ============ UI CHROME ============ -->
+  <div class="corner corner--tl" aria-hidden="true"></div>
+  <div class="corner corner--br" aria-hidden="true"></div>
 
-    <button class="sound-button" id="soundBtn" aria-label="Toggle sound" aria-pressed="false">
-      <span class="sound-button__volume"></span>
-      <span class="sound-button__volume"></span>
-      <span class="sound-button__volume"></span>
-      <span class="sound-button__volume"></span>
-    </button>
+  <div class="pill pill--tr" aria-hidden="true">
+    <span class="pill-dot"></span> When to Listen · interactive
+  </div>
 
-    <a class="studio-button" href="https://third-dimension.agency" target="_blank" rel="noopener">
-      <span class="studio-button__top">Design by</span>
-      <span class="studio-button__bottom">Studio</span>
-    </a>
-  </header>
-
-  <!-- ============ PAGINATION DOTS ============ -->
-  <nav class="pagination" id="pagination" aria-label="Sections">
-    <span class="pagination__number" role="button" tabindex="0" data-panel="1">001</span>
-    <span class="pagination__number" role="button" tabindex="0" data-panel="2">002</span>
-    <span class="pagination__number" role="button" tabindex="0" data-panel="3">003</span>
-    <span class="pagination__number" role="button" tabindex="0" data-panel="4">004</span>
-    <span class="pagination__number" role="button" tabindex="0" data-panel="5">005</span>
-    <span class="pagination__number" role="button" tabindex="0" data-panel="6">006</span>
-    <span class="pagination__number" role="button" tabindex="0" data-panel="7">007</span>
+  <nav class="progress-rail" id="progressRail" aria-label="Section progress">
+    <a href="#hero" data-scroll-to="hero" class="rail-dot active" aria-label="Hero"></a>
+    <a href="#background" data-scroll-to="background" class="rail-dot" aria-label="Background"></a>
+    <a href="#method" data-scroll-to="method" class="rail-dot" aria-label="Method"></a>
+    <a href="#results" data-scroll-to="results" class="rail-dot" aria-label="Results"></a>
+    <a href="#demo" data-scroll-to="demo" class="rail-dot" aria-label="Demo case"></a>
+    <a href="#policy" data-scroll-to="policy" class="rail-dot" aria-label="Policy"></a>
+    <a href="#team" data-scroll-to="team" class="rail-dot" aria-label="Team"></a>
   </nav>
 
-  <!-- ============ PANELS (fixed-viewport pagination app) ============ -->
-  <main class="stage" id="stage">
+  <!-- ============ TOP NAV ============ -->
+  <header class="topnav">
+    <a class="brand" href="#hero" data-scroll-to="hero" aria-label="When to Listen — home">
+      <span class="brand-a">When to</span><span class="brand-b">Listen</span>
+    </a>
+    <nav class="topnav__links" aria-label="Primary">
+      <a href="#background" data-scroll-to="background">Background</a>
+      <a href="#method" data-scroll-to="method">Method</a>
+      <a href="#results" data-scroll-to="results">Results</a>
+      <a href="#demo" data-scroll-to="demo">Demo</a>
+      <a href="#policy" data-scroll-to="policy">Policy</a>
+      <a href="#team" data-scroll-to="team">Team</a>
+    </nav>
+  </header>
 
-    <!-- PANEL 001 — HERO -->
-    <section class="panel" data-panel="1" aria-label="Intro">
-      <div class="panel-inner hero-col">
-        <h1 class="panel-h1">
-          <span class="panel-h1-line">When should an LLM</span>
-          <span class="panel-h1-line"><span class="hero-flip">listen</span> to another LLM?</span>
-          <span class="panel-h1-index">001</span>
+  <main id="content">
+
+    <!-- ============ HERO (split: text left, 3D box right) ============ -->
+    <section class="page page--hero" id="hero">
+      <div class="hero-text">
+        <p class="eyebrow">KAUST Academy · multi-LLM collaboration</p>
+        <h1 class="hero-title">
+          When should an<br>LLM <span class="accent"><span class="flip">listen</span></span> to<br>another LLM?
         </h1>
         <p class="hero-sub">
           Can lightweight, pre-revision signals reliably predict when a solver LLM should accept another
-          LLM's critique — <em>before any revision is made</em>? We tested it, and it depends heavily on
-          <em>who is talking to whom</em>. Toggle the direction.
+          LLM's critique — <em>before any revision is made</em>? We tested it: the answer depends heavily on
+          <em>who is talking to whom</em>.
         </p>
-
         <div class="direction-switch" role="group" aria-label="Choose critique direction">
           <button class="dir-btn active" data-dir="lq" id="btn-lq">
             <span class="dir-label">Llama solves → Qwen critiques</span>
@@ -85,20 +85,24 @@
             <span class="dir-stat">11.2% helped</span>
           </button>
         </div>
-
-        <div class="hero-authors">
+        <p class="hero-meta">
           Ghassan Alqahtani · Abdullah Asiri · Farah Alshammari · Lama Alshammari
-          <span class="hero-mentor">Mentor — Dr. Eman Alnabati</span>
-          <span class="hero-affil">KAUST · KAUST Academy · Ministry of Education · Alagil Foundation · RZM Investment</span>
-        </div>
-        <p class="hero-scene-hint">← Solver &nbsp;&nbsp;•&nbsp;&nbsp; Critic →</p>
+          <br><span class="hero-mentor">Mentor — Dr. Eman Alnabati</span>
+        </p>
+      </div>
+      <div class="hero-stage" id="heroBoxWrap" aria-hidden="true">
+        <!-- The two-brains-in-a-box scene is rendered into #scene-canvas, positioned
+             to the right of the hero text. Slot captions overlay it for clarity. -->
+        <span class="box-cap cap-llama">Llama</span>
+        <span class="box-cap cap-qwen">Qwen</span>
       </div>
     </section>
 
-    <!-- PANEL 002 — BACKGROUND / OBJECTIVES -->
-    <section class="panel" data-panel="2" aria-label="Background">
-      <div class="panel-inner narrow">
-        <h1 class="panel-h1">Multi-LLM critique is a double-edged tool.<span class="panel-h1-index">002</span></h1>
+    <!-- ============ BACKGROUND / OBJECTIVES ============ -->
+    <section class="page" id="background">
+      <div class="inner narrow">
+        <p class="eyebrow">01 / Background</p>
+        <h2 class="sec-title">Multi-LLM critique is a double-edged tool.</h2>
         <div class="prose">
           <p>External feedback can repair genuine errors. But accepting flawed critique causes models to abandon
           correct derivations they'd already reached on their own. Self-refinement is unreliable, and assuming
@@ -106,7 +110,7 @@
           <p class="prose-lead">Core question — can lightweight, <strong>pre-revision</strong> signals reliably predict
           when a solver should accept a critic's feedback, before any revision is made?</p>
         </div>
-        <h2 class="obj-title">Objectives</h2>
+        <h3 class="sec-sub">Objectives</h3>
         <ul class="objectives">
           <li><strong>Directional asymmetry</strong> — does critique benefit depend on which model solves and which one critiques?</li>
           <li><strong>Failure mechanism</strong> — is asymmetry driven by correction effectiveness, or by harmful critiques of already-correct answers?</li>
@@ -115,66 +119,32 @@
       </div>
     </section>
 
-    <!-- PANEL 003 — METHOD / PIPELINE -->
-    <section class="panel" data-panel="3" aria-label="Method">
-      <div class="panel-inner">
-        <h1 class="panel-h1">Solve independently. Evaluate. Gate.<span class="panel-h1-index">003</span></h1>
-        <div class="pipeline" aria-label="Pipeline diagram">
-          <svg viewBox="0 0 1180 300" class="pipeline-svg" role="img" aria-labelledby="pipeline-title">
-            <title id="pipeline-title">Pipeline: GSM8K question flows to independent Solver and Critic, then Critic Evaluation, then gated revision, ending in a final answer.</title>
-            <path class="flow-line" d="M120,150 H210" />
-            <path class="flow-line" d="M320,90 H420" />
-            <path class="flow-line" d="M320,210 H420" />
-            <path class="flow-line" d="M540,90 L620,130" />
-            <path class="flow-line" d="M540,210 L620,170" />
-            <path class="flow-line" d="M760,120 L850,80" />
-            <path class="flow-line" d="M760,180 L850,220" />
-            <path class="flow-line" d="M960,80 L960,130 L860,150" />
-            <path class="flow-line" d="M960,220 H1080 V150 H860" />
-
-            <rect class="node node-neutral" x="20" y="120" width="100" height="60" rx="10"/>
-            <text class="node-text" x="70" y="154" text-anchor="middle">GSM8K<tspan x="70" dy="16">question</tspan></text>
-
-            <rect class="node node-a" x="210" y="60" width="110" height="60" rx="10"/>
-            <text class="node-text" x="265" y="85" text-anchor="middle">Solver</text>
-            <text class="node-text small" x="265" y="102" text-anchor="middle">initial solve</text>
-
-            <rect class="node node-b" x="210" y="180" width="110" height="60" rx="10"/>
-            <text class="node-text" x="265" y="205" text-anchor="middle">Critic</text>
-            <text class="node-text small" x="265" y="222" text-anchor="middle">independent solve</text>
-            <text class="node-text tiny" x="265" y="252" text-anchor="middle">(solver's answer hidden)</text>
-
-            <rect class="node node-neutral" x="620" y="120" width="140" height="60" rx="10"/>
-            <text class="node-text" x="690" y="144" text-anchor="middle">Critic evaluation</text>
-            <text class="node-text small" x="690" y="161" text-anchor="middle">correct / incorrect</text>
-
-            <rect class="node node-keep" x="850" y="50" width="140" height="60" rx="10"/>
-            <text class="node-text" x="920" y="74" text-anchor="middle">Keep original</text>
-            <text class="node-text small" x="920" y="91" text-anchor="middle">answer</text>
-
-            <rect class="node node-revise" x="850" y="200" width="140" height="60" rx="10"/>
-            <text class="node-text" x="920" y="224" text-anchor="middle">Solver revision</text>
-            <text class="node-text small" x="920" y="241" text-anchor="middle">keep / change</text>
-
-            <rect class="node node-neutral" x="1060" y="120" width="100" height="60" rx="10"/>
-            <text class="node-text" x="1110" y="154" text-anchor="middle">Final<tspan x="1110" dy="16">answer</tspan></text>
-          </svg>
+    <!-- ============ METHOD ============ -->
+    <section class="page" id="method">
+      <div class="inner narrow">
+        <p class="eyebrow">02 / Method</p>
+        <h2 class="sec-title">Solve independently. Evaluate. Gate.</h2>
+        <div class="prose">
+          <p>Each model solves the GSM8K question on its own, with the other's answer hidden. One is the
+          <strong>Solver</strong>, the other the <strong>Critic</strong>; the Critic returns a verdict plus a proposed
+          answer. A learned gate then decides whether the Solver keeps its original answer or revises.</p>
+          <p class="prose-lead">Four stages: <strong>Solve</strong> (independent) → <strong>Evaluate</strong> (verdict + proposed answer) →
+          <strong>Gate</strong> (logistic model on pre-revision features) → <strong>Validate</strong> (5-fold StratifiedGroupKFold).</p>
         </div>
-        <p class="pipeline-caption">Four stages: <strong>Solve</strong> (independent) → <strong>Evaluate</strong> (critic returns a verdict + proposed answer) → <strong>Gate</strong> (logistic model on pre-revision features) → <strong>Validate</strong> (5-fold StratifiedGroupKFold). Dataset: GSM8K · Qwen2.5-3B-Instruct &amp; Llama-3.2-3B-Instruct.</p>
-
-        <div class="model-viz" aria-label="3D view of the two models and their critique">
-          <canvas id="model-scene" aria-hidden="true"></canvas>
-          <span class="model-viz__slot slot-qwen">Qwen</span>
-          <span class="model-viz__slot slot-llama">Llama</span>
-          <span class="model-viz__hint">Each globe is a 3D point-lattice projection of one model. The critique stream travels <b>Critic → Solver</b>, colored by the active direction.</span>
+        <div class="method-scene-note" role="note">
+          <span class="note-label">Live 3D — two brains in a box</span>
+          <p>The scene on the right of the hero shows the two models as a particle neural net inside a glowing
+          wireframe box. The colored stream travels <strong>Critic → Solver</strong>, recolored by the direction toggle,
+          and lands (HELPED) or deflects (HURT) as you scroll into Results.</p>
         </div>
       </div>
     </section>
 
-    <!-- PANEL 004 — RESULTS -->
-    <section class="panel" data-panel="4" aria-label="Results">
-      <div class="panel-inner">
-        <h1 class="panel-h1">The direction of critique changes everything.<span class="panel-h1-index">004</span></h1>
+    <!-- ============ RESULTS ============ -->
+    <section class="page" id="results">
+      <div class="inner">
+        <p class="eyebrow">03 / Results</p>
+        <h2 class="sec-title">The direction of critique changes everything.</h2>
 
         <div class="legend" role="group" aria-label="Direction color legend">
           <span class="legend-item li-a"><i></i>Llama solves → Qwen critiques</span>
@@ -186,36 +156,36 @@
             <h3>Benefit per revision</h3>
             <p class="chart-note">Share of disagreement cases where revision helped · 95% CI · <strong>p = 0.00013</strong></p>
             <div class="bars">
-              <div class="bar-row row-lq"><div class="bar-label">Llama-solver → Qwen-critic</div><div class="bar-track"><div class="bar-fill fill-a" style="width:29.1%"></div></div><div class="bar-val">29.1% <span>(41/141)</span></div></div>
-              <div class="bar-row row-ql"><div class="bar-label">Qwen-solver → Llama-critic</div><div class="bar-track"><div class="bar-fill fill-b" style="width:11.2%"></div></div><div class="bar-val">11.2% <span>(17/152)</span></div></div>
+              <div class="bar-row row-lq"><div class="bar-label">Llama-solver → Qwen-critic</div><div class="bar-track"><div class="bar-fill fill-a" data-w="29.1%"></div></div><div class="bar-val">29.1% <span>(41/141)</span></div></div>
+              <div class="bar-row row-ql"><div class="bar-label">Qwen-solver → Llama-critic</div><div class="bar-track"><div class="bar-fill fill-b" data-w="11.2%"></div></div><div class="bar-val">11.2% <span>(17/152)</span></div></div>
             </div>
           </div>
           <div class="chart-card">
             <h3>Correction effectiveness</h3>
             <p class="chart-note">Share of originally-incorrect answers fixed by revision · <strong>p = 0.0006</strong></p>
             <div class="bars">
-              <div class="bar-row row-lq"><div class="bar-label">Llama-solver → Qwen-critic</div><div class="bar-track"><div class="bar-fill fill-a" style="width:47.7%"></div></div><div class="bar-val">47.7% <span>(41/86)</span></div></div>
-              <div class="bar-row row-ql"><div class="bar-label">Qwen-solver → Llama-critic</div><div class="bar-track"><div class="bar-fill fill-b" style="width:21.8%"></div></div><div class="bar-val">21.8% <span>(17/78)</span></div></div>
+              <div class="bar-row row-lq"><div class="bar-label">Llama-solver → Qwen-critic</div><div class="bar-track"><div class="bar-fill fill-a" data-w="47.7%"></div></div><div class="bar-val">47.7% <span>(41/86)</span></div></div>
+              <div class="bar-row row-ql"><div class="bar-label">Qwen-solver → Llama-critic</div><div class="bar-track"><div class="bar-fill fill-b" data-w="21.8%"></div></div><div class="bar-val">21.8% <span>(17/78)</span></div></div>
             </div>
           </div>
           <div class="chart-card">
             <h3>False alarm rate</h3>
             <p class="chart-note">Correct answers wrongly flagged as incorrect · not significant · p = 0.12</p>
             <div class="bars">
-              <div class="bar-row row-lq"><div class="bar-label">Llama-solver → Qwen-critic</div><div class="bar-track"><div class="bar-fill fill-a" style="width:6.19%"></div></div><div class="bar-val">6.19%</div></div>
-              <div class="bar-row row-ql"><div class="bar-label">Qwen-solver → Llama-critic</div><div class="bar-track"><div class="bar-fill fill-b" style="width:8.15%"></div></div><div class="bar-val">8.15%</div></div>
+              <div class="bar-row row-lq"><div class="bar-label">Llama-solver → Qwen-critic</div><div class="bar-track"><div class="bar-fill fill-a" data-w="6.19%"></div></div><div class="bar-val">6.19%</div></div>
+              <div class="bar-row row-ql"><div class="bar-label">Qwen-solver → Llama-critic</div><div class="bar-track"><div class="bar-fill fill-b" data-w="8.15%"></div></div><div class="bar-val">8.15%</div></div>
             </div>
           </div>
           <div class="chart-card">
             <h3>3-way feature ablation</h3>
             <p class="chart-note">Predicting beneficial revision — F1 vs PR-AUC</p>
             <div class="bars ablation">
-              <div class="bar-row"><div class="bar-label">Direction only · F1</div><div class="bar-track"><div class="bar-fill fill-neutral" style="width:41.1%"></div></div><div class="bar-val">0.411</div></div>
-              <div class="bar-row"><div class="bar-label">Direction only · PR-AUC</div><div class="bar-track"><div class="bar-fill fill-accent2" style="width:26.4%"></div></div><div class="bar-val">0.264</div></div>
-              <div class="bar-row"><div class="bar-label">Critique features · F1</div><div class="bar-track"><div class="bar-fill fill-neutral" style="width:29.0%"></div></div><div class="bar-val">0.290</div></div>
-              <div class="bar-row"><div class="bar-label">Critique features · PR-AUC</div><div class="bar-track"><div class="bar-fill fill-accent2" style="width:33.0%"></div></div><div class="bar-val">0.330</div></div>
-              <div class="bar-row"><div class="bar-label">All combined · F1</div><div class="bar-track"><div class="bar-fill fill-neutral" style="width:40.7%"></div></div><div class="bar-val">0.407</div></div>
-              <div class="bar-row"><div class="bar-label">All combined · PR-AUC</div><div class="bar-track"><div class="bar-fill fill-accent2" style="width:37.8%"></div></div><div class="bar-val">0.378</div></div>
+              <div class="bar-row"><div class="bar-label">Direction only · F1</div><div class="bar-track"><div class="bar-fill fill-neutral" data-w="41.1%"></div></div><div class="bar-val">0.411</div></div>
+              <div class="bar-row"><div class="bar-label">Direction only · PR-AUC</div><div class="bar-track"><div class="bar-fill fill-accent2" data-w="26.4%"></div></div><div class="bar-val">0.264</div></div>
+              <div class="bar-row"><div class="bar-label">Critique features · F1</div><div class="bar-track"><div class="bar-fill fill-neutral" data-w="29.0%"></div></div><div class="bar-val">0.290</div></div>
+              <div class="bar-row"><div class="bar-label">Critique features · PR-AUC</div><div class="bar-track"><div class="bar-fill fill-accent2" data-w="33.0%"></div></div><div class="bar-val">0.330</div></div>
+              <div class="bar-row"><div class="bar-label">All combined · F1</div><div class="bar-track"><div class="bar-fill fill-neutral" data-w="40.7%"></div></div><div class="bar-val">0.407</div></div>
+              <div class="bar-row"><div class="bar-label">All combined · PR-AUC</div><div class="bar-track"><div class="bar-fill fill-accent2" data-w="37.8%"></div></div><div class="bar-val">0.378</div></div>
             </div>
           </div>
         </div>
@@ -233,10 +203,11 @@
       </div>
     </section>
 
-    <!-- PANEL 005 — DEMO CASE -->
-    <section class="panel" data-panel="5" aria-label="Demo case">
-      <div class="panel-inner narrow">
-        <h1 class="panel-h1">Walk through real HELPED cases.<span class="panel-h1-index">005</span></h1>
+    <!-- ============ DEMO CASE ============ -->
+    <section class="page" id="demo">
+      <div class="inner narrow">
+        <p class="eyebrow">04 / Demo case</p>
+        <h2 class="sec-title">Walk through real HELPED cases.</h2>
         <p class="prose-lead">Each case is a genuine GSM8K disagreement example from our dataset where the solver
         accepted the critique and its final answer improved. Step through the reasoning, then switch direction.</p>
 
@@ -260,10 +231,11 @@
       </div>
     </section>
 
-    <!-- PANEL 006 — POLICY + FUTURE -->
-    <section class="panel" data-panel="6" aria-label="Decision policy and future work">
-      <div class="panel-inner">
-        <h1 class="panel-h1">Does the learned gate beat the baselines?<span class="panel-h1-index">006</span></h1>
+    <!-- ============ POLICY + FUTURE ============ -->
+    <section class="page" id="policy">
+      <div class="inner">
+        <p class="eyebrow">05 / Decision policy</p>
+        <h2 class="sec-title">Does the learned gate beat the baselines?</h2>
         <p class="chart-note">Frozen test set, n = 298 · accuracy</p>
         <div class="policy-grid">
           <div class="policy-card"><div class="policy-val">90.60%</div><div class="policy-label">Never-Accept</div></div>
@@ -273,7 +245,7 @@
           <div class="policy-card ceiling"><div class="policy-val">92.28%</div><div class="policy-label">Oracle (ceiling)</div></div>
         </div>
         <p class="results-read">The learned policy edges out every static baseline. The gap to the oracle (92.28%) is the headroom left for richer pre-revision signals.</p>
-        <h2 class="obj-title">Future directions</h2>
+        <h3 class="sec-sub">Future directions</h3>
         <ul class="future-list">
           <li><strong>Scale evaluation datasets</strong> — expand held-out benchmarks to overcome statistical underpowering and validate directional reproducibility.</li>
           <li><strong>Integrate LLM-as-judge</strong> — replace shallow text-length proxies with automated critique-quality scoring.</li>
@@ -284,10 +256,11 @@
       </div>
     </section>
 
-    <!-- PANEL 007 — TEAM -->
-    <section class="panel" data-panel="7" aria-label="Team">
-      <div class="panel-inner narrow">
-        <h1 class="panel-h1">Team<span class="panel-h1-index">007</span></h1>
+    <!-- ============ TEAM ============ -->
+    <section class="page" id="team">
+      <div class="inner narrow">
+        <p class="eyebrow">06 / Team</p>
+        <h2 class="sec-title">Team</h2>
         <div class="team-grid">
           <a class="team-card" href="#" rel="noopener"><span class="team-name">Ghassan Alqahtani</span><span class="team-role">Researcher</span><span class="team-social">LinkedIn — [LINKEDIN URL]</span></a>
           <a class="team-card" href="#" rel="noopener"><span class="team-name">Abdullah Asiri</span><span class="team-role">Researcher</span><span class="team-social">LinkedIn — [LINKEDIN URL]</span></a>
@@ -307,18 +280,21 @@
 
   </main>
 
-  <footer class="sitefoot">
-    <nav class="footnav">
-      <a href="#" data-panel-goto="1">Main</a>
-      <a href="#" data-panel-goto="3">Tech</a>
-      <a href="#" data-panel-goto="7">Meet us</a>
+  <!-- ============ BOTTOM NAV ROW ============ -->
+  <footer class="bottomnav">
+    <nav class="bottomnav__links" aria-label="Footer">
+      <a href="#hero" data-scroll-to="hero">main</a>
+      <a href="#background" data-scroll-to="background">background</a>
+      <a href="#method" data-scroll-to="method">tech</a>
+      <a href="#results" data-scroll-to="results">results</a>
+      <a href="#demo" data-scroll-to="demo">demo</a>
+      <a href="#team" data-scroll-to="team">meet us</a>
     </nav>
-    <span>When to Listen — When Should an LLM Listen to Another LLM? · KAUST Academy</span>
+    <span class="bottomnav__legend">When to Listen — When Should an LLM Listen to Another LLM? · KAUST Academy</span>
   </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js" defer></script>
 <script src="scene.js" defer></script>
-<script src="modelScene.js" defer></script>
 <script src="script.js" defer></script>
 </body>
 </html>
