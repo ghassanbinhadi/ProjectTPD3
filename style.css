@@ -237,7 +237,7 @@ body.no-webgl #scene-fallback{ display: block; }
 .model-viz{
   position: relative; margin: 8px 0 4px; height: 260px;
   border: 1px solid var(--line-soft); border-radius: 2px; overflow: hidden;
-  background: radial-gradient(120% 120% at 50% 50%, #0a0f16 0%, #000 70%);
+  background: transparent;
 }
 #model-scene{ position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .model-viz__slot{

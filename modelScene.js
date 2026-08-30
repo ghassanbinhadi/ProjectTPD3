@@ -81,19 +81,18 @@
     }
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.Float32BufferAttribute(segs, 3));
-    const link = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({
+    const linkMat = new THREE.LineBasicMaterial({
       color: 0xffffff, transparent: true, opacity: 0.14
-    }));
+    });
+    const link = new THREE.LineSegments(geo, linkMat);
     g.add(link);
 
-    // soft inner core
-    const core = new THREE.Mesh(
-      new THREE.SphereGeometry(R * 0.9, 24, 24),
-      new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.03 })
-    );
+    // soft inner core glow (matches the hero scene's cluster glow)
+    const coreMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.08 });
+    const core = new THREE.Mesh(new THREE.SphereGeometry(R * 0.9, 24, 24), coreMat);
     g.add(core);
 
-    return { group: g, nodes: positions, core: core };
+    return { group: g, nodes: positions, core: core, linkMat: linkMat, coreMat: coreMat };
   }
 
   const LLAMA = buildGlobe(-2.1, 'Llama');
@@ -133,6 +132,11 @@
   function applyColor(){
     const c = new THREE.Color(COLORS[direction].r, COLORS[direction].g, COLORS[direction].b);
     streamMat.color.copy(c);
+    // tint the globe lattice links + cores with the same accent as the scene
+    LLAMA.linkMat.color.copy(c);
+    LLAMA.coreMat.color.copy(c);
+    QWEN.linkMat.color.copy(c);
+    QWEN.coreMat.color.copy(c);
   }
   applyColor();
 

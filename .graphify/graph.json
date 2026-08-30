@@ -12,20 +12,75 @@
       "6": "Graph Value Propositions",
       "7": "Interactivity Logic",
       "8": "Search Question Paper",
-      "9": "Roll Dice Utility"
+      "9": "Roll Dice Utility",
+      "10": "Community 10"
     },
-    "built_from_commit": "f6b90e962fe2b0b8bf5a3b0d1f018148b8b6eeea"
+    "built_from_commit": "88ffa4d17ddc806f849890017fedcc46c46fb4b3"
   },
-  "topology_signature": "n=57;e=63;CLAUDE_md,README_md,abdullah_asiri,claude_CLAUDE_md,eman_alnabati,farah_alshammari,ghassan_alqahtani,graph_ast_extraction,graph_audit_trail,graph_community_detection,graph_csv_ocr,graph_html_output,graph_mcp_server,graph_neo4j_export,graph_obsidian_vault,graph_persistent_graph,graph_semantic_extraction,graphify_concept,graphify_knowledge_graph,graphify_pipeline,graphify_skill,index_background,index_chart_ablation,index_chart_benefit_per_revision,index_chart_correction_effectiveness,index_chart_false_alarm,index_decision_policy,index_demo,index_direction_lq,index_direction_ql,index_direction_toggle,index_hero,index_hero_scene,index_html,index_method,index_outcome_toggle,index_pipeline_svg,index_results,index_team,kaust_academy,lama_alshammari,project_paper,project_peerGPT,roll_dice_skill,scene,scene_applycolor,scene_buildcluster,scene_frame,script,script_activate,script_drivescene,script_enter,script_loadcase,script_outcomehint,script_render,script_renderquestion,script_rendersteps|CLAUDE_md\tgraphify_knowledge_graph\treferences;README_md\tindex_html\treferences;README_md\tproject_peerGPT\treferences;abdullah_asiri\tindex_team\tcontains;claude_CLAUDE_md\tgraphify_skill\treferences;eman_alnabati\tindex_team\tcontains;eman_alnabati\tkaust_academy\taffiliated_with;farah_alshammari\tindex_team\tcontains;ghassan_alqahtani\tindex_team\tcontains;graph_ast_extraction\tgraph_semantic_extraction\tconceptually_related_to;graph_ast_extraction\tgraphify_pipeline\treferences;graph_audit_trail\tgraph_community_detection\tconceptually_related_to;graph_audit_trail\tgraph_persistent_graph\tconceptually_related_to;graph_community_detection\tgraph_persistent_graph\tconceptually_related_to;graph_community_detection\tgraphify_pipeline\treferences;graph_csv_ocr\tgraphify_pipeline\treferences;graph_html_output\tgraphify_pipeline\treferences;graph_neo4j_export\tgraphify_pipeline\treferences;graph_obsidian_vault\tgraphify_pipeline\treferences;graph_semantic_extraction\tgraphify_pipeline\treferences;graphify_concept\tgraphify_pipeline\treferences;graphify_concept\tgraphify_skill\timplements;graphify_knowledge_graph\tproject_peerGPT\tconceptually_related_to;index_background\tindex_html\tcontains;index_chart_ablation\tindex_direction_toggle\tshares_data_with;index_chart_ablation\tindex_results\tcontains;index_chart_benefit_per_revision\tindex_chart_correction_effectiveness\tshares_data_with;index_chart_benefit_per_revision\tindex_results\tcontains;index_chart_correction_effectiveness\tindex_results\tcontains;index_chart_false_alarm\tindex_results\tcontains;index_decision_policy\tindex_html\tcontains;index_demo\tindex_html\tcontains;index_direction_lq\tindex_direction_ql\tsemantically_similar_to;index_direction_lq\tindex_direction_toggle\tcontains;index_direction_ql\tindex_direction_toggle\tcontains;index_direction_toggle\tindex_hero\tcontains;index_direction_toggle\tindex_hero_scene\tshares_data_with;index_hero\tindex_hero_scene\tcontains;index_hero\tindex_html\tcontains;index_hero\tkaust_academy\treferences;index_hero_scene\tindex_outcome_toggle\tshares_data_with;index_html\tindex_method\tcontains;index_html\tindex_results\tcontains;index_html\tindex_team\tcontains;index_method\tindex_pipeline_svg\tcontains;index_outcome_toggle\tindex_results\tcontains;index_team\tkaust_academy\treferences;index_team\tlama_alshammari\tcontains;scene\tscene_applycolor\tcontains;scene\tscene_buildcluster\tcontains;scene\tscene_frame\tcontains;script\tscript_activate\tcontains;script\tscript_drivescene\tcontains;script\tscript_enter\tcontains;script\tscript_loadcase\tcontains;script\tscript_outcomehint\tcontains;script\tscript_render\tcontains;script\tscript_renderquestion\tcontains;script\tscript_rendersteps\tcontains;script_activate\tscript_drivescene\tcalls;script_loadcase\tscript_render\tcalls;script_loadcase\tscript_renderquestion\tcalls;script_loadcase\tscript_rendersteps\tcalls",
+  "topology_signature": "n=63;e=69;CLAUDE_md,README_md,abdullah_asiri,claude_CLAUDE_md,eman_alnabati,farah_alshammari,ghassan_alqahtani,graph_ast_extraction,graph_audit_trail,graph_community_detection,graph_csv_ocr,graph_html_output,graph_mcp_server,graph_neo4j_export,graph_obsidian_vault,graph_persistent_graph,graph_semantic_extraction,graphify_concept,graphify_knowledge_graph,graphify_pipeline,graphify_skill,index_background,index_chart_ablation,index_chart_benefit_per_revision,index_chart_correction_effectiveness,index_chart_false_alarm,index_decision_policy,index_demo,index_direction_lq,index_direction_ql,index_direction_toggle,index_hero,index_hero_scene,index_html,index_method,index_outcome_toggle,index_pipeline_svg,index_results,index_team,kaust_academy,lama_alshammari,modelscene,modelscene_applycolor,modelscene_buildglobe,modelscene_frame,modelscene_size,modelscene_streamcurve,project_paper,project_peerGPT,roll_dice_skill,scene,scene_applycolor,scene_buildcluster,scene_frame,script,script_activate,script_drivescene,script_enter,script_loadcase,script_outcomehint,script_render,script_renderquestion,script_rendersteps|CLAUDE_md\tgraphify_knowledge_graph\treferences;README_md\tindex_html\treferences;README_md\tproject_peerGPT\treferences;abdullah_asiri\tindex_team\tcontains;claude_CLAUDE_md\tgraphify_skill\treferences;eman_alnabati\tindex_team\tcontains;eman_alnabati\tkaust_academy\taffiliated_with;farah_alshammari\tindex_team\tcontains;ghassan_alqahtani\tindex_team\tcontains;graph_ast_extraction\tgraph_semantic_extraction\tconceptually_related_to;graph_ast_extraction\tgraphify_pipeline\treferences;graph_audit_trail\tgraph_community_detection\tconceptually_related_to;graph_audit_trail\tgraph_persistent_graph\tconceptually_related_to;graph_community_detection\tgraph_persistent_graph\tconceptually_related_to;graph_community_detection\tgraphify_pipeline\treferences;graph_csv_ocr\tgraphify_pipeline\treferences;graph_html_output\tgraphify_pipeline\treferences;graph_neo4j_export\tgraphify_pipeline\treferences;graph_obsidian_vault\tgraphify_pipeline\treferences;graph_semantic_extraction\tgraphify_pipeline\treferences;graphify_concept\tgraphify_pipeline\treferences;graphify_concept\tgraphify_skill\timplements;graphify_knowledge_graph\tproject_peerGPT\tconceptually_related_to;index_background\tindex_html\tcontains;index_chart_ablation\tindex_direction_toggle\tshares_data_with;index_chart_ablation\tindex_results\tcontains;index_chart_benefit_per_revision\tindex_chart_correction_effectiveness\tshares_data_with;index_chart_benefit_per_revision\tindex_results\tcontains;index_chart_correction_effectiveness\tindex_results\tcontains;index_chart_false_alarm\tindex_results\tcontains;index_decision_policy\tindex_html\tcontains;index_demo\tindex_html\tcontains;index_direction_lq\tindex_direction_ql\tsemantically_similar_to;index_direction_lq\tindex_direction_toggle\tcontains;index_direction_ql\tindex_direction_toggle\tcontains;index_direction_toggle\tindex_hero\tcontains;index_direction_toggle\tindex_hero_scene\tshares_data_with;index_hero\tindex_hero_scene\tcontains;index_hero\tindex_html\tcontains;index_hero\tkaust_academy\treferences;index_hero_scene\tindex_outcome_toggle\tshares_data_with;index_html\tindex_method\tcontains;index_html\tindex_results\tcontains;index_html\tindex_team\tcontains;index_method\tindex_pipeline_svg\tcontains;index_outcome_toggle\tindex_results\tcontains;index_team\tkaust_academy\treferences;index_team\tlama_alshammari\tcontains;modelscene\tmodelscene_applycolor\tcontains;modelscene\tmodelscene_buildglobe\tcontains;modelscene\tmodelscene_frame\tcontains;modelscene\tmodelscene_size\tcontains;modelscene\tmodelscene_streamcurve\tcontains;modelscene_frame\tmodelscene_streamcurve\tcalls;scene\tscene_applycolor\tcontains;scene\tscene_buildcluster\tcontains;scene\tscene_frame\tcontains;script\tscript_activate\tcontains;script\tscript_drivescene\tcontains;script\tscript_enter\tcontains;script\tscript_loadcase\tcontains;script\tscript_outcomehint\tcontains;script\tscript_render\tcontains;script\tscript_renderquestion\tcontains;script\tscript_rendersteps\tcontains;script_activate\tscript_drivescene\tcalls;script_loadcase\tscript_render\tcalls;script_loadcase\tscript_renderquestion\tcalls;script_loadcase\tscript_rendersteps\tcalls",
   "nodes": [
+    {
+      "id": "modelscene",
+      "label": "modelScene.js",
+      "file_type": "code",
+      "source_file": "modelScene.js",
+      "source_location": "L1",
+      "community": 5,
+      "community_name": "3D Scene Rendering"
+    },
+    {
+      "id": "modelscene_buildglobe",
+      "label": "buildGlobe()",
+      "file_type": "code",
+      "source_file": "modelScene.js",
+      "source_location": "L45",
+      "community": 5,
+      "community_name": "3D Scene Rendering"
+    },
+    {
+      "id": "modelscene_streamcurve",
+      "label": "streamCurve()",
+      "file_type": "code",
+      "source_file": "modelScene.js",
+      "source_location": "L119",
+      "community": 5,
+      "community_name": "3D Scene Rendering"
+    },
+    {
+      "id": "modelscene_applycolor",
+      "label": "applyColor()",
+      "file_type": "code",
+      "source_file": "modelScene.js",
+      "source_location": "L132",
+      "community": 5,
+      "community_name": "3D Scene Rendering"
+    },
+    {
+      "id": "modelscene_frame",
+      "label": "frame()",
+      "file_type": "code",
+      "source_file": "modelScene.js",
+      "source_location": "L162",
+      "community": 5,
+      "community_name": "3D Scene Rendering"
+    },
+    {
+      "id": "modelscene_size",
+      "label": "size()",
+      "file_type": "code",
+      "source_file": "modelScene.js",
+      "source_location": "L223",
+      "community": 5,
+      "community_name": "3D Scene Rendering"
+    },
     {
       "id": "scene",
       "label": "scene.js",
       "file_type": "code",
       "source_file": "scene.js",
       "source_location": "L1",
-      "community": 5,
-      "community_name": "3D Scene Rendering"
+      "community": 6,
+      "community_name": "Graph Value Propositions"
     },
     {
       "id": "scene_buildcluster",
@@ -33,8 +88,8 @@
       "file_type": "code",
       "source_file": "scene.js",
       "source_location": "L118",
-      "community": 5,
-      "community_name": "3D Scene Rendering"
+      "community": 6,
+      "community_name": "Graph Value Propositions"
     },
     {
       "id": "scene_applycolor",
@@ -42,8 +97,8 @@
       "file_type": "code",
       "source_file": "scene.js",
       "source_location": "L200",
-      "community": 5,
-      "community_name": "3D Scene Rendering"
+      "community": 6,
+      "community_name": "Graph Value Propositions"
     },
     {
       "id": "scene_frame",
@@ -51,8 +106,8 @@
       "file_type": "code",
       "source_file": "scene.js",
       "source_location": "L248",
-      "community": 5,
-      "community_name": "3D Scene Rendering"
+      "community": 6,
+      "community_name": "Graph Value Propositions"
     },
     {
       "id": "script",
@@ -188,8 +243,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 9,
-      "community_name": "Roll Dice Utility"
+      "community": 10,
+      "community_name": "Community 10"
     },
     {
       "id": "graphify_pipeline",
@@ -216,8 +271,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 6,
-      "community_name": "Graph Value Propositions"
+      "community": 7,
+      "community_name": "Interactivity Logic"
     },
     {
       "id": "graph_persistent_graph",
@@ -230,8 +285,8 @@
       "author": null,
       "contributor": null,
       "rationale": "Relationships stored in .graphify/graph.json survive across sessions.",
-      "community": 6,
-      "community_name": "Graph Value Propositions"
+      "community": 7,
+      "community_name": "Interactivity Logic"
     },
     {
       "id": "graph_audit_trail",
@@ -244,8 +299,8 @@
       "author": null,
       "contributor": null,
       "rationale": "Every edge is tagged EXTRACTED, INFERRED, or AMBIGUOUS so you know what was found vs invented.",
-      "community": 6,
-      "community_name": "Graph Value Propositions"
+      "community": 7,
+      "community_name": "Interactivity Logic"
     },
     {
       "id": "graph_mcp_server",
@@ -258,8 +313,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 7,
-      "community_name": "Interactivity Logic"
+      "community": 8,
+      "community_name": "Search Question Paper"
     },
     {
       "id": "graph_neo4j_export",
@@ -664,8 +719,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 8,
-      "community_name": "Search Question Paper"
+      "community": 9,
+      "community_name": "Roll Dice Utility"
     },
     {
       "id": "ghassan_alqahtani",
@@ -753,6 +808,78 @@
     }
   ],
   "links": [
+    {
+      "source": "modelscene",
+      "target": "modelscene_applycolor",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "modelScene.js",
+      "source_location": "L132",
+      "weight": 1,
+      "_src": "modelscene",
+      "_tgt": "modelscene_applycolor",
+      "confidence_score": 1
+    },
+    {
+      "source": "modelscene",
+      "target": "modelscene_buildglobe",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "modelScene.js",
+      "source_location": "L45",
+      "weight": 1,
+      "_src": "modelscene",
+      "_tgt": "modelscene_buildglobe",
+      "confidence_score": 1
+    },
+    {
+      "source": "modelscene",
+      "target": "modelscene_frame",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "modelScene.js",
+      "source_location": "L162",
+      "weight": 1,
+      "_src": "modelscene",
+      "_tgt": "modelscene_frame",
+      "confidence_score": 1
+    },
+    {
+      "source": "modelscene",
+      "target": "modelscene_size",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "modelScene.js",
+      "source_location": "L223",
+      "weight": 1,
+      "_src": "modelscene",
+      "_tgt": "modelscene_size",
+      "confidence_score": 1
+    },
+    {
+      "source": "modelscene",
+      "target": "modelscene_streamcurve",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "modelScene.js",
+      "source_location": "L119",
+      "weight": 1,
+      "_src": "modelscene",
+      "_tgt": "modelscene_streamcurve",
+      "confidence_score": 1
+    },
+    {
+      "source": "modelscene_frame",
+      "target": "modelscene_streamcurve",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "modelScene.js",
+      "source_location": "L205",
+      "weight": 1,
+      "_src": "modelscene_frame",
+      "_tgt": "modelscene_streamcurve",
+      "confidence_score": 1
+    },
     {
       "source": "scene",
       "target": "scene_applycolor",

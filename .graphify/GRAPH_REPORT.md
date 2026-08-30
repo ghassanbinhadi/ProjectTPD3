@@ -1,24 +1,24 @@
 # Graph Report - .  (2026-08-30)
 
 ## Corpus Check
-- Corpus is ~20,878 words - fits in a single context window. You may not need a graph.
+- Corpus is ~22,053 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 57 nodes · 63 edges · 9 communities detected
-- Extraction: 83% EXTRACTED · 17% INFERRED · 0% AMBIGUOUS · INFERRED: 11 edges (avg confidence: 0.82)
+- 63 nodes · 69 edges · 10 communities detected
+- Extraction: 84% EXTRACTED · 16% INFERRED · 0% AMBIGUOUS · INFERRED: 11 edges (avg confidence: 0.82)
 - Token cost: 0 input · 0 output
-- Edge kinds: contains: 33 · references: 14 · conceptually_related_to: 5 · calls: 4 · shares_data_with: 4 · affiliated_with: 1 · implements: 1 · semantically_similar_to: 1
+- Edge kinds: contains: 38 · references: 14 · calls: 5 · conceptually_related_to: 5 · shares_data_with: 4 · affiliated_with: 1 · implements: 1 · semantically_similar_to: 1
 
 
 ## Input Scope
 - Requested: auto
 - Resolved: committed (source: default-auto)
-- Included files: 11 · Candidates: 23
-- Excluded: 2 untracked · 3903 ignored · 0 sensitive · 0 missing committed
+- Included files: 12 · Candidates: 24
+- Excluded: 0 untracked · 3905 ignored · 0 sensitive · 0 missing committed
 - Recommendation: Use --scope all or graphify.yaml inputs.corpus for a knowledge-base folder.
 
 ## Graph Freshness
-- Built from Git commit: `f6b90e9`
+- Built from Git commit: `88ffa4d`
 - Compare this hash to `git rev-parse HEAD` before trusting freshness-sensitive graph output.
 ## God Nodes (most connected - your core abstractions)
 1. `Graphify Pipeline` - 8 edges
@@ -30,7 +30,7 @@
 7. `Community Detection` - 3 edges
 8. `Hero WebGL Scene` - 3 edges
 9. `KAUST Academy` - 3 edges
-10. `activate()` - 2 edges
+10. `streamCurve()` - 2 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Graphify Knowledge Graph` --conceptually_related_to--> `PeerGPT Project`  [INFERRED]
@@ -68,41 +68,47 @@ Nodes (7): activate(), driveScene(), loadCase(), outcomeHint, render(), renderQu
 Cohesion: 0.29
 Nodes (8): Abdullah Asiri, Dr. Eman Alnabati, Farah Alshammari, Ghassan Alqahtani, Hero Section, Team Section, KAUST Academy, Lama Alshammari
 
-### Community 6 - "Graph Value Propositions"
-Cohesion: 1.00
-Nodes (3): Honest Audit Trail, Community Detection, Persistent Graph
+### Community 5 - "3D Scene Rendering"
+Cohesion: 0.40
+Nodes (2): frame(), streamCurve()
 
 ### Community 7 - "Interactivity Logic"
 Cohesion: 1.00
-Nodes (1): Graphify MCP Server
+Nodes (3): Honest Audit Trail, Community Detection, Persistent Graph
 
 ### Community 8 - "Search Question Paper"
 Cohesion: 1.00
-Nodes (1): When Should an LLM Listen to Another LLM?
+Nodes (1): Graphify MCP Server
 
 ### Community 9 - "Roll Dice Utility"
+Cohesion: 1.00
+Nodes (1): When Should an LLM Listen to Another LLM?
+
+### Community 10 - "Community 10"
 Cohesion: 1.00
 Nodes (1): Roll Dice Skill
 
 ## Knowledge Gaps
 - **18 isolated node(s):** `outcomeHint`, `CLAUDE.md Configuration`, `Roll Dice Skill`, `Graphify MCP Server`, `Neo4j Export` (+13 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `Interactivity Logic`** (1 nodes): `Graphify MCP Server`
+- **Thin community `3D Scene Rendering`** (2 nodes): `frame()`, `streamCurve()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Search Question Paper`** (1 nodes): `When Should an LLM Listen to Another LLM?`
+- **Thin community `Search Question Paper`** (1 nodes): `Graphify MCP Server`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Roll Dice Utility`** (1 nodes): `Roll Dice Skill`
+- **Thin community `Roll Dice Utility`** (1 nodes): `When Should an LLM Listen to Another LLM?`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 10`** (1 nodes): `Roll Dice Skill`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Team Section` connect `Graphify Tooling` to `Results Charts & Direction`?**
-  _High betweenness centrality (0.078) - this node is a cross-community bridge._
+  _High betweenness centrality (0.063) - this node is a cross-community bridge._
 - **Why does `Results Charts Section` connect `Team & Authors` to `Results Charts & Direction`?**
-  _High betweenness centrality (0.069) - this node is a cross-community bridge._
+  _High betweenness centrality (0.056) - this node is a cross-community bridge._
 - **Why does `Hero Section` connect `Graphify Tooling` to `Team & Authors`, `Results Charts & Direction`?**
-  _High betweenness centrality (0.051) - this node is a cross-community bridge._
+  _High betweenness centrality (0.041) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `Direction Toggle` (e.g. with `3-Way Feature Ablation Chart` and `Hero WebGL Scene`) actually correct?**
   _`Direction Toggle` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `outcomeHint`, `CLAUDE.md Configuration`, `Roll Dice Skill` to the rest of the system?**
