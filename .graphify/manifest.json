@@ -1,11 +1,11 @@
 {
   "scene.js": {
-    "mtime": 1788104173278.5498,
-    "hash": "ed12ca91b6438d32b28c547c72ea3594"
+    "mtime": 1788105855463.3096,
+    "hash": "4dfa516c5fe8bd98b1cff5106d2f15bc"
   },
   "script.js": {
-    "mtime": 1788104199753.1777,
-    "hash": "41a5ff500356e2e77fb38596204d941b"
+    "mtime": 1788105762905.3794,
+    "hash": "19acda2dd9298d9f31d1005f455bfcfd"
   },
   ".claude/CLAUDE.md": {
     "mtime": 1788092810356.2107,
@@ -24,23 +24,23 @@
     "hash": "43933251c7da7a98da7b57cd858902b1"
   },
   "README.md": {
-    "mtime": 1788104224624.499,
+    "mtime": 1788104313497.98,
     "hash": "b4db11f727c1301948c219d0aac4b1f8"
   },
   "index.html": {
-    "mtime": 1788103365208.4695,
-    "hash": "df672cc1e09779e180e12364aae4b8f7"
+    "mtime": 1788105501227.4844,
+    "hash": "3bf0b0657cf701290edb543dab9e1a3e"
   },
   "favicon.svg": {
     "mtime": 1788094510131.0122,
     "hash": "a4f0e992d82a19bf15b9ab4d4d811b82"
   },
   ".graphify/GRAPH_REPORT.md": {
-    "mtime": 1788102092280.4539,
-    "hash": "a50f57c72cde8e8682b4a0e717ac4835"
+    "mtime": 1788104313492.8113,
+    "hash": "acc73d0d1ba8d0e0a948c7c355702e16"
   },
   ".graphify/graph.html": {
-    "mtime": 1788102093678.116,
-    "hash": "a2215da9fec280123fcd095467d1cce6"
+    "mtime": 1788104313494.559,
+    "hash": "3f0964c614aaed67ce9f7a03c70c7325"
   }
 }

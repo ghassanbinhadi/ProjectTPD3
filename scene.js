@@ -48,28 +48,34 @@
     return;
   }
 
-  // ---- Scene ----
+  // ---- Scene (hero-only) ----
   const canvas = document.getElementById('scene-canvas');
-  if (!canvas) { document.body.classList.add('no-webgl'); return; }
+  const heroWrap = document.getElementById('heroBoxWrap');
+  if (!canvas || !heroWrap) { document.body.classList.add('no-webgl'); return; }
 
   const COLORS = {
     lq: { r:226/255, g:162/255, b:51/255 },
     ql: { r:69/255,  g:179/255, b:170/255 }
   };
 
+  function heroSize(){
+    const r = heroWrap.getBoundingClientRect();
+    return { w: Math.max(r.width, 300), h: Math.max(r.height, 300) };
+  }
+  let _sz = heroSize();
   const renderer = new THREE.WebGLRenderer({ canvas:canvas, antialias:true, alpha:true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 1.8));
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(_sz.w, _sz.h);
   renderer.setClearColor(0x000000, 0);
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0x000000, 10, 26);
+  scene.fog = new THREE.Fog(0x000000, 9, 22);
 
-  const camera = new THREE.PerspectiveCamera(46, window.innerWidth/window.innerHeight, 0.1, 80);
-  camera.position.set(0, 0.45, 9.2);
+  const camera = new THREE.PerspectiveCamera(46, _sz.w/_sz.h, 0.1, 80);
+  camera.position.set(0, 0.45, 8.8);
   camera.lookAt(0, 0, 0);
 
-  // Root group that will be offset to the right so the box bleeds off edge
+  // Root — no offset, box centered in hero stage
   const WORLD = new THREE.Group();
   scene.add(WORLD);
 
@@ -118,10 +124,9 @@
     makeContour(5.0, 0.45, 1.8, 2.1);
   })();
 
-  // ============ Wireframe box — dominates right side, bleeds off ============
+  // ============ Wireframe box — centered in hero stage ============
   const BOX = new THREE.Group();
-  // Position box to the right so it bleeds off viewport (hero split 40/60)
-  BOX.position.set(2.6, -0.15, 0);
+  BOX.position.set(0, 0, 0);
   WORLD.add(BOX);
 
   const boxW=4.6, boxH=3.0, boxD=2.6;
@@ -167,13 +172,38 @@
     let s = cx<0? 7:13;
     function rnd(){ s=(s*16807)%2147483647; return s/2147483647; }
     const baseColor = new THREE.Color(tint);
+    const facing = cx < 0 ? 1 : -1; // left brain faces right, right brain faces left (talking to each other)
+    function insideBrain(x,y){
+      const fx = x * facing;
+      // main brain oval
+      const oval = (fx/0.62)*(fx/0.62) + (y/0.42)*(y/0.42);
+      if (oval > 1) return false;
+      // frontal bulge (forehead) extra
+      if (fx > 0.18 && Math.abs(y) < 0.22) {
+        const bulge = ((fx-0.18)/0.38)*((fx-0.18)/0.38) + (y/0.28)*(y/0.28);
+        if (bulge < 1) return true;
+      }
+      // lower jaw / brain stem cut — small indent
+      if (fx > 0.12 && y < -0.30) {
+        if (y < -0.33 - (fx-0.12)*0.28) return false;
+      }
+      // gentle top indent (longitudinal fissure hint)
+      if (Math.abs(y) < 0.06 && fx < -0.35) {
+        // slight waist, allow
+      }
+      return oval <= 1;
+    }
+    let attempts=0;
     for(let i=0;i<count;i++){
-      const theta=Math.acos(rnd()*2-1);
-      const phi=rnd()*Math.PI*2;
-      const r=radius*(0.55+rnd()*0.45);
-      const x=r*Math.sin(theta)*Math.cos(phi);
-      const y=r*Math.sin(theta)*Math.sin(phi)*0.85;
-      const z=r*Math.cos(theta)*0.7;
+      let x,y,z;
+      // rejection sample inside brain silhouette
+      do {
+        x = (rnd()*2-1)*0.70;
+        y = (rnd()*2-1)*0.50;
+        attempts++; if(attempts>500) break;
+      } while(!insideBrain(x,y));
+      x *= radius*1.05; y *= radius*1.15;
+      z = (rnd()*2-1)*0.22 * radius;
       const mat=new THREE.MeshBasicMaterial({ color:baseColor, transparent:true, opacity:0.78 });
       const sph=new THREE.Mesh(new THREE.SphereGeometry(0.055 + 0.04*rnd(), 10,10), mat);
       sph.position.set(x,y,z);
@@ -210,8 +240,8 @@
     return { group:g, nodes:positions, core:core, seg:seg };
   }
 
-  const SOLVER = buildCluster(-1.15, 10, 0.95, 0xECE8DC);
-  const CRITIC = buildCluster( 1.15, 10, 0.95, 0xECE8DC);
+  const SOLVER = buildCluster(-1.05, 14, 1.02, 0xECE8DC);
+  const CRITIC = buildCluster( 1.05, 14, 1.02, 0xECE8DC);
 
   // ============ Critique stream (Critic -> Solver) inside box ============
   // Curve in BOX local space: from CRITIC cluster to SOLVER cluster with arc
@@ -274,10 +304,18 @@
     mouseY=(e.clientY/window.innerHeight-0.5)*2;
   },{passive:true});
   window.addEventListener('resize', function(){
-    camera.aspect=window.innerWidth/window.innerHeight;
+    const s=heroSize();
+    camera.aspect=s.w/s.h;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(s.w, s.h);
   });
+  // also observe heroWrap resize
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(()=>{
+      const s=heroSize();
+      camera.aspect=s.w/s.h; camera.updateProjectionMatrix(); renderer.setSize(s.w,s.h);
+    }).observe(heroWrap);
+  }
 
   // ---- Loop ----
   const clock=new THREE.Clock();

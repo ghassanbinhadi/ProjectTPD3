@@ -14,9 +14,9 @@
       "8": "Search Question Paper",
       "9": "Roll Dice Utility"
     },
-    "built_from_commit": "079e1bcf81ca1c08cebf2d3e38732ad40ae584e6"
+    "built_from_commit": "413504947ada1ed5c1e32e0927e8916453449596"
   },
-  "topology_signature": "n=61;e=68;CLAUDE_md,README_md,abdullah_asiri,claude_CLAUDE_md,eman_alnabati,farah_alshammari,ghassan_alqahtani,graph_ast_extraction,graph_audit_trail,graph_community_detection,graph_csv_ocr,graph_html_output,graph_mcp_server,graph_neo4j_export,graph_obsidian_vault,graph_persistent_graph,graph_semantic_extraction,graphify_concept,graphify_knowledge_graph,graphify_pipeline,graphify_skill,index_background,index_chart_ablation,index_chart_benefit_per_revision,index_chart_correction_effectiveness,index_chart_false_alarm,index_decision_policy,index_demo,index_direction_lq,index_direction_ql,index_direction_toggle,index_hero,index_hero_scene,index_html,index_method,index_outcome_toggle,index_pipeline_svg,index_results,index_team,kaust_academy,lama_alshammari,project_paper,project_peerGPT,roll_dice_skill,scene,scene_applycolor,scene_buildcluster,scene_frame,scene_glowspritetexture,scene_makecontour,scene_rnd,script,script_activate,script_drivebysection,script_drivescene,script_enter,script_loadcase,script_outcomehint,script_render,script_renderquestion,script_rendersteps|CLAUDE_md\tgraphify_knowledge_graph\treferences;README_md\tindex_html\treferences;README_md\tproject_peerGPT\treferences;abdullah_asiri\tindex_team\tcontains;claude_CLAUDE_md\tgraphify_skill\treferences;eman_alnabati\tindex_team\tcontains;eman_alnabati\tkaust_academy\taffiliated_with;farah_alshammari\tindex_team\tcontains;ghassan_alqahtani\tindex_team\tcontains;graph_ast_extraction\tgraph_semantic_extraction\tconceptually_related_to;graph_ast_extraction\tgraphify_pipeline\treferences;graph_audit_trail\tgraph_community_detection\tconceptually_related_to;graph_audit_trail\tgraph_persistent_graph\tconceptually_related_to;graph_community_detection\tgraph_persistent_graph\tconceptually_related_to;graph_community_detection\tgraphify_pipeline\treferences;graph_csv_ocr\tgraphify_pipeline\treferences;graph_html_output\tgraphify_pipeline\treferences;graph_neo4j_export\tgraphify_pipeline\treferences;graph_obsidian_vault\tgraphify_pipeline\treferences;graph_semantic_extraction\tgraphify_pipeline\treferences;graphify_concept\tgraphify_pipeline\treferences;graphify_concept\tgraphify_skill\timplements;graphify_knowledge_graph\tproject_peerGPT\tconceptually_related_to;index_background\tindex_html\tcontains;index_chart_ablation\tindex_direction_toggle\tshares_data_with;index_chart_ablation\tindex_results\tcontains;index_chart_benefit_per_revision\tindex_chart_correction_effectiveness\tshares_data_with;index_chart_benefit_per_revision\tindex_results\tcontains;index_chart_correction_effectiveness\tindex_results\tcontains;index_chart_false_alarm\tindex_results\tcontains;index_decision_policy\tindex_html\tcontains;index_demo\tindex_html\tcontains;index_direction_lq\tindex_direction_ql\tsemantically_similar_to;index_direction_lq\tindex_direction_toggle\tcontains;index_direction_ql\tindex_direction_toggle\tcontains;index_direction_toggle\tindex_hero\tcontains;index_direction_toggle\tindex_hero_scene\tshares_data_with;index_hero\tindex_hero_scene\tcontains;index_hero\tindex_html\tcontains;index_hero\tkaust_academy\treferences;index_hero_scene\tindex_outcome_toggle\tshares_data_with;index_html\tindex_method\tcontains;index_html\tindex_results\tcontains;index_html\tindex_team\tcontains;index_method\tindex_pipeline_svg\tcontains;index_outcome_toggle\tindex_results\tcontains;index_team\tkaust_academy\treferences;index_team\tlama_alshammari\tcontains;scene\tscene_applycolor\tcontains;scene\tscene_buildcluster\tcontains;scene\tscene_frame\tcontains;scene\tscene_glowspritetexture\tcontains;scene\tscene_makecontour\tcontains;scene\tscene_rnd\tcontains;scene_buildcluster\tscene_rnd\tcalls;script\tscript_activate\tcontains;script\tscript_drivebysection\tcontains;script\tscript_drivescene\tcontains;script\tscript_enter\tcontains;script\tscript_loadcase\tcontains;script\tscript_outcomehint\tcontains;script\tscript_render\tcontains;script\tscript_renderquestion\tcontains;script\tscript_rendersteps\tcontains;script_activate\tscript_drivescene\tcalls;script_loadcase\tscript_render\tcalls;script_loadcase\tscript_renderquestion\tcalls;script_loadcase\tscript_rendersteps\tcalls",
+  "topology_signature": "n=63;e=70;CLAUDE_md,README_md,abdullah_asiri,claude_CLAUDE_md,eman_alnabati,farah_alshammari,ghassan_alqahtani,graph_ast_extraction,graph_audit_trail,graph_community_detection,graph_csv_ocr,graph_html_output,graph_mcp_server,graph_neo4j_export,graph_obsidian_vault,graph_persistent_graph,graph_semantic_extraction,graphify_concept,graphify_knowledge_graph,graphify_pipeline,graphify_skill,index_background,index_chart_ablation,index_chart_benefit_per_revision,index_chart_correction_effectiveness,index_chart_false_alarm,index_decision_policy,index_demo,index_direction_lq,index_direction_ql,index_direction_toggle,index_hero,index_hero_scene,index_html,index_method,index_outcome_toggle,index_pipeline_svg,index_results,index_team,kaust_academy,lama_alshammari,project_paper,project_peerGPT,roll_dice_skill,scene,scene_applycolor,scene_buildcluster,scene_frame,scene_glowspritetexture,scene_herosize,scene_makecontour,scene_rnd,script,script_activate,script_drivebysection,script_drivescene,script_enter,script_loadcase,script_outcomehint,script_render,script_renderdetail,script_renderquestion,script_rendersteps|CLAUDE_md\tgraphify_knowledge_graph\treferences;README_md\tindex_html\treferences;README_md\tproject_peerGPT\treferences;abdullah_asiri\tindex_team\tcontains;claude_CLAUDE_md\tgraphify_skill\treferences;eman_alnabati\tindex_team\tcontains;eman_alnabati\tkaust_academy\taffiliated_with;farah_alshammari\tindex_team\tcontains;ghassan_alqahtani\tindex_team\tcontains;graph_ast_extraction\tgraph_semantic_extraction\tconceptually_related_to;graph_ast_extraction\tgraphify_pipeline\treferences;graph_audit_trail\tgraph_community_detection\tconceptually_related_to;graph_audit_trail\tgraph_persistent_graph\tconceptually_related_to;graph_community_detection\tgraph_persistent_graph\tconceptually_related_to;graph_community_detection\tgraphify_pipeline\treferences;graph_csv_ocr\tgraphify_pipeline\treferences;graph_html_output\tgraphify_pipeline\treferences;graph_neo4j_export\tgraphify_pipeline\treferences;graph_obsidian_vault\tgraphify_pipeline\treferences;graph_semantic_extraction\tgraphify_pipeline\treferences;graphify_concept\tgraphify_pipeline\treferences;graphify_concept\tgraphify_skill\timplements;graphify_knowledge_graph\tproject_peerGPT\tconceptually_related_to;index_background\tindex_html\tcontains;index_chart_ablation\tindex_direction_toggle\tshares_data_with;index_chart_ablation\tindex_results\tcontains;index_chart_benefit_per_revision\tindex_chart_correction_effectiveness\tshares_data_with;index_chart_benefit_per_revision\tindex_results\tcontains;index_chart_correction_effectiveness\tindex_results\tcontains;index_chart_false_alarm\tindex_results\tcontains;index_decision_policy\tindex_html\tcontains;index_demo\tindex_html\tcontains;index_direction_lq\tindex_direction_ql\tsemantically_similar_to;index_direction_lq\tindex_direction_toggle\tcontains;index_direction_ql\tindex_direction_toggle\tcontains;index_direction_toggle\tindex_hero\tcontains;index_direction_toggle\tindex_hero_scene\tshares_data_with;index_hero\tindex_hero_scene\tcontains;index_hero\tindex_html\tcontains;index_hero\tkaust_academy\treferences;index_hero_scene\tindex_outcome_toggle\tshares_data_with;index_html\tindex_method\tcontains;index_html\tindex_results\tcontains;index_html\tindex_team\tcontains;index_method\tindex_pipeline_svg\tcontains;index_outcome_toggle\tindex_results\tcontains;index_team\tkaust_academy\treferences;index_team\tlama_alshammari\tcontains;scene\tscene_applycolor\tcontains;scene\tscene_buildcluster\tcontains;scene\tscene_frame\tcontains;scene\tscene_glowspritetexture\tcontains;scene\tscene_herosize\tcontains;scene\tscene_makecontour\tcontains;scene\tscene_rnd\tcontains;scene_buildcluster\tscene_rnd\tcalls;script\tscript_activate\tcontains;script\tscript_drivebysection\tcontains;script\tscript_drivescene\tcontains;script\tscript_enter\tcontains;script\tscript_loadcase\tcontains;script\tscript_outcomehint\tcontains;script\tscript_render\tcontains;script\tscript_renderdetail\tcontains;script\tscript_renderquestion\tcontains;script\tscript_rendersteps\tcontains;script_activate\tscript_drivescene\tcalls;script_loadcase\tscript_render\tcalls;script_loadcase\tscript_renderquestion\tcalls;script_loadcase\tscript_rendersteps\tcalls",
   "nodes": [
     {
       "id": "scene",
@@ -28,11 +28,20 @@
       "community_name": "3D Scene Rendering"
     },
     {
+      "id": "scene_herosize",
+      "label": "heroSize()",
+      "file_type": "code",
+      "source_file": "scene.js",
+      "source_location": "L61",
+      "community": 5,
+      "community_name": "3D Scene Rendering"
+    },
+    {
       "id": "scene_rnd",
       "label": "rnd()",
       "file_type": "code",
       "source_file": "scene.js",
-      "source_location": "L81",
+      "source_location": "L87",
       "community": 5,
       "community_name": "3D Scene Rendering"
     },
@@ -41,7 +50,7 @@
       "label": "makeContour()",
       "file_type": "code",
       "source_file": "scene.js",
-      "source_location": "L98",
+      "source_location": "L104",
       "community": 5,
       "community_name": "3D Scene Rendering"
     },
@@ -50,7 +59,7 @@
       "label": "glowSpriteTexture()",
       "file_type": "code",
       "source_file": "scene.js",
-      "source_location": "L148",
+      "source_location": "L153",
       "community": 5,
       "community_name": "3D Scene Rendering"
     },
@@ -59,7 +68,7 @@
       "label": "buildCluster()",
       "file_type": "code",
       "source_file": "scene.js",
-      "source_location": "L162",
+      "source_location": "L167",
       "community": 5,
       "community_name": "3D Scene Rendering"
     },
@@ -68,7 +77,7 @@
       "label": "applyColor()",
       "file_type": "code",
       "source_file": "scene.js",
-      "source_location": "L243",
+      "source_location": "L273",
       "community": 5,
       "community_name": "3D Scene Rendering"
     },
@@ -77,7 +86,7 @@
       "label": "frame()",
       "file_type": "code",
       "source_file": "scene.js",
-      "source_location": "L284",
+      "source_location": "L322",
       "community": 5,
       "community_name": "3D Scene Rendering"
     },
@@ -87,8 +96,8 @@
       "file_type": "code",
       "source_file": "script.js",
       "source_location": "L1",
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 0,
+      "community_name": "Site Structure & Sections"
     },
     {
       "id": "script_drivebysection",
@@ -96,8 +105,17 @@
       "file_type": "code",
       "source_file": "script.js",
       "source_location": "L47",
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 0,
+      "community_name": "Site Structure & Sections"
+    },
+    {
+      "id": "script_renderdetail",
+      "label": "renderDetail()",
+      "file_type": "code",
+      "source_file": "script.js",
+      "source_location": "L198",
+      "community": 0,
+      "community_name": "Site Structure & Sections"
     },
     {
       "id": "script_renderquestion",
@@ -105,8 +123,8 @@
       "file_type": "code",
       "source_file": "script.js",
       "source_location": "L201",
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 0,
+      "community_name": "Site Structure & Sections"
     },
     {
       "id": "script_rendersteps",
@@ -114,8 +132,8 @@
       "file_type": "code",
       "source_file": "script.js",
       "source_location": "L204",
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 0,
+      "community_name": "Site Structure & Sections"
     },
     {
       "id": "script_loadcase",
@@ -123,8 +141,8 @@
       "file_type": "code",
       "source_file": "script.js",
       "source_location": "L215",
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 0,
+      "community_name": "Site Structure & Sections"
     },
     {
       "id": "script_render",
@@ -132,8 +150,8 @@
       "file_type": "code",
       "source_file": "script.js",
       "source_location": "L224",
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 0,
+      "community_name": "Site Structure & Sections"
     },
     {
       "id": "script_activate",
@@ -141,8 +159,8 @@
       "file_type": "code",
       "source_file": "script.js",
       "source_location": "L30",
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 0,
+      "community_name": "Site Structure & Sections"
     },
     {
       "id": "script_outcomehint",
@@ -150,8 +168,8 @@
       "file_type": "code",
       "source_file": "script.js",
       "source_location": "L64",
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 0,
+      "community_name": "Site Structure & Sections"
     },
     {
       "id": "script_drivescene",
@@ -159,8 +177,8 @@
       "file_type": "code",
       "source_file": "script.js",
       "source_location": "L66",
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 0,
+      "community_name": "Site Structure & Sections"
     },
     {
       "id": "script_enter",
@@ -168,8 +186,8 @@
       "file_type": "code",
       "source_file": "script.js",
       "source_location": "L31",
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 0,
+      "community_name": "Site Structure & Sections"
     },
     {
       "id": "claude_CLAUDE_md",
@@ -182,8 +200,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 0,
-      "community_name": "Site Structure & Sections"
+      "community": 1,
+      "community_name": "Results Charts & Direction"
     },
     {
       "id": "graphify_skill",
@@ -196,8 +214,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 0,
-      "community_name": "Site Structure & Sections"
+      "community": 1,
+      "community_name": "Results Charts & Direction"
     },
     {
       "id": "graphify_concept",
@@ -210,8 +228,8 @@
       "author": null,
       "contributor": null,
       "rationale": "Built around Andrej Karpathy's /raw folder workflow - drop anything into a folder and get a structured knowledge graph.",
-      "community": 0,
-      "community_name": "Site Structure & Sections"
+      "community": 1,
+      "community_name": "Results Charts & Direction"
     },
     {
       "id": "roll_dice_skill",
@@ -238,8 +256,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 0,
-      "community_name": "Site Structure & Sections"
+      "community": 1,
+      "community_name": "Results Charts & Direction"
     },
     {
       "id": "graph_community_detection",
@@ -308,8 +326,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 0,
-      "community_name": "Site Structure & Sections"
+      "community": 1,
+      "community_name": "Results Charts & Direction"
     },
     {
       "id": "graph_obsidian_vault",
@@ -322,8 +340,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 0,
-      "community_name": "Site Structure & Sections"
+      "community": 1,
+      "community_name": "Results Charts & Direction"
     },
     {
       "id": "graph_html_output",
@@ -336,8 +354,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 0,
-      "community_name": "Site Structure & Sections"
+      "community": 1,
+      "community_name": "Results Charts & Direction"
     },
     {
       "id": "graph_csv_ocr",
@@ -350,8 +368,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 0,
-      "community_name": "Site Structure & Sections"
+      "community": 1,
+      "community_name": "Results Charts & Direction"
     },
     {
       "id": "graph_semantic_extraction",
@@ -364,8 +382,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 0,
-      "community_name": "Site Structure & Sections"
+      "community": 1,
+      "community_name": "Results Charts & Direction"
     },
     {
       "id": "graph_ast_extraction",
@@ -378,8 +396,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 0,
-      "community_name": "Site Structure & Sections"
+      "community": 1,
+      "community_name": "Results Charts & Direction"
     },
     {
       "id": "CLAUDE_md",
@@ -392,8 +410,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 1,
-      "community_name": "Results Charts & Direction"
+      "community": 2,
+      "community_name": "Team & Authors"
     },
     {
       "id": "graphify_knowledge_graph",
@@ -406,8 +424,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 1,
-      "community_name": "Results Charts & Direction"
+      "community": 2,
+      "community_name": "Team & Authors"
     },
     {
       "id": "README_md",
@@ -420,8 +438,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 1,
-      "community_name": "Results Charts & Direction"
+      "community": 2,
+      "community_name": "Team & Authors"
     },
     {
       "id": "index_html",
@@ -434,8 +452,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 1,
-      "community_name": "Results Charts & Direction"
+      "community": 2,
+      "community_name": "Team & Authors"
     },
     {
       "id": "index_hero",
@@ -462,8 +480,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 2,
-      "community_name": "Team & Authors"
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
     },
     {
       "id": "index_background",
@@ -476,8 +494,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 1,
-      "community_name": "Results Charts & Direction"
+      "community": 2,
+      "community_name": "Team & Authors"
     },
     {
       "id": "index_method",
@@ -490,8 +508,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 1,
-      "community_name": "Results Charts & Direction"
+      "community": 2,
+      "community_name": "Team & Authors"
     },
     {
       "id": "index_results",
@@ -504,8 +522,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 2,
-      "community_name": "Team & Authors"
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
     },
     {
       "id": "index_demo",
@@ -518,8 +536,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 1,
-      "community_name": "Results Charts & Direction"
+      "community": 2,
+      "community_name": "Team & Authors"
     },
     {
       "id": "index_decision_policy",
@@ -532,8 +550,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 1,
-      "community_name": "Results Charts & Direction"
+      "community": 2,
+      "community_name": "Team & Authors"
     },
     {
       "id": "index_team",
@@ -560,8 +578,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 2,
-      "community_name": "Team & Authors"
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
     },
     {
       "id": "index_direction_ql",
@@ -574,8 +592,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 2,
-      "community_name": "Team & Authors"
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
     },
     {
       "id": "index_pipeline_svg",
@@ -588,8 +606,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 1,
-      "community_name": "Results Charts & Direction"
+      "community": 2,
+      "community_name": "Team & Authors"
     },
     {
       "id": "index_chart_benefit_per_revision",
@@ -602,8 +620,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 2,
-      "community_name": "Team & Authors"
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
     },
     {
       "id": "index_chart_correction_effectiveness",
@@ -616,8 +634,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 2,
-      "community_name": "Team & Authors"
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
     },
     {
       "id": "index_chart_false_alarm",
@@ -630,8 +648,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 2,
-      "community_name": "Team & Authors"
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
     },
     {
       "id": "index_chart_ablation",
@@ -644,8 +662,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 2,
-      "community_name": "Team & Authors"
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
     },
     {
       "id": "index_hero_scene",
@@ -658,8 +676,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 2,
-      "community_name": "Team & Authors"
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
     },
     {
       "id": "index_outcome_toggle",
@@ -672,8 +690,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 2,
-      "community_name": "Team & Authors"
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
     },
     {
       "id": "project_peerGPT",
@@ -686,8 +704,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 1,
-      "community_name": "Results Charts & Direction"
+      "community": 2,
+      "community_name": "Team & Authors"
     },
     {
       "id": "project_paper",
@@ -839,6 +857,18 @@
     },
     {
       "source": "scene",
+      "target": "scene_herosize",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scene.js",
+      "source_location": "L61",
+      "weight": 1,
+      "_src": "scene",
+      "_tgt": "scene_herosize",
+      "confidence_score": 1
+    },
+    {
+      "source": "scene",
       "target": "scene_makecontour",
       "relation": "contains",
       "confidence": "EXTRACTED",
@@ -883,6 +913,18 @@
       "weight": 1,
       "_src": "script",
       "_tgt": "script_drivebysection",
+      "confidence_score": 1
+    },
+    {
+      "source": "script",
+      "target": "script_renderdetail",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "script.js",
+      "source_location": "L198",
+      "weight": 1,
+      "_src": "script",
+      "_tgt": "script_renderdetail",
       "confidence_score": 1
     },
     {

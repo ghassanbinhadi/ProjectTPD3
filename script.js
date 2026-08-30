@@ -114,7 +114,7 @@
     fills.forEach(f=> barObs.observe(f));
   })();
 
-  // ============ Demo stepper ============
+  // ============ Demo — master-detail (6 questions beside full trace) ============
   (function(){
     const CASES={
       shells:{
@@ -138,7 +138,7 @@
           { eyebrow:'Critic verdict — Qwen', tag:{text:'INCORRECT', cls:'tag-wrong'}, body:'Qwen: "the solver multiplied the total distance by 4 instead of first finding the speed per hour."' },
           { eyebrow:'Critic’s proposed answer', tag:{text:'Proposed: 160', cls:'tag-neutral'}, body:'Qwen finds 40 mph (60 / 1.5) and proposes 160 miles (40 × 4).' },
           { eyebrow:'Solver revision', tag:{text:'Revised: 160', cls:'tag-right'}, body:'Llama revises to 160 miles.' },
-          { eyebrow:'Outcome', tag:{text:'HELPED — gold 160', cls:'tag-right'}, body:'Representative example (illustrative). Replace with real notebook case before publishing if desired.' }
+          { eyebrow:'Outcome', tag:{text:'HELPED — gold 160', cls:'tag-right'}, body:'Representative example (illustrative).' }
         ]
       },
       flour:{
@@ -191,57 +191,43 @@
       }
     };
     const ORDER=['shells','train','flour','ali','garden','sara'];
-    const track=document.getElementById('demoTrack');
-    const progress=document.getElementById('demoProgress');
-    const prevBtn=document.getElementById('demoPrev');
-    const nextBtn=document.getElementById('demoNext');
-    const select=document.getElementById('caseSelect');
-    const questionEl=document.getElementById('demoQuestion');
-    if(!track) return;
-    function renderQuestion(c){
-      if(questionEl) questionEl.innerHTML='<span class="dq-eyebrow">'+c.title+' · '+c.qlabel+'</span><p class="dq-body">'+c.question+'</p>';
-    }
-    function renderSteps(c){
-      track.innerHTML='';
+    const listEl=document.getElementById('demoList');
+    const detailEl=document.getElementById('demoDetail');
+    if(!listEl || !detailEl) return;
+
+    function renderDetail(key){
+      const c=CASES[key];
+      // sync direction
+      body.setAttribute('data-direction', c.dir);
+      document.querySelectorAll('.dir-btn').forEach(b=> b.classList.toggle('active', b.getAttribute('data-dir')===c.dir));
+      if(window.PeerGPTScene) window.PeerGPTScene.setDirection(c.dir);
+      // highlight active card
+      listEl.querySelectorAll('.demo-qcard').forEach(el=> el.classList.toggle('active', el.dataset.key===key));
+      // build detail: full trace like spec Case 1
+      let html = `<span class="detail-eyebrow">${c.title} · ${c.qlabel}</span>`;
+      html += `<p class="detail-question">${c.question}</p><div class="detail-grid">`;
       c.steps.forEach(s=>{
-        const el=document.createElement('div');
-        el.className='demo-step';
-        const tagHtml=s.tag?`<span class="step-tag ${s.tag.cls}">${s.tag.text}</span>`:'';
-        el.innerHTML=`<span class="step-eyebrow">${s.eyebrow}</span>${tagHtml}<p class="step-body">${s.body}</p>`;
-        track.appendChild(el);
+        const isQuestion = s.eyebrow==='Question';
+        const cls = s.tag ? s.tag.cls : '';
+        const tag = s.tag ? `<span class="detail-tag ${cls}">${s.tag.text}</span>` : '';
+        const rowCls = s.eyebrow==='Outcome' ? 'detail-row highlight' : 'detail-row';
+        html += `<div class="${rowCls}"><span class="detail-label">${s.eyebrow}${tag}</span><span class="detail-body">${s.body}</span></div>`;
       });
+      html += `</div>`;
+      detailEl.innerHTML=html;
     }
-    let currentIdx=0; let currentKey=ORDER[0]; let current=CASES[currentKey];
-    function loadCase(key){
-      currentKey=key; current=CASES[key]; currentIdx=0;
-      renderQuestion(current); renderSteps(current); render();
-      // sync direction with case (so 3D stream recolors to that case's direction)
-      body.setAttribute('data-direction', current.dir);
-      document.querySelectorAll('.dir-btn').forEach(b=> b.classList.toggle('active', b.getAttribute('data-dir')===current.dir));
-      if(window.PeerGPTScene) window.PeerGPTScene.setDirection(current.dir);
-      if(select) select.value=key;
-    }
-    function render(){
-      track.style.transform=`translateX(-${currentIdx*100}%)`;
-      track.style.transition='transform .35s ease';
-      progress.textContent=`${currentIdx+1} / ${current.steps.length}`;
-      prevBtn.disabled=currentIdx===0;
-      nextBtn.disabled=currentIdx===current.steps.length-1;
-    }
-    if(select){
-      select.addEventListener('change', ()=> loadCase(select.value));
-      ORDER.forEach(k=>{
-        const opt=document.createElement('option');
-        opt.value=k;
-        opt.textContent=(CASES[k].dir==='ql'?'Qwen→Llama · ':'Llama→Qwen · ')+CASES[k].title;
-        select.appendChild(opt);
-      });
-      select.value=ORDER[0];
-    }
-    prevBtn.addEventListener('click', ()=>{ if(currentIdx>0){ currentIdx--; render(); } });
-    nextBtn.addEventListener('click', ()=>{ if(currentIdx<current.steps.length-1){ currentIdx++; render(); } });
-    loadCase(ORDER[0]);
-    // expose for QA
-    window.__demo={ CASES, loadCase, getIdx:()=>currentIdx };
+
+    // build list of 6
+    ORDER.forEach(k=>{
+      const c=CASES[k];
+      const btn=document.createElement('button');
+      btn.className='demo-qcard';
+      btn.dataset.key=k;
+      btn.innerHTML=`<span class="q-title">${c.title}</span><span class="q-meta">${c.qlabel}</span><span class="q-preview">${c.question.slice(0,72)}…</span>`;
+      btn.addEventListener('click', ()=> renderDetail(k));
+      listEl.appendChild(btn);
+    });
+    renderDetail(ORDER[0]);
+    window.__demo={ CASES, renderDetail };
   })();
 })();

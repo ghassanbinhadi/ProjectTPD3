@@ -17,16 +17,7 @@
 </head>
 <body data-direction="lq">
 
-  <!-- Fixed full-page WebGL scene (starfield + topology + two-brains-in-a-box).
-       Rendered by scene.js behind the fixed hero and as a faint backdrop. -->
-  <canvas id="scene-canvas" aria-hidden="true"></canvas>
-  <div id="scene-fallback" class="scene-fallback" aria-hidden="true">
-    <div class="fallback-net net-left" data-net="solver"></div>
-    <div class="fallback-net net-right" data-net="critic"></div>
-    <svg class="fallback-stream" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-      <path id="fallbackStreamPath" d="M 78 50 C 60 20, 40 80, 22 50" fill="none"/>
-    </svg>
-  </div>
+  <!-- fallback container kept at body level but hidden unless no-webgl; real canvas lives inside hero -->
 
   <!-- ============ UI CHROME ============ -->
   <div class="corner corner--tl" aria-hidden="true"></div>
@@ -63,7 +54,7 @@
 
   <main id="content">
 
-    <!-- ============ HERO (split: text left, 3D box right) ============ -->
+    <!-- ============ HERO (split: text left, 3D brains right — canvas is hero-only) ============ -->
     <section class="page page--hero" id="hero">
       <div class="hero-text">
         <p class="eyebrow">KAUST Academy · multi-LLM collaboration</p>
@@ -91,52 +82,66 @@
         </p>
       </div>
       <div class="hero-stage" id="heroBoxWrap" aria-hidden="true">
-        <!-- The two-brains-in-a-box scene is rendered into #scene-canvas, positioned
-             to the right of the hero text. Slot captions overlay it for clarity. -->
+        <canvas id="scene-canvas" aria-hidden="true"></canvas>
+        <div id="scene-fallback" class="scene-fallback" aria-hidden="true">
+          <div class="fallback-net net-left" data-net="solver"></div>
+          <div class="fallback-net net-right" data-net="critic"></div>
+          <svg class="fallback-stream" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path id="fallbackStreamPath" d="M 78 50 C 60 20, 40 80, 22 50" fill="none"/>
+          </svg>
+        </div>
         <span class="box-cap cap-llama">Llama</span>
         <span class="box-cap cap-qwen">Qwen</span>
       </div>
     </section>
 
-    <!-- ============ BACKGROUND / OBJECTIVES ============ -->
-    <section class="page" id="background">
-      <div class="inner narrow">
+    <!-- ============ BACKGROUND / OBJECTIVES (2-col varied layout) ============ -->
+    <section class="page page--alt" id="background">
+      <div class="inner inner--wide">
         <p class="eyebrow">01 / Background</p>
-        <h2 class="sec-title">Multi-LLM critique is a double-edged tool.</h2>
-        <div class="prose">
-          <p>External feedback can repair genuine errors. But accepting flawed critique causes models to abandon
-          correct derivations they'd already reached on their own. Self-refinement is unreliable, and assuming
-          critique is uniformly beneficial degrades overall performance without a way to gate it.</p>
-          <p class="prose-lead">Core question — can lightweight, <strong>pre-revision</strong> signals reliably predict
-          when a solver should accept a critic's feedback, before any revision is made?</p>
+        <div class="split-2col">
+          <div>
+            <h2 class="sec-title">Multi-LLM critique is a double-edged tool.</h2>
+            <div class="prose">
+              <p>External feedback can repair genuine errors. But accepting flawed critique causes models to abandon
+              correct derivations they'd already reached on their own. Self-refinement is unreliable, and assuming
+              critique is uniformly beneficial degrades overall performance without a way to gate it.</p>
+              <p class="prose-lead">Core question — can lightweight, <strong>pre-revision</strong> signals reliably predict
+              when a solver should accept a critic's feedback, before any revision is made?</p>
+            </div>
+          </div>
+          <div class="side-card">
+            <h3 class="sec-sub" style="margin-top:0">Objectives</h3>
+            <ul class="objectives">
+              <li><strong>Directional asymmetry</strong> — does critique benefit depend on which model solves and which one critiques?</li>
+              <li><strong>Failure mechanism</strong> — is asymmetry driven by correction effectiveness, or by harmful critiques of already-correct answers?</li>
+              <li><strong>Predictive signals</strong> — do directional-pairing features out-predict critique-derived features?</li>
+            </ul>
+          </div>
         </div>
-        <h3 class="sec-sub">Objectives</h3>
-        <ul class="objectives">
-          <li><strong>Directional asymmetry</strong> — does critique benefit depend on which model solves and which one critiques?</li>
-          <li><strong>Failure mechanism</strong> — is asymmetry driven by correction effectiveness, or by harmful critiques of already-correct answers?</li>
-          <li><strong>Predictive signals</strong> — do directional-pairing features out-predict critique-derived features?</li>
-        </ul>
       </div>
     </section>
 
-    <!-- ============ METHOD ============ -->
-    <section class="page" id="method">
-      <div class="inner narrow">
+    <!-- ============ METHOD (centered pipeline + note) ============ -->
+    <section class="page page--center" id="method">
+      <div class="inner inner--wide">
         <p class="eyebrow">02 / Method</p>
         <h2 class="sec-title">Solve independently. Evaluate. Gate.</h2>
-        <div class="prose">
+        <div class="prose" style="max-width:720px; margin:0 auto; text-align:center">
           <p>Each model solves the GSM8K question on its own, with the other's answer hidden. One is the
           <strong>Solver</strong>, the other the <strong>Critic</strong>; the Critic returns a verdict plus a proposed
           answer. A learned gate then decides whether the Solver keeps its original answer or revises.</p>
-          <p class="prose-lead">Four stages: <strong>Solve</strong> (independent) → <strong>Evaluate</strong> (verdict + proposed answer) →
-          <strong>Gate</strong> (logistic model on pre-revision features) → <strong>Validate</strong> (5-fold StratifiedGroupKFold).</p>
         </div>
-        <div class="method-scene-note" role="note">
-          <span class="note-label">Live 3D — two brains in a box</span>
-          <p>The scene on the right of the hero shows the two models as a particle neural net inside a glowing
-          wireframe box. The colored stream travels <strong>Critic → Solver</strong>, recolored by the direction toggle,
-          and lands (HELPED) or deflects (HURT) as you scroll into Results.</p>
+        <div class="pipeline">
+          <div class="pipe-step"><span class="pipe-num">01</span><h4>Solve</h4><p>Solver + Critic solve independently, hidden from each other</p></div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-step"><span class="pipe-num">02</span><h4>Evaluate</h4><p>Critic returns CORRECT/INCORRECT + proposed answer</p></div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-step"><span class="pipe-num">03</span><h4>Gate</h4><p>Balanced logistic regression on pre-revision features</p></div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-step"><span class="pipe-num">04</span><h4>Validate</h4><p>5-fold StratifiedGroupKFold → frozen test set</p></div>
         </div>
+        <p class="pipe-meta">Dataset: GSM8K · Models: Qwen2.5-3B-Instruct &amp; Llama-3.2-3B-Instruct · Dataset: 298 held-out</p>
       </div>
     </section>
 
@@ -203,31 +208,17 @@
       </div>
     </section>
 
-    <!-- ============ DEMO CASE ============ -->
-    <section class="page" id="demo">
-      <div class="inner narrow">
-        <p class="eyebrow">04 / Demo case</p>
+    <!-- ============ DEMO CASE (master-detail: 6 questions + full trace) ============ -->
+    <section class="page page--wide" id="demo">
+      <div class="inner inner--wide">
+        <p class="eyebrow">04 / Demo — 6 HELPED cases</p>
         <h2 class="sec-title">Walk through real HELPED cases.</h2>
-        <p class="prose-lead">Each case is a genuine GSM8K disagreement example from our dataset where the solver
-        accepted the critique and its final answer improved. Step through the reasoning, then switch direction.</p>
-
-        <div class="case-selector" role="group" aria-label="Choose a demo case">
-          <label for="caseSelect">Select case</label>
-          <div class="case-select-wrap">
-            <select id="caseSelect" class="case-select"></select>
-          </div>
+        <p class="prose-lead" style="max-width:680px">Each case is a genuine GSM8K disagreement where the solver accepted the critique and improved. Click a question on the left — the full trace (Solver / Critic / Revised / Outcome) appears on the right.</p>
+        <div class="demo-layout">
+          <nav class="demo-list" id="demoList" aria-label="Case list"></nav>
+          <article class="demo-detail" id="demoDetail" aria-live="polite"></article>
         </div>
-
-        <div class="demo-question" id="demoQuestion"></div>
-
-        <div class="demo-stepper" id="demoStepper">
-          <div class="demo-track" id="demoTrack"></div>
-          <div class="demo-controls">
-            <button id="demoPrev" aria-label="Previous step">←</button>
-            <div class="demo-progress" id="demoProgress"></div>
-            <button id="demoNext" aria-label="Next step">→</button>
-          </div>
-        </div>
+        <p class="demo-footnote">Case 1 (Martha shells) is the real poster example. Cases 2–6 are illustrative placeholders in the same GSM8K style — replace with real notebook output before publishing if desired.</p>
       </div>
     </section>
 
