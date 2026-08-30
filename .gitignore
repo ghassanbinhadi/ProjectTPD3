@@ -1,0 +1,10 @@
+.DS_Store
+
+# graphify: never commit ephemeral/state artifacts per CLAUDE.md rules
+.graphify/branch.json
+.graphify/worktree.json
+.graphify/needs_update
+.graphify/cache/
+
+# node / dev
+node_modules/
