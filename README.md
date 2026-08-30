@@ -63,3 +63,24 @@ static files live at the repo root, so no build step is needed.
   `script.js`.
 - The 3D scene behavior (stream timing, direction colors, outcome effects) is
   in `scene.js`.
+
+## Local tooling (MCP + skills)
+
+This project wires up a fully **local** Playwright MCP server and two skills for
+agent use. No network fetch happens at startup.
+
+- **Playwright MCP (local)** — `opencode.json` points its `mcp.playwright`
+  `command` at the install-local binary
+  `.tools/node_modules/.bin/playwright-mcp` with `--browser chrome`, so it
+  drives the **real installed Google Chrome** (headless) locally. The package
+  is pinned in `.tools/package.json`; reinstall with
+  `cd .tools && npm install` (browsers are cached under
+  `~/Library/Caches/ms-playwright`).
+- **Skills** — `opencode.json` registers both skill directories in
+  `skills.paths`:
+  - `roll-dice` at `.opencode/skills/roll-dice/SKILL.md`
+  - `graphify` at `.claude/skills/graphify/SKILL.md`
+- The `skillui` and `graphify` CLIs are installed to `~/.npm-global/bin`.
+
+After editing `opencode.json` or any skill file, **restart opencode** for the
+changes to take effect (config is read once at startup).
