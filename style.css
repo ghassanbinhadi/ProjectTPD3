@@ -1,5 +1,5 @@
 /* ============================================================
-   PeerGPT — Corvus pagination-app design system
+   When to Listen — Corvus pagination-app design system
    Pure-black fixed-viewport app. #000 bg, white + muted-grey
    Satoshi type with Roboto Mono indices. The only color is the
    two-tone direction accent (amber Llama->Qwen / cyan Qwen->Llama).
@@ -99,50 +99,6 @@ body.no-webgl #scene-fallback{ display: block; }
   stroke-dasharray: 4 7; animation: dashmove 1.6s linear infinite; transition: stroke .4s ease;
 }
 @keyframes dashmove{ to { stroke-dashoffset: -22; } }
-
-/* ============ CLICK-TO-CONTINUE LOADER ============ */
-.loader{
-  position: fixed; inset: 0; z-index: 999;
-  background: #000; color: var(--text);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
-  transition: opacity .6s ease, visibility .6s ease;
-}
-.loader.done{ opacity: 0; visibility: hidden; pointer-events: none; }
-.loader__particles{
-  position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; overflow: hidden; opacity: .5;
-  pointer-events: none;
-}
-.loader__particles li{
-  position: absolute; bottom: -10px; width: 2px; height: 2px; background: var(--text); border-radius: 50%;
-  animation: rise 6s linear infinite;
-}
-.loader__particles li:nth-child(1){ left: 8%;  animation-delay: 0s;    animation-duration: 7s; }
-.loader__particles li:nth-child(2){ left: 18%; animation-delay: 1.1s;  animation-duration: 5.5s; }
-.loader__particles li:nth-child(3){ left: 29%; animation-delay: 0.4s;  animation-duration: 6.5s; }
-.loader__particles li:nth-child(4){ left: 41%; animation-delay: 2s;    animation-duration: 5s; }
-.loader__particles li:nth-child(5){ left: 53%; animation-delay: 0.8s;  animation-duration: 7.5s; }
-.loader__particles li:nth-child(6){ left: 62%; animation-delay: 1.5s;  animation-duration: 6s; }
-.loader__particles li:nth-child(7){ left: 72%; animation-delay: 0.2s;  animation-duration: 5.8s; }
-.loader__particles li:nth-child(8){ left: 81%; animation-delay: 1.8s;  animation-duration: 6.8s; }
-.loader__particles li:nth-child(9){ left: 90%; animation-delay: 0.6s;  animation-duration: 5.2s; }
-.loader__particles li:nth-child(10){ left: 35%; animation-delay: 2.4s; animation-duration: 7.2s; }
-@keyframes rise{
-  0%{ transform: translateY(0); opacity: 0; }
-  10%{ opacity: .9; }
-  100%{ transform: translateY(-110vh); opacity: 0; }
-}
-.loader__counter{
-  font-family: var(--font-display); font-weight: 700; font-size: 5rem; line-height: 1;
-  letter-spacing: 0.01em;
-}
-.loader__cta{
-  margin-top: 34px; background: none; border: none; color: var(--text-mute);
-  font-family: var(--font-body); font-size: 20px; font-weight: 400; padding: 8px 16px;
-  opacity: 0; visibility: hidden; transition: opacity .5s ease;
-}
-.loader__cta.show{ opacity: 1; visibility: visible; }
-.loader__cta:hover{ color: var(--text); }
-.loader__cta.hidden{ visibility: hidden; }
 
 /* ============ HEADER (logo + sound + studio pill) ============ */
 .siteheader{
@@ -259,8 +215,6 @@ body.no-webgl #scene-fallback{ display: block; }
 .objectives li strong{ color: var(--text); }
 
 /* ============ Pipeline ============ */
-.stream-note{ margin-top: 18px; color: var(--text-mute); font-size: 14px; max-width: 720px; }
-.stream-note b{ color: var(--accent); }
 .pipeline{ overflow-x: auto; margin: 4px 0 16px; }
 .pipeline-svg{ width: 100%; min-width: 700px; height: auto; }
 .flow-line{ fill:none; stroke: rgba(255,255,255,0.35); stroke-width: 1.6; opacity:.6; }
@@ -278,6 +232,25 @@ body.no-webgl #scene-fallback{ display: block; }
 .node-text.tiny{ font-size: 10px; font-weight: 400; fill: rgba(255,255,255,0.55); }
 .pipeline-caption{ color: var(--text-mute); max-width: 820px; font-weight: 300; }
 .pipeline-caption strong{ color: var(--text); }
+
+/* ============ 3D model viz (panel 003) ============ */
+.model-viz{
+  position: relative; margin: 8px 0 4px; height: 260px;
+  border: 1px solid var(--line-soft); border-radius: 2px; overflow: hidden;
+  background: radial-gradient(120% 120% at 50% 50%, #0a0f16 0%, #000 70%);
+}
+#model-scene{ position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.model-viz__slot{
+  position: absolute; top: 14px; font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim);
+}
+.slot-llama{ left: 20px; }
+.slot-qwen{ right: 20px; }
+.model-viz__hint{
+  position: absolute; left: 0; right: 0; bottom: 12px; text-align: center;
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); padding: 0 20px;
+}
+.model-viz__hint b{ color: var(--accent); font-weight: 500; }
 
 /* ============ Results ============ */
 .legend{ display:flex; gap: 22px; flex-wrap:wrap; margin: 4px 0 18px; }
@@ -320,6 +293,20 @@ body[data-direction="ql"] .row-ql .bar-label{ color: var(--text); font-weight: 5
 .results-read em{ color: var(--text); font-style: normal; }
 
 /* ============ Demo stepper ============ */
+.case-selector{ margin: 22px 0 14px; display:flex; align-items:center; gap: 12px; flex-wrap:wrap; }
+.case-selector label{ font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing:.12em; }
+.case-select-wrap{ flex: 1; min-width: 240px; }
+.case-select{
+  width: 100%; background: #000; color: var(--text); border: 1px solid var(--line);
+  border-radius: 2px; padding: 12px 14px; font-family: var(--font-body); font-size: 14px;
+}
+.case-select:focus-visible{ outline: 1px solid var(--text); outline-offset: 2px; }
+.demo-question{
+  border-left: 2px solid var(--accent); padding: 0 0 0 16px; margin: 0 0 20px;
+  transition: border-color .4s ease;
+}
+.dq-eyebrow{ font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing:.1em; }
+.dq-body{ font-size: 1.05rem; color: var(--text-mute); margin: 8px 0 0; max-width: 520px; }
 .demo-stepper{ margin-top: 26px; }
 .demo-track{ display:flex; gap: 0; overflow: hidden; border-radius: 2px; border: 1px solid var(--line-soft); }
 .demo-step{ min-width: 100%; padding: 28px 26px; display:flex; flex-direction: column; gap: 10px; transition: opacity .3s ease; }

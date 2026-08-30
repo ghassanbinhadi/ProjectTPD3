@@ -14,9 +14,9 @@
       "8": "Search Question Paper",
       "9": "Roll Dice Utility"
     },
-    "built_from_commit": "53d14e2392b991979af15ae98275da71ae01c8ba"
+    "built_from_commit": "f6b90e962fe2b0b8bf5a3b0d1f018148b8b6eeea"
   },
-  "topology_signature": "n=54;e=57;CLAUDE_md,README_md,abdullah_asiri,claude_CLAUDE_md,eman_alnabati,farah_alshammari,ghassan_alqahtani,graph_ast_extraction,graph_audit_trail,graph_community_detection,graph_csv_ocr,graph_html_output,graph_mcp_server,graph_neo4j_export,graph_obsidian_vault,graph_persistent_graph,graph_semantic_extraction,graphify_concept,graphify_knowledge_graph,graphify_pipeline,graphify_skill,index_background,index_chart_ablation,index_chart_benefit_per_revision,index_chart_correction_effectiveness,index_chart_false_alarm,index_decision_policy,index_demo,index_direction_lq,index_direction_ql,index_direction_toggle,index_hero,index_hero_scene,index_html,index_method,index_outcome_toggle,index_pipeline_svg,index_results,index_team,kaust_academy,lama_alshammari,project_paper,project_peerGPT,roll_dice_skill,scene,scene_applycolor,scene_buildcluster,scene_frame,script,script_activate,script_drivescene,script_enter,script_outcomehint,script_render|CLAUDE_md\tgraphify_knowledge_graph\treferences;README_md\tindex_html\treferences;README_md\tproject_peerGPT\treferences;abdullah_asiri\tindex_team\tcontains;claude_CLAUDE_md\tgraphify_skill\treferences;eman_alnabati\tindex_team\tcontains;eman_alnabati\tkaust_academy\taffiliated_with;farah_alshammari\tindex_team\tcontains;ghassan_alqahtani\tindex_team\tcontains;graph_ast_extraction\tgraph_semantic_extraction\tconceptually_related_to;graph_ast_extraction\tgraphify_pipeline\treferences;graph_audit_trail\tgraph_community_detection\tconceptually_related_to;graph_audit_trail\tgraph_persistent_graph\tconceptually_related_to;graph_community_detection\tgraph_persistent_graph\tconceptually_related_to;graph_community_detection\tgraphify_pipeline\treferences;graph_csv_ocr\tgraphify_pipeline\treferences;graph_html_output\tgraphify_pipeline\treferences;graph_neo4j_export\tgraphify_pipeline\treferences;graph_obsidian_vault\tgraphify_pipeline\treferences;graph_semantic_extraction\tgraphify_pipeline\treferences;graphify_concept\tgraphify_pipeline\treferences;graphify_concept\tgraphify_skill\timplements;graphify_knowledge_graph\tproject_peerGPT\tconceptually_related_to;index_background\tindex_html\tcontains;index_chart_ablation\tindex_direction_toggle\tshares_data_with;index_chart_ablation\tindex_results\tcontains;index_chart_benefit_per_revision\tindex_chart_correction_effectiveness\tshares_data_with;index_chart_benefit_per_revision\tindex_results\tcontains;index_chart_correction_effectiveness\tindex_results\tcontains;index_chart_false_alarm\tindex_results\tcontains;index_decision_policy\tindex_html\tcontains;index_demo\tindex_html\tcontains;index_direction_lq\tindex_direction_ql\tsemantically_similar_to;index_direction_lq\tindex_direction_toggle\tcontains;index_direction_ql\tindex_direction_toggle\tcontains;index_direction_toggle\tindex_hero\tcontains;index_direction_toggle\tindex_hero_scene\tshares_data_with;index_hero\tindex_hero_scene\tcontains;index_hero\tindex_html\tcontains;index_hero\tkaust_academy\treferences;index_hero_scene\tindex_outcome_toggle\tshares_data_with;index_html\tindex_method\tcontains;index_html\tindex_results\tcontains;index_html\tindex_team\tcontains;index_method\tindex_pipeline_svg\tcontains;index_outcome_toggle\tindex_results\tcontains;index_team\tkaust_academy\treferences;index_team\tlama_alshammari\tcontains;scene\tscene_applycolor\tcontains;scene\tscene_buildcluster\tcontains;scene\tscene_frame\tcontains;script\tscript_activate\tcontains;script\tscript_drivescene\tcontains;script\tscript_enter\tcontains;script\tscript_outcomehint\tcontains;script\tscript_render\tcontains;script_activate\tscript_drivescene\tcalls",
+  "topology_signature": "n=57;e=63;CLAUDE_md,README_md,abdullah_asiri,claude_CLAUDE_md,eman_alnabati,farah_alshammari,ghassan_alqahtani,graph_ast_extraction,graph_audit_trail,graph_community_detection,graph_csv_ocr,graph_html_output,graph_mcp_server,graph_neo4j_export,graph_obsidian_vault,graph_persistent_graph,graph_semantic_extraction,graphify_concept,graphify_knowledge_graph,graphify_pipeline,graphify_skill,index_background,index_chart_ablation,index_chart_benefit_per_revision,index_chart_correction_effectiveness,index_chart_false_alarm,index_decision_policy,index_demo,index_direction_lq,index_direction_ql,index_direction_toggle,index_hero,index_hero_scene,index_html,index_method,index_outcome_toggle,index_pipeline_svg,index_results,index_team,kaust_academy,lama_alshammari,project_paper,project_peerGPT,roll_dice_skill,scene,scene_applycolor,scene_buildcluster,scene_frame,script,script_activate,script_drivescene,script_enter,script_loadcase,script_outcomehint,script_render,script_renderquestion,script_rendersteps|CLAUDE_md\tgraphify_knowledge_graph\treferences;README_md\tindex_html\treferences;README_md\tproject_peerGPT\treferences;abdullah_asiri\tindex_team\tcontains;claude_CLAUDE_md\tgraphify_skill\treferences;eman_alnabati\tindex_team\tcontains;eman_alnabati\tkaust_academy\taffiliated_with;farah_alshammari\tindex_team\tcontains;ghassan_alqahtani\tindex_team\tcontains;graph_ast_extraction\tgraph_semantic_extraction\tconceptually_related_to;graph_ast_extraction\tgraphify_pipeline\treferences;graph_audit_trail\tgraph_community_detection\tconceptually_related_to;graph_audit_trail\tgraph_persistent_graph\tconceptually_related_to;graph_community_detection\tgraph_persistent_graph\tconceptually_related_to;graph_community_detection\tgraphify_pipeline\treferences;graph_csv_ocr\tgraphify_pipeline\treferences;graph_html_output\tgraphify_pipeline\treferences;graph_neo4j_export\tgraphify_pipeline\treferences;graph_obsidian_vault\tgraphify_pipeline\treferences;graph_semantic_extraction\tgraphify_pipeline\treferences;graphify_concept\tgraphify_pipeline\treferences;graphify_concept\tgraphify_skill\timplements;graphify_knowledge_graph\tproject_peerGPT\tconceptually_related_to;index_background\tindex_html\tcontains;index_chart_ablation\tindex_direction_toggle\tshares_data_with;index_chart_ablation\tindex_results\tcontains;index_chart_benefit_per_revision\tindex_chart_correction_effectiveness\tshares_data_with;index_chart_benefit_per_revision\tindex_results\tcontains;index_chart_correction_effectiveness\tindex_results\tcontains;index_chart_false_alarm\tindex_results\tcontains;index_decision_policy\tindex_html\tcontains;index_demo\tindex_html\tcontains;index_direction_lq\tindex_direction_ql\tsemantically_similar_to;index_direction_lq\tindex_direction_toggle\tcontains;index_direction_ql\tindex_direction_toggle\tcontains;index_direction_toggle\tindex_hero\tcontains;index_direction_toggle\tindex_hero_scene\tshares_data_with;index_hero\tindex_hero_scene\tcontains;index_hero\tindex_html\tcontains;index_hero\tkaust_academy\treferences;index_hero_scene\tindex_outcome_toggle\tshares_data_with;index_html\tindex_method\tcontains;index_html\tindex_results\tcontains;index_html\tindex_team\tcontains;index_method\tindex_pipeline_svg\tcontains;index_outcome_toggle\tindex_results\tcontains;index_team\tkaust_academy\treferences;index_team\tlama_alshammari\tcontains;scene\tscene_applycolor\tcontains;scene\tscene_buildcluster\tcontains;scene\tscene_frame\tcontains;script\tscript_activate\tcontains;script\tscript_drivescene\tcontains;script\tscript_enter\tcontains;script\tscript_loadcase\tcontains;script\tscript_outcomehint\tcontains;script\tscript_render\tcontains;script\tscript_renderquestion\tcontains;script\tscript_rendersteps\tcontains;script_activate\tscript_drivescene\tcalls;script_loadcase\tscript_render\tcalls;script_loadcase\tscript_renderquestion\tcalls;script_loadcase\tscript_rendersteps\tcalls",
   "nodes": [
     {
       "id": "scene",
@@ -32,7 +32,7 @@
       "label": "buildCluster()",
       "file_type": "code",
       "source_file": "scene.js",
-      "source_location": "L75",
+      "source_location": "L118",
       "community": 5,
       "community_name": "3D Scene Rendering"
     },
@@ -41,7 +41,7 @@
       "label": "applyColor()",
       "file_type": "code",
       "source_file": "scene.js",
-      "source_location": "L157",
+      "source_location": "L200",
       "community": 5,
       "community_name": "3D Scene Rendering"
     },
@@ -50,7 +50,7 @@
       "label": "frame()",
       "file_type": "code",
       "source_file": "scene.js",
-      "source_location": "L205",
+      "source_location": "L248",
       "community": 5,
       "community_name": "3D Scene Rendering"
     },
@@ -60,8 +60,71 @@
       "file_type": "code",
       "source_file": "script.js",
       "source_location": "L1",
-      "community": 4,
-      "community_name": "Graphify Tooling"
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
+    },
+    {
+      "id": "script_activate",
+      "label": "activate()",
+      "file_type": "code",
+      "source_file": "script.js",
+      "source_location": "L30",
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
+    },
+    {
+      "id": "script_outcomehint",
+      "label": "outcomeHint",
+      "file_type": "code",
+      "source_file": "script.js",
+      "source_location": "L64",
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
+    },
+    {
+      "id": "script_drivescene",
+      "label": "driveScene()",
+      "file_type": "code",
+      "source_file": "script.js",
+      "source_location": "L66",
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
+    },
+    {
+      "id": "script_renderquestion",
+      "label": "renderQuestion()",
+      "file_type": "code",
+      "source_file": "script.js",
+      "source_location": "L209",
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
+    },
+    {
+      "id": "script_rendersteps",
+      "label": "renderSteps()",
+      "file_type": "code",
+      "source_file": "script.js",
+      "source_location": "L215",
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
+    },
+    {
+      "id": "script_loadcase",
+      "label": "loadCase()",
+      "file_type": "code",
+      "source_file": "script.js",
+      "source_location": "L230",
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
+    },
+    {
+      "id": "script_render",
+      "label": "render()",
+      "file_type": "code",
+      "source_file": "script.js",
+      "source_location": "L241",
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
     },
     {
       "id": "script_enter",
@@ -69,44 +132,8 @@
       "file_type": "code",
       "source_file": "script.js",
       "source_location": "L31",
-      "community": 4,
-      "community_name": "Graphify Tooling"
-    },
-    {
-      "id": "script_activate",
-      "label": "activate()",
-      "file_type": "code",
-      "source_file": "script.js",
-      "source_location": "L61",
-      "community": 4,
-      "community_name": "Graphify Tooling"
-    },
-    {
-      "id": "script_outcomehint",
-      "label": "outcomeHint",
-      "file_type": "code",
-      "source_file": "script.js",
-      "source_location": "L96",
-      "community": 4,
-      "community_name": "Graphify Tooling"
-    },
-    {
-      "id": "script_drivescene",
-      "label": "driveScene()",
-      "file_type": "code",
-      "source_file": "script.js",
-      "source_location": "L98",
-      "community": 4,
-      "community_name": "Graphify Tooling"
-    },
-    {
-      "id": "script_render",
-      "label": "render()",
-      "file_type": "code",
-      "source_file": "script.js",
-      "source_location": "L189",
-      "community": 4,
-      "community_name": "Graphify Tooling"
+      "community": 3,
+      "community_name": "Graphify Extraction Pipeline"
     },
     {
       "id": "claude_CLAUDE_md",
@@ -385,8 +412,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 4,
+      "community_name": "Graphify Tooling"
     },
     {
       "id": "index_direction_toggle",
@@ -483,8 +510,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 4,
+      "community_name": "Graphify Tooling"
     },
     {
       "id": "index_direction_lq",
@@ -651,8 +678,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 4,
+      "community_name": "Graphify Tooling"
     },
     {
       "id": "abdullah_asiri",
@@ -665,8 +692,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 4,
+      "community_name": "Graphify Tooling"
     },
     {
       "id": "farah_alshammari",
@@ -679,8 +706,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 4,
+      "community_name": "Graphify Tooling"
     },
     {
       "id": "lama_alshammari",
@@ -693,8 +720,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 4,
+      "community_name": "Graphify Tooling"
     },
     {
       "id": "eman_alnabati",
@@ -707,8 +734,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 4,
+      "community_name": "Graphify Tooling"
     },
     {
       "id": "kaust_academy",
@@ -721,8 +748,8 @@
       "author": null,
       "contributor": null,
       "rationale": null,
-      "community": 3,
-      "community_name": "Graphify Extraction Pipeline"
+      "community": 4,
+      "community_name": "Graphify Tooling"
     }
   ],
   "links": [
@@ -788,14 +815,14 @@
     },
     {
       "source": "script",
-      "target": "script_enter",
+      "target": "script_loadcase",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "script.js",
-      "source_location": "L31",
+      "source_location": "L230",
       "weight": 1,
       "_src": "script",
-      "_tgt": "script_enter",
+      "_tgt": "script_loadcase",
       "confidence_score": 1
     },
     {
@@ -823,6 +850,30 @@
       "confidence_score": 1
     },
     {
+      "source": "script",
+      "target": "script_renderquestion",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "script.js",
+      "source_location": "L209",
+      "weight": 1,
+      "_src": "script",
+      "_tgt": "script_renderquestion",
+      "confidence_score": 1
+    },
+    {
+      "source": "script",
+      "target": "script_rendersteps",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "script.js",
+      "source_location": "L215",
+      "weight": 1,
+      "_src": "script",
+      "_tgt": "script_rendersteps",
+      "confidence_score": 1
+    },
+    {
       "source": "script_activate",
       "target": "script_drivescene",
       "relation": "calls",
@@ -832,6 +883,54 @@
       "weight": 1,
       "_src": "script_activate",
       "_tgt": "script_drivescene",
+      "confidence_score": 1
+    },
+    {
+      "source": "script_loadcase",
+      "target": "script_render",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "script.js",
+      "source_location": "L236",
+      "weight": 1,
+      "_src": "script_loadcase",
+      "_tgt": "script_render",
+      "confidence_score": 1
+    },
+    {
+      "source": "script_loadcase",
+      "target": "script_renderquestion",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "script.js",
+      "source_location": "L234",
+      "weight": 1,
+      "_src": "script_loadcase",
+      "_tgt": "script_renderquestion",
+      "confidence_score": 1
+    },
+    {
+      "source": "script_loadcase",
+      "target": "script_rendersteps",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "script.js",
+      "source_location": "L235",
+      "weight": 1,
+      "_src": "script_loadcase",
+      "_tgt": "script_rendersteps",
+      "confidence_score": 1
+    },
+    {
+      "source": "script",
+      "target": "script_enter",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "script.js",
+      "source_location": "L31",
+      "weight": 1,
+      "_src": "script",
+      "_tgt": "script_enter",
       "confidence_score": 1
     },
     {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>When Should an LLM Listen to Another LLM? — PeerGPT</title>
+<title>When to Listen — When Should an LLM Listen to Another LLM?</title>
 <meta name="description" content="Predicting beneficial critique acceptance in multi-LLM collaboration. A KAUST Academy study testing Qwen2.5-3B and Llama-3.2-3B as solver and critic on GSM8K.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,22 +27,11 @@
     </svg>
   </div>
 
-  <!-- ============ CLICK-TO-CONTINUE LOADER ============ -->
-  <div class="loader" id="loader" aria-hidden="true">
-    <ul class="loader__particles" aria-hidden="true">
-      <li></li><li></li><li></li><li></li><li></li>
-      <li></li><li></li><li></li><li></li><li></li>
-      <li></li><li></li><li></li><li></li><li></li>
-    </ul>
-    <div class="loader__counter" id="loaderCounter">0%</div>
-    <button class="loader__cta" id="loaderCta">click to continue</button>
-  </div>
-
   <!-- ============ HEADER ============ -->
   <header class="siteheader">
     <a class="header__logo" href="#" data-panel-goto="1">
-      <span class="logo-mark">PEER</span>
-      <span class="logo-mark logo-mark--alt">gpt</span>
+      <span class="logo-mark">When to</span>
+      <span class="logo-mark logo-mark--alt">Listen</span>
     </a>
 
     <button class="sound-button" id="soundBtn" aria-label="Toggle sound" aria-pressed="false">
@@ -172,7 +161,13 @@
           </svg>
         </div>
         <p class="pipeline-caption">Four stages: <strong>Solve</strong> (independent) → <strong>Evaluate</strong> (critic returns a verdict + proposed answer) → <strong>Gate</strong> (logistic model on pre-revision features) → <strong>Validate</strong> (5-fold StratifiedGroupKFold). Dataset: GSM8K · Qwen2.5-3B-Instruct &amp; Llama-3.2-3B-Instruct.</p>
-        <p class="stream-note" id="streamNote">The glowing stream above is the critique travelling <b>Critic</b> → <b>Solver</b>, colored by the active direction. Switch the direction on 001 to re-color it here.</p>
+
+        <div class="model-viz" aria-label="3D view of the two models and their critique">
+          <canvas id="model-scene" aria-hidden="true"></canvas>
+          <span class="model-viz__slot slot-qwen">Qwen</span>
+          <span class="model-viz__slot slot-llama">Llama</span>
+          <span class="model-viz__hint">Each globe is a 3D point-lattice projection of one model. The critique stream travels <b>Critic → Solver</b>, colored by the active direction.</span>
+        </div>
       </div>
     </section>
 
@@ -241,9 +236,18 @@
     <!-- PANEL 005 — DEMO CASE -->
     <section class="panel" data-panel="5" aria-label="Demo case">
       <div class="panel-inner narrow">
-        <h1 class="panel-h1">Walk through one HELPED case.<span class="panel-h1-index">005</span></h1>
-        <p class="prose-lead">Martha has been collecting shells since she turned 5 years old, every month she collects
-        one shell. By her 10th birthday, how many shells will Martha have collected?</p>
+        <h1 class="panel-h1">Walk through real HELPED cases.<span class="panel-h1-index">005</span></h1>
+        <p class="prose-lead">Each case is a genuine GSM8K disagreement example from our dataset where the solver
+        accepted the critique and its final answer improved. Step through the reasoning, then switch direction.</p>
+
+        <div class="case-selector" role="group" aria-label="Choose a demo case">
+          <label for="caseSelect">Select case</label>
+          <div class="case-select-wrap">
+            <select id="caseSelect" class="case-select"></select>
+          </div>
+        </div>
+
+        <div class="demo-question" id="demoQuestion"></div>
 
         <div class="demo-stepper" id="demoStepper">
           <div class="demo-track" id="demoTrack"></div>
@@ -308,13 +312,13 @@
       <a href="#" data-panel-goto="1">Main</a>
       <a href="#" data-panel-goto="3">Tech</a>
       <a href="#" data-panel-goto="7">Meet us</a>
-      <a href="#" data-panel-goto="7">Contact</a>
     </nav>
-    <span>PeerGPT — When Should an LLM Listen to Another LLM? · KAUST Academy</span>
+    <span>When to Listen — When Should an LLM Listen to Another LLM? · KAUST Academy</span>
   </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js" defer></script>
 <script src="scene.js" defer></script>
+<script src="modelScene.js" defer></script>
 <script src="script.js" defer></script>
 </body>
 </html>

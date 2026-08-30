@@ -1,5 +1,5 @@
 /* ============================================================
-   PeerGPT — 3D hero scene
+   When to Listen — 3D hero scene
    Two abstract neural node-clusters (Solver left, Critic right)
    critiquing each other, rendered with Three.js.
 
@@ -56,10 +56,10 @@
   const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setClearColor(0x0B1521, 0);
+  renderer.setClearColor(0x000000, 0);
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0x0B1521, 9, 16);
+  scene.fog = new THREE.Fog(0x000000, 9, 22);
 
   const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 60);
   camera.position.set(0, 0.2, 7);
@@ -67,6 +67,49 @@
 
   const GROUP = new THREE.Group();
   scene.add(GROUP);
+
+  // ---- Full-viewport neural lattice backdrop (Corvus-style) --------
+  // A broad, faint web of nodes + short-arc links that fills the frame so
+  // the background reads as one continuous field rather than two blobs.
+  const LATTICE = new THREE.Group();
+  scene.add(LATTICE);
+  {
+    const n = 260;
+    const positions = [];
+    const flat = [];
+    let s = 31;
+    const rand = function(){ s = (s * 16807) % 2147483647; return s / 2147483647; };
+    for (let i = 0; i < n; i++) {
+      const x = (rand() * 2 - 1) * 16;
+      const y = (rand() * 2 - 1) * 9;
+      const z = (rand() * 2 - 1) * 5 - 2;
+      positions.push(new THREE.Vector3(x, y, z));
+      flat.push(x, y, z);
+    }
+    const pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute('position', new THREE.Float32BufferAttribute(flat, 3));
+    const points = new THREE.Points(pGeo, new THREE.PointsMaterial({
+      size: 0.05, color: 0xffffff, transparent: true, opacity: 0.28, depthWrite: false
+    }));
+    LATTICE.add(points);
+
+    // connect nearby lattice points into a faint wireframe web
+    const segs = [];
+    for (let i = 0; i < positions.length; i++) {
+      for (let j = i + 1; j < positions.length; j++) {
+        if (positions[i].distanceTo(positions[j]) < 1.5) {
+          segs.push(positions[i].x, positions[i].y, positions[i].z,
+                    positions[j].x, positions[j].y, positions[j].z);
+        }
+      }
+    }
+    const lGeo = new THREE.BufferGeometry();
+    lGeo.setAttribute('position', new THREE.Float32BufferAttribute(segs, 3));
+    const links = new THREE.LineSegments(lGeo, new THREE.LineBasicMaterial({
+      color: 0xffffff, transparent: true, opacity: 0.05
+    }));
+    LATTICE.add(links);
+  }
 
   // Shared node material cache for brightness pulses
   const nodeMats = [];
@@ -211,6 +254,10 @@
     SOLVER.group.rotation.x = Math.cos(t * 0.22) * 0.18;
     CRITIC.group.rotation.y = Math.sin(t * 0.24 + 2.1) * 0.4;
     CRITIC.group.rotation.x = Math.cos(t * 0.20 + 1.2) * 0.18;
+
+    // slow drift of the backdrop lattice
+    LATTICE.rotation.y = t * 0.012;
+    LATTICE.rotation.x = Math.sin(t * 0.02) * 0.05;
 
     ([SOLVER, CRITIC]).forEach(function(cl){
       for (var i = 0; i < cl.nodes.length; i++) {
