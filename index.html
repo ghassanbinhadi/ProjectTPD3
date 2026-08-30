@@ -5,9 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>When Should an LLM Listen to Another LLM? — PeerGPT</title>
 <meta name="description" content="Predicting beneficial critique acceptance in multi-LLM collaboration. A KAUST Academy study testing Qwen2.5-3B and Llama-3.2-3B as solver and critic on GSM8K.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,600,700,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body data-direction="lq">
@@ -27,20 +32,17 @@
     </svg>
   </div>
 
-  <!-- ============ NAV / DIRECTION TOGGLE ============ -->
+  <!-- ============ NAV (Corvus-style left vertical mono) ============ -->
   <header class="topbar">
-    <div class="topbar-inner">
-      <a class="wordmark" href="#top">PeerGPT</a>
-      <nav class="toc" id="toc">
-        <a href="#background">Background</a>
-        <a href="#method">Method</a>
-        <a href="#results">Results</a>
-        <a href="#demo">Demo</a>
-        <a href="#policy">Policy</a>
-        <a href="#team">Team</a>
-      </nav>
-      <a class="topbar-cta" href="https://github.com/ghassanbinhadi/ProjectTPD3" target="_blank" rel="noopener">GitHub ↗</a>
-    </div>
+    <nav class="toc" id="toc">
+      <a class="toc-item" href="#background"><span>001</span> background</a>
+      <a class="toc-item" href="#method"><span>002</span> method</a>
+      <a class="toc-item" href="#results"><span>003</span> results</a>
+      <a class="toc-item" href="#demo"><span>004</span> demo</a>
+      <a class="toc-item" href="#policy"><span>005</span> policy</a>
+      <a class="toc-item" href="#team"><span>006</span> team</a>
+    </nav>
+    <a class="topbar-cta" href="https://github.com/ghassanbinhadi/ProjectTPD3" target="_blank" rel="noopener">github ↗</a>
   </header>
 
   <main id="top">
@@ -80,7 +82,7 @@
   <!-- ============ BACKGROUND / OBJECTIVES ============ -->
   <section id="background" class="section">
     <div class="section-inner narrow">
-      <p class="kicker">01 — The problem</p>
+      <p class="kicker">001 — The problem</p>
       <h2>Multi-LLM critique is a double-edged tool.</h2>
       <div class="prose">
         <p>External feedback can repair genuine errors. But accepting flawed critique causes models to abandon
@@ -100,8 +102,8 @@
 
   <!-- ============ METHOD ============ -->
   <section id="method" class="section scene-reveal">
-    <div class="section-inner">
-      <p class="kicker">02 — Pipeline</p>
+    <div class="section-inner wide">
+      <p class="kicker">002 — Pipeline</p>
       <h2>Solve independently. Evaluate. Gate. Revise only if the gate says so.</h2>
       <div class="pipeline" aria-label="Pipeline diagram">
         <svg viewBox="0 0 1180 340" class="pipeline-svg" role="img" aria-labelledby="pipeline-title">
@@ -160,8 +162,8 @@
 
   <!-- ============ RESULTS ============ -->
   <section id="results" class="section scene-reveal">
-    <div class="section-inner">
-      <p class="kicker">03 — Results</p>
+    <div class="section-inner wide">
+      <p class="kicker">003 — Results</p>
       <h2>The direction of critique changes everything.</h2>
 
       <div class="legend" role="group" aria-label="Direction color legend">
@@ -266,7 +268,7 @@
   <!-- ============ DEMO CASE ============ -->
   <section id="demo" class="section alt">
     <div class="section-inner narrow">
-      <p class="kicker">04 — Demo case</p>
+      <p class="kicker">004 — Demo case</p>
       <h2>Walk through one HELPED case.</h2>
       <p class="prose-lead">Martha has been collecting shells since she turned 5 years old, every month she collects
       one shell. By her 10th birthday, how many shells will Martha have collected?</p>
@@ -284,8 +286,8 @@
 
   <!-- ============ DECISION POLICY ============ -->
   <section id="policy" class="section">
-    <div class="section-inner">
-      <p class="kicker">05 — Decision policy</p>
+    <div class="section-inner wide">
+      <p class="kicker">005 — Decision policy</p>
       <h2>Does the learned gate actually beat the obvious baselines?</h2>
       <p class="chart-note">Frozen test set, n = 298 · accuracy</p>
       <div class="policy-grid">
@@ -304,7 +306,7 @@
   <!-- ============ FUTURE WORK ============ -->
   <section class="section alt">
     <div class="section-inner narrow">
-      <p class="kicker">06 — Future directions</p>
+      <p class="kicker">006 — Future directions</p>
       <ul class="future-list">
         <li><strong>Scale evaluation datasets</strong> — expand held-out benchmarks to overcome statistical underpowering and validate directional reproducibility.</li>
         <li><strong>Integrate LLM-as-judge</strong> — replace shallow text-length proxies with automated critique-quality scoring to capture nuanced reasoning errors.</li>
@@ -318,7 +320,7 @@
   <!-- ============ TEAM / ACK / LINKS ============ -->
   <section id="team" class="section team-section">
     <div class="section-inner narrow">
-      <p class="kicker">07 — Team</p>
+      <p class="kicker">007 — Team</p>
       <div class="team-grid">
         <a class="team-card" href="#" rel="noopener">
           <span class="team-name">Ghassan Alqahtani</span>
